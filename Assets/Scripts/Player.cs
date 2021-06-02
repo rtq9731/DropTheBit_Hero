@@ -6,15 +6,17 @@ using DG.Tweening;
 public class Player : MonoBehaviour
 {
     PlayerData player = new PlayerData();
-    Animator playerAnimator;
+    Animator animator;
 
     [SerializeField] float atk;
+    [SerializeField] float attackCool;
 
     private Enemy enemy;
 
     private float atkTimer;
 
     private bool isFirstFight = true;
+    private bool isStateChange = true;
 
     enum PlayerState
     {
@@ -23,53 +25,75 @@ public class Player : MonoBehaviour
     };
 
     PlayerState state;
+    PlayerState State { get { return state; } set { state = value; isStateChange = true; } }
 
     private void Awake()
     {
-        playerAnimator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         state = PlayerState.Walk;
         player.ATK = this.atk;
     }
 
     private void Update()
     {
-        switch (state)
+        if(isStateChange)
         {
-            case PlayerState.Walk:
+            switch (state)
+            {
+                case PlayerState.Walk:
 
-                if(isFirstFight)
-                {
-                    MoveToFightPos();
-                    playerAnimator.SetBool("isWalk", true);
-                }
-                break;
+                    if(isFirstFight)
+                    {
+                        MoveToFight();
+                    }
 
-            case PlayerState.Atk:
-                Fight();
-                break;
+                    Clearanimator();
+                    break;
+                case PlayerState.Atk:
 
-            default:
-                break;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if(state == PlayerState.Atk)
+        {
+            Fight();
         }
     }
 
-    private void MoveToFightPos()
+    private void MoveToFight()
     {
-        if (playerAnimator.GetBool("isWalk"))
-        {
-            return;
-        }
-
-        transform.DOMoveX(-0.75f, 2f).OnComplete(() => { state = PlayerState.Atk; playerAnimator.SetBool("isWalk", false); playerAnimator.SetBool("isAttack", true); MainSceneManager.Instance.ScrollingBackground(); });
+        transform.DOMoveX(-1f, 2f).SetEase(Ease.Linear).OnComplete(() => { 
+            animator.SetBool("isAttack", true);
+            State = PlayerState.Atk;
+        });
     }
 
     private void Fight()
     {
-        if(playerAnimator.GetCurrentAnimatorStateInfo(0).length <= atkTimer)
+        if(enemy == null)
+        {
+            Clearanimator();
+            State = PlayerState.Walk;
+            return;
+        }
+
+        animator.Play("Player_Attack");
+        if (attackCool <= atkTimer)
         {
             this.enemy.Hit(this.player.ATK);
+            atkTimer = 0;
         }
+
         atkTimer += Time.deltaTime;
+    }
+
+    public void Clearanimator()
+    {
+        animator.SetBool("isAttack", false);
+        isStateChange = false;
     }
 
     public void SetEnmey(Enemy enemy)
@@ -80,6 +104,5 @@ public class Player : MonoBehaviour
     public void RemoveEnmey()
     {
         this.enemy = null;
-        state = PlayerState.Walk;
     }
 }
