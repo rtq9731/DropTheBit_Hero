@@ -5,13 +5,11 @@ using DG.Tweening;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] int hp;
-    [SerializeField] int money;
-
-    EnemyData enemyData = new EnemyData();
+    MonsterDataData data;
 
     [SerializeField] Animator animator;
     [SerializeField] Animation enemy_Hit;
+    [SerializeField] string Name;
 
     EnemyState state = EnemyState.Walk;
     EnemyState State { get { return state; } set { state = value; isStateChange = true; } }
@@ -33,7 +31,11 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         State = EnemyState.Walk;
-        enemyData.HP = hp;
+    }
+
+    private void OnEnable()
+    {
+        StartCoroutine(InputData());
     }
 
     private void Update()
@@ -42,6 +44,7 @@ public class Enemy : MonoBehaviour
         {
             isDie = true;
             animator.Play("Enemy_Die");
+            GameManager.Instance.AddMoney(data.Cost);
             MainSceneManager.Instance.GetPlayer().RemoveEnmey();
             Invoke("Die", 0.93f);
         }
@@ -68,7 +71,6 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        GameManager.Instance.AddMoney(money);
         MainSceneManager.Instance.CallNextEnmey();
         transform.DOMoveX(-7.75f, 2f).OnComplete(()=> {
             Destroy(this.gameObject);
@@ -77,13 +79,13 @@ public class Enemy : MonoBehaviour
 
     public void Hit(float damage)
     {
-        if (enemyData.HP <= 0)
+        if (data.HP <= 0)
         {
             State = EnemyState.Die;
             return;
         }
-        animator.Play("Enemy_Hit"); 
-        enemyData.HP -= damage;
+        animator.Play("Enemy_Hit");
+        data.AddDamage(damage);
         State = EnemyState.Hit;
     }
 
@@ -94,5 +96,15 @@ public class Enemy : MonoBehaviour
             State = EnemyState.Atk;
             MainSceneManager.Instance.GetPlayer().SetEnmey(this);
         });
+    }
+
+    private IEnumerator InputData()
+    {
+        string[] temp = name.Split('(');
+        string tempName = temp[0];
+        Debug.Log(tempName);
+        yield return new WaitForSeconds(0.1f);
+        data = MainSceneManager.Instance.GetEnemyDataFromName(tempName);
+        yield return null;
     }
 }
