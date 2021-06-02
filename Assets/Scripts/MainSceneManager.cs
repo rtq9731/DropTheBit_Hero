@@ -48,7 +48,6 @@ public class MainSceneManager : MonoBehaviour
         for (int i = 0; i < excelSheet.dataArray.Length; i++)
         {
             monsterDatafromExcel.Add(excelSheet.dataArray[i].Name, excelSheet.dataArray[i]);
-            Debug.Log(monsterDatafromExcel[excelSheet.dataArray[i].Name].Name);
         }
     }
 

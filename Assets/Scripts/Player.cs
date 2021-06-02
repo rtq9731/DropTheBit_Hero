@@ -65,7 +65,7 @@ public class Player : MonoBehaviour
 
     private void MoveToFight()
     {
-        transform.DOMoveX(-1f, 2f).SetEase(Ease.Linear).OnComplete(() => { 
+        transform.DOMoveX(-1f, 2f).SetEase(Ease.OutCubic).OnComplete(() => { 
             animator.SetBool("isAttack", true);
             State = PlayerState.Atk;
         });

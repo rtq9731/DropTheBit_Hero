@@ -8,7 +8,6 @@ public class Enemy : MonoBehaviour
     MonsterDataData data;
 
     [SerializeField] Animator animator;
-    [SerializeField] Animation enemy_Hit;
     [SerializeField] string Name;
 
     EnemyState state = EnemyState.Walk;
@@ -16,9 +15,6 @@ public class Enemy : MonoBehaviour
 
     bool isStateChange = true;
     bool isDie = false;
-
-    float animationTimer;
-    float animationCool;
 
     enum EnemyState
     {
@@ -92,7 +88,7 @@ public class Enemy : MonoBehaviour
     private void MoveToFightPos()
     {
         isStateChange = false;
-        transform.DOMoveX(1f, 2f).SetEase(Ease.Linear).OnComplete(() => { 
+        transform.DOMoveX(1f, 1f).SetEase(Ease.OutCubic).OnComplete(() => { 
             State = EnemyState.Atk;
             MainSceneManager.Instance.GetPlayer().SetEnmey(this);
         });
@@ -103,7 +99,7 @@ public class Enemy : MonoBehaviour
         string[] temp = name.Split('(');
         string tempName = temp[0];
         Debug.Log(tempName);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.001f);
         data = MainSceneManager.Instance.GetEnemyDataFromName(tempName);
         yield return null;
     }
