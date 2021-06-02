@@ -7,11 +7,11 @@ using UnityQuickSheet;
 ///
 /// !!! Machine generated code !!!
 ///
-public class MonsterDataAssetPostprocessor : AssetPostprocessor 
+public class WeaponsAssetPostprocessor : AssetPostprocessor 
 {
     private static readonly string filePath = "Assets/Scripts/Data/Data.xlsx";
-    private static readonly string assetFilePath = "Assets/Scripts/Data/MonsterData.asset";
-    private static readonly string sheetName = "MonsterData";
+    private static readonly string assetFilePath = "Assets/Scripts/Data/Weapons.asset";
+    private static readonly string sheetName = "Weapons";
     
     static void OnPostprocessAllAssets (string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
     {
@@ -20,16 +20,16 @@ public class MonsterDataAssetPostprocessor : AssetPostprocessor
             if (!filePath.Equals (asset))
                 continue;
                 
-            MonsterData data = (MonsterData)AssetDatabase.LoadAssetAtPath (assetFilePath, typeof(MonsterData));
+            Weapons data = (Weapons)AssetDatabase.LoadAssetAtPath (assetFilePath, typeof(Weapons));
             if (data == null) {
-                data = ScriptableObject.CreateInstance<MonsterData> ();
+                data = ScriptableObject.CreateInstance<Weapons> ();
                 data.SheetName = filePath;
                 data.WorksheetName = sheetName;
                 AssetDatabase.CreateAsset ((ScriptableObject)data, assetFilePath);
                 //data.hideFlags = HideFlags.NotEditable;
             }
             
-            //data.dataArray = new ExcelQuery(filePath, sheetName).Deserialize<MonsterDataData>().ToArray();		
+            //data.dataArray = new ExcelQuery(filePath, sheetName).Deserialize<WeaponsData>().ToArray();		
 
             //ScriptableObject obj = AssetDatabase.LoadAssetAtPath (assetFilePath, typeof(ScriptableObject)) as ScriptableObject;
             //EditorUtility.SetDirty (obj);
@@ -37,7 +37,7 @@ public class MonsterDataAssetPostprocessor : AssetPostprocessor
             ExcelQuery query = new ExcelQuery(filePath, sheetName);
             if (query != null && query.IsValid())
             {
-                data.dataArray = query.Deserialize<MonsterDataData>().ToArray();
+                data.dataArray = query.Deserialize<WeaponsData>().ToArray();
                 ScriptableObject obj = AssetDatabase.LoadAssetAtPath (assetFilePath, typeof(ScriptableObject)) as ScriptableObject;
                 EditorUtility.SetDirty (obj);
             }

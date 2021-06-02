@@ -5,11 +5,16 @@ using UnityEngine;
 public class MainSceneManager : MonoBehaviour
 {
     public static MainSceneManager Instance;
+
+    [Header("자체 접근용")]
     [SerializeField] BackGroundMove backGround;
     [SerializeField] Player player;
-    [SerializeField] MonsterData excelSheet;
+    [SerializeField] Monster excelSheet;
 
-    private Dictionary<string, MonsterDataData> monsterDatafromExcel = new Dictionary<string, MonsterDataData>();
+    [Header("다른 오브젝트 접근용")]
+    [SerializeField] public TopUI topUI;
+
+    private Dictionary<string, MonsterData> monsterDatafromExcel = new Dictionary<string, MonsterData>();
     private Dictionary<string, GameObject> enemyPrefabs = new Dictionary<string, GameObject>();
 
     private void Awake()
@@ -51,18 +56,22 @@ public class MainSceneManager : MonoBehaviour
         }
     }
 
-    public MonsterDataData GetEnemyDataFromName(string name)
+    public void GetEnemyDataFromName(string name, out float hp, out int cost)
     {
-        if(monsterDatafromExcel[name] != null)
+        Debug.Log(name);
+        MonsterData tempData = monsterDatafromExcel[name];
+        if (tempData != null)
         {
-            return monsterDatafromExcel[name];
+            hp = tempData.HP;
+            cost = tempData.Cost;
         }
         else
         {
-            return null;
 #if UNITY_EDITOR
             Debug.Log($"can't find the Monster by {name}");
 #endif
+            hp = 0;
+            cost = 0;
         }
     }
 }

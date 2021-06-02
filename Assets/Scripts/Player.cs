@@ -98,6 +98,8 @@ public class Player : MonoBehaviour
 
     public void SetEnmey(Enemy enemy)
     {
+        Fight();
+        state = PlayerState.Atk;
         this.enemy = enemy;
     }
 

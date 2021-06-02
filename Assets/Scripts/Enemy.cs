@@ -5,10 +5,11 @@ using DG.Tweening;
 
 public class Enemy : MonoBehaviour
 {
-    MonsterDataData data;
 
     [SerializeField] Animator animator;
     [SerializeField] string Name;
+
+    MonsterData data;
 
     EnemyState state = EnemyState.Walk;
     EnemyState State { get { return state; } set { state = value; isStateChange = true; } }
@@ -31,6 +32,7 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
+        data = new MonsterData();
         StartCoroutine(InputData());
     }
 
@@ -71,6 +73,7 @@ public class Enemy : MonoBehaviour
         transform.DOMoveX(-7.75f, 2f).OnComplete(()=> {
             Destroy(this.gameObject);
             });
+        GameManager.Instance.KillCount++;
     }
 
     public void Hit(float damage)
@@ -98,9 +101,9 @@ public class Enemy : MonoBehaviour
     {
         string[] temp = name.Split('(');
         string tempName = temp[0];
-        Debug.Log(tempName);
-        yield return new WaitForSeconds(0.001f);
-        data = MainSceneManager.Instance.GetEnemyDataFromName(tempName);
+        yield return new WaitForSeconds(0.1f);
+        MainSceneManager.Instance.GetEnemyDataFromName(tempName, out float hp, out int cost);
+        data.InitData(hp, cost);
         yield return null;
     }
 }

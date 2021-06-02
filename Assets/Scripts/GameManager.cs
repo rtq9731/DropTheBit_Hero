@@ -5,11 +5,21 @@ using UnityEngine;
 public class GameManager : MonoSingleton<GameManager>
 {
 
-    [SerializeField] private float money;
+    private int money;
     private float stage;
+    private int killCount;
+    private int weaponChangeCount;
+    private Dictionary<string, int> waponUpgradeCountbyName = new Dictionary<string, int>();
 
-    public void AddMoney(float addNum)
+    public int KillCount { get { return killCount; } set { killCount = value; MainSceneManager.Instance.topUI.UpdateCurrentKillCount(); } }
+
+    public void AddMoney(int addNum)
     {
         money += addNum;
+        MainSceneManager.Instance.topUI.UpdateCurrentCoin();
+    }
+    public int GetMoney()
+    {
+        return money;
     }
 }
