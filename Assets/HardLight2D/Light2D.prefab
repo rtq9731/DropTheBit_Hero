@@ -8,7 +8,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1278962375649610283}
+  - component: {fileID: 2390549994955507818}
   - component: {fileID: 9133201526527734124}
   - component: {fileID: 1278962375649610277}
   - component: {fileID: 1278962375649610282}
@@ -19,16 +19,16 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1278962375649610283
+--- !u!4 &2390549994955507818
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1278962375649610280}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 256, y: 256, z: 256}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -48,28 +48,31 @@ MonoBehaviour:
   Range: 5
   Color: {r: 1, g: 1, b: 1, a: 1}
   Intensity: 1
+  SortingLayer: Default
   SortingOrder: -1000
-  FilteringSettings:
-    useTriggers: 0
+  filteringSettings:
     useLayerMask: 1
     layerMask:
       serializedVersion: 2
       m_Bits: 4294967295
-  OptimizationSettings:
+  optimizationSettings:
+    CalculateOnlyOnce: 0
     OptimizedRaycasting: 1
     CameraCulling: {fileID: 0}
+    ChooseMainCamera: 0
   position: {x: 0, y: 0}
+  TransformIsDirty: 0
   needUpdate: 0
   ContactFilter:
     useTriggers: 0
-    useLayerMask: 0
+    useLayerMask: 1
     useDepth: 0
     useOutsideDepth: 0
     useNormalAngle: 0
     useOutsideNormalAngle: 0
     layerMask:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 4294967295
     minDepth: 0
     maxDepth: 0
     minNormalAngle: 0
@@ -96,6 +99,8 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -120,3 +125,4 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1000
+  m_AdditionalVertexStreams: {fileID: 0}

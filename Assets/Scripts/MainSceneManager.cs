@@ -9,22 +9,32 @@ public class MainSceneManager : MonoBehaviour
     [Header("자체 접근용")]
     [SerializeField] BackGroundMove backGround;
     [SerializeField] Player player;
-    [SerializeField] Monster excelSheet;
+    [SerializeField] Monster enemySheet;
+    [SerializeField] Weapons weaponSheet;
 
     [Header("다른 오브젝트 접근용")]
     [SerializeField] public TopUI topUI;
+    [SerializeField] public WeaponUpUI upgradeUI;
 
-    private Dictionary<string, MonsterData> monsterDatafromExcel = new Dictionary<string, MonsterData>();
+    private Dictionary<string, MonsterData> monsters = new Dictionary<string, MonsterData>();
+    private Dictionary<string, WeaponsData> weapons = new Dictionary<string, WeaponsData>();
+    public List<string> weaponNames = new List<string>();
     private Dictionary<string, GameObject> enemyPrefabs = new Dictionary<string, GameObject>();
 
     private void Awake()
     {
         Instance = this;
         InputCommonEnemyData();
+        InputWeponData();
     }
     void OnDestroy()
     {
         Instance = null;
+    }
+
+    public Dictionary<string, WeaponsData> GetWeponDictionary()
+    {
+        return weapons;
     }
 
     private void Start()
@@ -50,16 +60,25 @@ public class MainSceneManager : MonoBehaviour
 
     private void InputCommonEnemyData()
     {
-        for (int i = 0; i < excelSheet.dataArray.Length; i++)
+        for (int i = 0; i < enemySheet.dataArray.Length; i++)
         {
-            monsterDatafromExcel.Add(excelSheet.dataArray[i].Name, excelSheet.dataArray[i]);
+            monsters.Add(enemySheet.dataArray[i].Name, enemySheet.dataArray[i]);
         }
     }
 
+    private void InputWeponData()
+    {
+        for (int i = 0; i < weaponSheet.dataArray.Length; i++)
+        {
+            weapons.Add(weaponSheet.dataArray[i].Name, weaponSheet.dataArray[i]);
+            weaponNames.Add(weaponSheet.dataArray[i].Name);
+        }
+    }
+
+
     public void GetEnemyDataFromName(string name, out float hp, out int cost)
     {
-        Debug.Log(name);
-        MonsterData tempData = monsterDatafromExcel[name];
+        MonsterData tempData = monsters[name];
         if (tempData != null)
         {
             hp = tempData.HP;

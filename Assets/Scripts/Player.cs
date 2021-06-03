@@ -5,10 +5,10 @@ using DG.Tweening;
 
 public class Player : MonoBehaviour
 {
-    PlayerData player = new PlayerData();
     Animator animator;
 
     [SerializeField] float atk;
+    public float ATK { get { return atk; } set { atk = value; } }
     [SerializeField] float attackCool;
 
     private Enemy enemy;
@@ -31,7 +31,6 @@ public class Player : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         state = PlayerState.Walk;
-        player.ATK = this.atk;
     }
 
     private void Update()
@@ -83,7 +82,7 @@ public class Player : MonoBehaviour
         animator.Play("Player_Attack");
         if (attackCool <= atkTimer)
         {
-            this.enemy.Hit(this.player.ATK);
+            this.enemy.Hit(ATK);
             atkTimer = 0;
         }
 

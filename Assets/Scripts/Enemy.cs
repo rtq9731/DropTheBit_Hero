@@ -7,8 +7,8 @@ public class Enemy : MonoBehaviour
 {
 
     [SerializeField] Animator animator;
-    [SerializeField] string Name;
 
+    [SerializeField]
     MonsterData data;
 
     EnemyState state = EnemyState.Walk;

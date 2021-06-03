@@ -6,10 +6,9 @@ public class GameManager : MonoSingleton<GameManager>
 {
 
     private int money;
-    private float stage;
     private int killCount;
     private int weaponChangeCount;
-    private Dictionary<string, int> waponUpgradeCountbyName = new Dictionary<string, int>();
+    private float stage;
 
     public int KillCount { get { return killCount; } set { killCount = value; MainSceneManager.Instance.topUI.UpdateCurrentKillCount(); } }
 
@@ -18,8 +17,14 @@ public class GameManager : MonoSingleton<GameManager>
         money += addNum;
         MainSceneManager.Instance.topUI.UpdateCurrentCoin();
     }
+
     public int GetMoney()
     {
         return money;
+    }
+
+    private void LoadAllSongs()
+    {
+
     }
 }
