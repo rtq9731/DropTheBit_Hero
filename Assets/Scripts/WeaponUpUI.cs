@@ -18,14 +18,14 @@ public class WeaponUpUI : MonoBehaviour
 
     public void UnlockNewWeapon(short index, UpgradePanel upgradePanel)
     {
-        WeaponsData temp = MainSceneManager.Instance.GetWeponDictionary()[MainSceneManager.Instance.weaponNames[index]];
+        WeaponsData temp = GameManager.Instance.GetWeponDictionary()[GameManager.Instance.weaponNames[index]];
         upgradePanel.isUnlocked = true;
         upgradePanels[index].Refresh(upgradePanel.isUnlocked);
     }
 
     public void MakeUpgradePanels()
     {
-        weapons = MainSceneManager.Instance.GetWeponDictionary();
+        weapons = GameManager.Instance.GetWeponDictionary();
         foreach (var item in weapons)
         {
             GameObject temp;

@@ -7,9 +7,7 @@ public class Enemy : MonoBehaviour
 {
 
     [SerializeField] Animator animator;
-
-    [SerializeField]
-    MonsterData data;
+    [SerializeField] MonsterData data;
 
     EnemyState state = EnemyState.Walk;
     EnemyState State { get { return state; } set { state = value; isStateChange = true; } }
@@ -43,7 +41,7 @@ public class Enemy : MonoBehaviour
             isDie = true;
             animator.Play("Enemy_Die");
             GameManager.Instance.AddMoney(data.Cost);
-            MainSceneManager.Instance.GetPlayer().RemoveEnmey();
+            GameManager.Instance.GetPlayer().RemoveEnmey();
             Invoke("Die", 0.93f);
         }
 
@@ -69,7 +67,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        MainSceneManager.Instance.CallNextEnmey();
+        GameManager.Instance.CallNextEnmey();
         transform.DOMoveX(-7.75f, 2f).OnComplete(()=> {
             Destroy(this.gameObject);
             });
@@ -93,7 +91,7 @@ public class Enemy : MonoBehaviour
         isStateChange = false;
         transform.DOMoveX(1f, 1f).SetEase(Ease.OutCubic).OnComplete(() => { 
             State = EnemyState.Atk;
-            MainSceneManager.Instance.GetPlayer().SetEnmey(this);
+            GameManager.Instance.GetPlayer().SetEnmey(this);
         });
     }
 
@@ -102,7 +100,7 @@ public class Enemy : MonoBehaviour
         string[] temp = name.Split('(');
         string tempName = temp[0];
         yield return new WaitForSeconds(0.1f);
-        MainSceneManager.Instance.GetEnemyDataFromName(tempName, out float hp, out int cost);
+        GameManager.Instance.GetEnemyDataFromName(tempName, out float hp, out int cost);
         data.InitData(hp, cost);
         yield return null;
     }
