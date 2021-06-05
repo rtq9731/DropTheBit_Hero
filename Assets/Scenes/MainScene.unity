@@ -679,7 +679,7 @@ MonoBehaviour:
   audioSource: {fileID: 186843378}
   poolingMax: 5
   noteOffset: 5
-  shakePower: 1
+  shakePower: 10
   shakeTime: 1
   notesforPooling: []
 --- !u!1 &192068836
@@ -1279,10 +1279,10 @@ RectTransform:
   m_Father: {fileID: 1345456432}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1440, y: 2560}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &355907648
 MonoBehaviour:
@@ -1395,8 +1395,11 @@ MonoBehaviour:
   weaponSheet: {fileID: 11400000, guid: cfa89dfc637c57344800e4999c810e58, type: 2}
   topUI: {fileID: 1295205254}
   upgradeUI: {fileID: 1806968691}
-  songList:
-  - {fileID: 8300000, guid: 20e293b8bc8eae240899a82b025513e2, type: 3}
+  RythmManager: {fileID: 186843376}
+  CvsWeaponUp: {fileID: 1231221665}
+  CvsMenu: {fileID: 355907646}
+  CvsBg: {fileID: 1401540609}
+  CvsTopUI: {fileID: 1295205249}
   weaponNames: []
 --- !u!43 &437970643
 Mesh:
@@ -2931,10 +2934,10 @@ RectTransform:
   m_Father: {fileID: 1345456432}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1440, y: 2560}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1231221667
 MonoBehaviour:
@@ -3197,10 +3200,10 @@ RectTransform:
   m_Father: {fileID: 1345456432}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1440, y: 2560}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1295205251
 MonoBehaviour:
@@ -3738,10 +3741,10 @@ RectTransform:
   m_Father: {fileID: 1345456432}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 1440, y: 2560}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1401540611
 MonoBehaviour:

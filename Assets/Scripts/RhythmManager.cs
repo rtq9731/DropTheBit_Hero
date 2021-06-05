@@ -51,6 +51,20 @@ public class RhythmManager : MonoBehaviour
         }
     }
 
+    public void StartStopSong()
+    {
+        isPlayingNote = !isPlayingNote;
+
+        if(isPlayingNote)
+        {
+            audioSource.Play();
+        }
+        else
+        {
+            audioSource.Pause();
+        }
+    }
+
     void InitRhythm()
     {
         foreach (var item in GameManager.Instance.GetSongNotesByName("So_Happy"))

@@ -12,8 +12,12 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] Weapons weaponSheet;
     [SerializeField] public TopUI topUI;
     [SerializeField] public WeaponUpUI upgradeUI;
-    [SerializeField] List<AudioClip> songList;
 
+    [SerializeField] GameObject RythmManager;
+    [SerializeField] GameObject CvsWeaponUp;
+    [SerializeField] GameObject CvsMenu;
+    [SerializeField] GameObject CvsBg;
+    [SerializeField] GameObject CvsTopUI;
 
     public List<string> weaponNames = new List<string>();
 
@@ -22,7 +26,6 @@ public class GameManager : MonoSingleton<GameManager>
     private Dictionary<string, GameObject> enemyPrefabs = new Dictionary<string, GameObject>();
     private List<float> noteList = new List<float>();
     private Dictionary<string, List<float>> noteListDictionary = new Dictionary<string, List<float>>();
-
 
     private int money;
     private int killCount;
@@ -168,5 +171,10 @@ public class GameManager : MonoSingleton<GameManager>
             }
             noteListDictionary.Add(noteSheet.dataArray[i].Songname, noteList);
         }
+    }
+
+    public void SceneChange()
+    {
+
     }
 }
