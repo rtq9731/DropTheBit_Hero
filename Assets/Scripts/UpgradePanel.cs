@@ -44,7 +44,7 @@ public class UpgradePanel : MonoBehaviour
         {
             upgradeBtn.GetComponentInChildren<Text>().text = "최대로 업그레이드 됨!"; // 최대로 업그레이드 됐다면 다음으로 넘김
             this.currentUpgradeText.text = "현재 업그레이드 단계 : 최대"; // 최대로 업그레이드 됨으로 표시
-            GameManager.Instance.upgradeUI.UnlockNewWeapon(this.index, this);
+            MainSceneManager.Instance.upgradeUI.UnlockNewWeapon(this.index, this);
         }
         else
         {
@@ -71,7 +71,7 @@ public class UpgradePanel : MonoBehaviour
         {
             upgradeBtn.GetComponentInChildren<Text>().text = "최대로 업그레이드 됨!"; // 최대로 업그레이드 됐다면 다음으로 넘김
             this.currentUpgradeText.text = "현재 업그레이드 단계 : 최대"; // 최대로 업그레이드 됨으로 표시
-            GameManager.Instance.upgradeUI.UnlockNewWeapon(this.index, this);
+            MainSceneManager.Instance.upgradeUI.UnlockNewWeapon(this.index, this);
         }
         else
         {
@@ -107,7 +107,7 @@ public class UpgradePanel : MonoBehaviour
 
         ++upgradeCount;
 
-        GameManager.Instance.GetPlayer().ATK += index + upgradeCount * 0.5f;
+        MainSceneManager.Instance.Player.ATK += index + upgradeCount * 0.5f;
         upgradeBtn.onClick.RemoveAllListeners();
         Debug.Log(upgradeCount);
         Refresh();

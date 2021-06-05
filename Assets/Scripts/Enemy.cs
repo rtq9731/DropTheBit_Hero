@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
             isDie = true;
             animator.Play("Enemy_Die");
             GameManager.Instance.AddMoney(data.Cost);
-            GameManager.Instance.GetPlayer().RemoveEnmey();
+            MainSceneManager.Instance.Player.RemoveEnmey();
             Invoke("Die", 0.93f);
         }
 
@@ -91,7 +91,7 @@ public class Enemy : MonoBehaviour
         isStateChange = false;
         transform.DOMoveX(1f, 1f).SetEase(Ease.OutCubic).OnComplete(() => { 
             State = EnemyState.Atk;
-            GameManager.Instance.GetPlayer().SetEnmey(this);
+            MainSceneManager.Instance.Player.SetEnmey(this);
         });
     }
 

@@ -5,34 +5,23 @@ using UnityEngine;
 public class GameManager : MonoSingleton<GameManager>
 {
     [SerializeField] Notes noteSheet;
-
-    [SerializeField] BackGroundMove backGround;
-    [SerializeField] Player player;
     [SerializeField] Monster enemySheet;
     [SerializeField] Weapons weaponSheet;
-    [SerializeField] public TopUI topUI;
-    [SerializeField] public WeaponUpUI upgradeUI;
-
-    [SerializeField] GameObject RythmManager;
-    [SerializeField] GameObject CvsWeaponUp;
-    [SerializeField] GameObject CvsMenu;
-    [SerializeField] GameObject CvsBg;
-    [SerializeField] GameObject CvsTopUI;
 
     public List<string> weaponNames = new List<string>();
-
     private Dictionary<string, MonsterData> monsters = new Dictionary<string, MonsterData>();
     private Dictionary<string, WeaponsData> weapons = new Dictionary<string, WeaponsData>();
     private Dictionary<string, GameObject> enemyPrefabs = new Dictionary<string, GameObject>();
-    private List<float> noteList = new List<float>();
     private Dictionary<string, List<float>> noteListDictionary = new Dictionary<string, List<float>>();
 
-    private int money;
-    private int killCount;
-    private float stage;
-    private int combo;
+    private List<float> noteList = new List<float>();
 
-    public int KillCount { get { return killCount; } set { killCount = value; topUI.UpdateCurrentKillCount(); } }
+    private int money = 0;
+    private int killCount = 0;
+    private float stage = 0;
+    private int combo = 0;
+
+    public int KillCount { get { return killCount; } set { killCount = value; MainSceneManager.Instance.topUI.UpdateCurrentKillCount(); } }
 
     public Dictionary<string, WeaponsData> GetWeponDictionary()
     {
@@ -55,6 +44,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         enemyPrefabs.Add("Skeleton", Resources.Load("Enemies/Skeleton") as GameObject);
     }
+
     public void AddCombo(int num)
     {
         combo += num;
@@ -70,31 +60,20 @@ public class GameManager : MonoSingleton<GameManager>
         return noteListDictionary[songName];
     }
 
-    public Player GetPlayer()
-    {
-        return player;
-    }
-
     public void CallNextEnmey()
     {
         GameObject temp = enemyPrefabs["Skeleton"];
         Instantiate(temp, new Vector2(8, 1), Quaternion.identity);
     }
 
-    public void ScrollingBackground()
-    {
-        backGround.isScroll = !backGround.isScroll;
-    }
-
-    public void AddMoney(int addNum)
-    {
-        money += addNum;
-        topUI.UpdateCurrentCoin();
-    }
-
     public int GetMoney()
     {
         return money;
+    }
+
+    public void AddMoney(int money)
+    {
+        this.money += money;
     }
 
     private void InputCommonEnemyData()
