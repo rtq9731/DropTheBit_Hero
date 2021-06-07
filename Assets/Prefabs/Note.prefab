@@ -88,7 +88,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3dd457c9229f684190832744da61753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MissSize: 0
-  minPerfectSize: 0.9
-  maxPerfectSize: 1.1
-  whereIsGood: 0.2
+  minPerfectSize: 0.6
+  maxPerfectSize: 1.4
+  whereIsGood: 0.4

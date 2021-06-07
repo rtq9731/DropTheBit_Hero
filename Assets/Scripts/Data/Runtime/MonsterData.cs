@@ -10,24 +10,24 @@ public class MonsterData
 {
   [SerializeField]
   string name;
-  public string Name { get {return name; } private set { this.name = value;} }
+  public string Name { get {return name; } set { this.name = value;} }
   
   [SerializeField]
   float hp;
-  public float HP { get {return hp; } private set { this.hp = value;} }
+  public float HP { get {return hp; } set { this.hp = value;} }
   
   [SerializeField]
   int cost;
-  public int Cost { get {return cost; } private set { this.cost = value;} }
-
+  public int Cost { get {return cost; } set { this.cost = value;} }
     public void AddDamage(float damage)
     {
         this.hp -= damage;
     }
-
-    public void InitData(float hp, int cost)
+    public void InitData(float hp, int cost, string name)
     {
         this.HP = hp;
         this.Cost = cost;
+        this.Name = name;
     }
+
 }

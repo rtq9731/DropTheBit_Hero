@@ -567,7 +567,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 7cd0b3fde05f7e5448b5be55878aba68, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 1c14055d214eeb141b332e87399f7aa3, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.041
   m_Pitch: 1
@@ -677,10 +677,11 @@ MonoBehaviour:
     type: 3}
   noteLine: {fileID: 923608344}
   audioSource: {fileID: 186843378}
-  poolingMax: 5
-  noteOffset: 5
+  poolingMax: 20
+  noteOffset: 1
   shakePower: 10
   shakeTime: 1
+  noteSongName: Faded
   notesforPooling: []
 --- !u!1 &192068836
 GameObject:

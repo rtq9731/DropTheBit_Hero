@@ -41,6 +41,7 @@ public class Enemy : MonoBehaviour
             isDie = true;
             animator.Play("Enemy_Die");
             GameManager.Instance.AddMoney(data.Cost);
+            GameManager.Instance.KillCount++;
             MainSceneManager.Instance.Player.RemoveEnmey();
             Invoke("Die", 0.93f);
         }
@@ -67,11 +68,10 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        GameManager.Instance.CallNextEnmey();
+        GameManager.Instance.CallNextEnmey(data.Name);
         transform.DOMoveX(-7.75f, 2f).OnComplete(()=> {
             Destroy(this.gameObject);
             });
-        GameManager.Instance.KillCount++;
     }
 
     public void Hit(float damage)
@@ -101,7 +101,7 @@ public class Enemy : MonoBehaviour
         string tempName = temp[0];
         yield return new WaitForSeconds(0.1f);
         GameManager.Instance.GetEnemyDataFromName(tempName, out float hp, out int cost);
-        data.InitData(hp, cost);
+        data.InitData(hp, cost, tempName);
         yield return null;
     }
 }

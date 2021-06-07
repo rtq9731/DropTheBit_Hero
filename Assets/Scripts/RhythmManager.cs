@@ -14,6 +14,9 @@ public class RhythmManager : MonoBehaviour
     [SerializeField] float shakePower = 0f;
     [SerializeField] float shakeTime = 0f;
 
+    [Header("테스트용 변수")]
+    [SerializeField] string noteSongName = "";
+
     public List<GameObject> notesforPooling = new List<GameObject>();
     private int index = 0;
 
@@ -30,17 +33,21 @@ public class RhythmManager : MonoBehaviour
 
     private void Update()
     {
-        if(isPlayingNote && noteTimer + noteOffset >= notesQueue.Peek())
+        if(isPlayingNote && noteTimer - noteOffset >= notesQueue.Peek())
         {
-            if(notesQueue.Dequeue() == 0)
+            Debug.Log(notesQueue.Peek());
+            if(notesQueue.Count == 1)
             {
+                CrateNote();
+                notesQueue.Dequeue();
                 FinishRhythm();
                 return;
             }
             CrateNote();
-            noteTimer += Time.deltaTime;
+            notesQueue.Dequeue();
         }
-        else if (isPlayingNote)
+        
+        if (isPlayingNote)
         {
             noteTimer += Time.deltaTime;
         }
@@ -67,11 +74,10 @@ public class RhythmManager : MonoBehaviour
 
     void InitRhythm()
     {
-        foreach (var item in GameManager.Instance.GetSongNotesByName("So_Happy"))
+        foreach (var item in GameManager.Instance.GetSongNotesByName(noteSongName))
         {
             notesQueue.Enqueue(item);
         }
-
         isPlayingNote = true;
         audioSource.Play();
     }
@@ -92,9 +98,7 @@ public class RhythmManager : MonoBehaviour
         {
             notesforPooling[index].gameObject.SetActive(true);
         }
-
-        notesforPooling[index].gameObject.transform.localScale = new Vector3(2, 2, 2);
-        notesforPooling[index].gameObject.transform.DOScale(0, noteOffset / 2f).SetEase(Ease.Linear);
+        notesforPooling[index].gameObject.transform.DOScale(0, noteOffset).SetEase(Ease.Linear);
         index++;
         if (index == poolingMax)
         {
@@ -106,6 +110,7 @@ public class RhythmManager : MonoBehaviour
     private void DeleteNote(GameObject note)
     {
         note.SetActive(false);
+        DOTween.Complete(note);
     }
 
     private void CheckNote()
