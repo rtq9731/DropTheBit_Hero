@@ -14,9 +14,6 @@ public class RhythmManager : MonoBehaviour
     [SerializeField] float shakePower = 0f;
     [SerializeField] float shakeTime = 0f;
 
-    [Header("테스트용 변수")]
-    [SerializeField] string noteSongName = "";
-
     public List<GameObject> notesforPooling = new List<GameObject>();
     private int index = 0;
 
@@ -26,14 +23,9 @@ public class RhythmManager : MonoBehaviour
 
     private bool isPlayingNote = false;
 
-    private void Start()
-    {
-        InitRhythm();
-    }
-
     private void Update()
     {
-        if(isPlayingNote && noteTimer - noteOffset >= notesQueue.Peek())
+        if(isPlayingNote && (noteTimer - 0.05 ) >= notesQueue.Peek())
         {
             Debug.Log(notesQueue.Peek());
             if(notesQueue.Count == 1)
@@ -72,16 +64,6 @@ public class RhythmManager : MonoBehaviour
         }
     }
 
-    void InitRhythm()
-    {
-        foreach (var item in GameManager.Instance.GetSongNotesByName(noteSongName))
-        {
-            notesQueue.Enqueue(item);
-        }
-        isPlayingNote = true;
-        audioSource.Play();
-    }
-
     void FinishRhythm()
     {
         isPlayingNote = false;
@@ -98,7 +80,7 @@ public class RhythmManager : MonoBehaviour
         {
             notesforPooling[index].gameObject.SetActive(true);
         }
-        notesforPooling[index].gameObject.transform.DOScale(0, noteOffset).SetEase(Ease.Linear);
+        notesforPooling[index].gameObject.transform.DOScale(0, 1).SetEase(Ease.Linear);
         index++;
         if (index == poolingMax)
         {
@@ -135,24 +117,21 @@ public class RhythmManager : MonoBehaviour
                     {
                         noteLine.GetComponent<RectTransform>().DOShakeAnchorPos(shakeTime, shakePower).OnComplete(() => noteLine.GetComponent<RectTransform>().anchoredPosition = Vector3.zero);
                         DeleteNote(item.gameObject);
-                        GameManager.Instance.AddCombo(2);
-                        break;
+                        return;
                     }
                 // Good
                 case 2:
                     {
                         noteLine.GetComponent<RectTransform>().DOShakeAnchorPos(shakeTime, shakePower / 2f).OnComplete(() => noteLine.GetComponent<RectTransform>().anchoredPosition = Vector3.zero);
                         DeleteNote(item.gameObject);
-                        GameManager.Instance.AddCombo(1);
-                        break;
+                        return;
                     }
                 // Miss
                 case 3:
                     {
                         noteLine.GetComponent<RectTransform>().DOShakeAnchorPos(shakeTime, shakePower / 3f).OnComplete(() => noteLine.GetComponent<RectTransform>().anchoredPosition = Vector3.zero);
                         DeleteNote(item.gameObject);
-                        GameManager.Instance.BreakCombo();
-                        break;
+                        return;
                     }
                 default: break;
             }

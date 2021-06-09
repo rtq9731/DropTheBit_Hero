@@ -19,11 +19,17 @@ public class MainSceneManager : MonoBehaviour
     [SerializeField] Player player;
     [SerializeField] public TopUI topUI;
     [SerializeField] public WeaponUpUI upgradeUI;
+    [SerializeField] public AudioSource hitSound;
 
     public Player Player { get { return player; } set { player = value; } }
 
     public void ScrollingBackground()
     {
         backGround.isScroll = !backGround.isScroll;
+    }
+
+    public void DoHit()
+    {
+        hitSound.Play();
     }
 }
