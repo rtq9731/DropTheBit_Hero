@@ -9,6 +9,7 @@ public class RhythmManager : MonoBehaviour
     [SerializeField] GameObject notePrefab;
     [SerializeField] GameObject noteLine;
     [SerializeField] AudioSource audioSource;
+    [SerializeField] Transform noteMakeTr;
     [SerializeField] int poolingMax = 5;
     [SerializeField] float noteOffset = 2f;
     [SerializeField] float shakePower = 0f;
@@ -19,29 +20,30 @@ public class RhythmManager : MonoBehaviour
 
     private float noteTimer = 0;
 
-    Queue<float> notesQueue = new Queue<float>();
-
     private bool isPlayingNote = false;
+
+    private int noteMakeIndex = 0;
+    private int noteCheckIndex = 0;
+
+    private void Start()
+    {
+        Invoke("StartStopSong", 2f);
+    }
 
     private void Update()
     {
-        if(isPlayingNote && (noteTimer - 0.05 ) >= notesQueue.Peek())
+        if(isPlayingNote && noteTimer >= GameManager.Instance.parsingManager.BeatmapData["So_Happy"].HitObjects[noteMakeIndex].Time - 1000)
         {
-            Debug.Log(notesQueue.Peek());
-            if(notesQueue.Count == 1)
-            {
-                CrateNote();
-                notesQueue.Dequeue();
-                FinishRhythm();
+            if (GameManager.Instance.parsingManager.BeatmapData["So_Happy"].HitObjects.Count < noteMakeIndex)
                 return;
-            }
+
+            noteMakeIndex++;
             CrateNote();
-            notesQueue.Dequeue();
         }
-        
+
         if (isPlayingNote)
         {
-            noteTimer += Time.deltaTime;
+            noteTimer += Time.deltaTime * 1000;
         }
 
         if(Input.GetMouseButtonDown(0))
@@ -52,6 +54,9 @@ public class RhythmManager : MonoBehaviour
 
     public void StartStopSong()
     {
+        if (!isPlayingNote)
+            audioSource.clip = GameManager.Instance.GetMusic();
+
         isPlayingNote = !isPlayingNote;
 
         if(isPlayingNote)
@@ -71,7 +76,6 @@ public class RhythmManager : MonoBehaviour
 
     void CrateNote()
     {
-
         if (notesforPooling.Count < poolingMax)
         {
             notesforPooling.Add(Instantiate(notePrefab, transform));
@@ -80,7 +84,8 @@ public class RhythmManager : MonoBehaviour
         {
             notesforPooling[index].gameObject.SetActive(true);
         }
-        notesforPooling[index].gameObject.transform.DOScale(0, 1).SetEase(Ease.Linear);
+        notesforPooling[index].transform.position = noteMakeTr.position;
+        notesforPooling[index].transform.DOMoveX(noteLine.transform.position.x, 1f).SetEase(Ease.Linear);
         index++;
         if (index == poolingMax)
         {
@@ -97,44 +102,23 @@ public class RhythmManager : MonoBehaviour
 
     private void CheckNote()
     {
-        for (int i = 0; i < notesforPooling.Count; i++)
-        {
-            var item = notesforPooling[i].GetComponent<NoteScript>();
-            if (!item.gameObject.activeSelf) // 만약 비활성화 되있다면 멈춰!
-            {
-                continue;
-            }
+        var item = notesforPooling[noteCheckIndex].GetComponent<NoteScript>();
 
-            switch (item.isHit()) // 히트 검사
-            {
-                // None
-                case 0:
-                    {
-                        break;
-                    }
-                // Perfect 
-                case 1:
-                    {
-                        noteLine.GetComponent<RectTransform>().DOShakeAnchorPos(shakeTime, shakePower).OnComplete(() => noteLine.GetComponent<RectTransform>().anchoredPosition = Vector3.zero);
-                        DeleteNote(item.gameObject);
-                        return;
-                    }
-                // Good
-                case 2:
-                    {
-                        noteLine.GetComponent<RectTransform>().DOShakeAnchorPos(shakeTime, shakePower / 2f).OnComplete(() => noteLine.GetComponent<RectTransform>().anchoredPosition = Vector3.zero);
-                        DeleteNote(item.gameObject);
-                        return;
-                    }
-                // Miss
-                case 3:
-                    {
-                        noteLine.GetComponent<RectTransform>().DOShakeAnchorPos(shakeTime, shakePower / 3f).OnComplete(() => noteLine.GetComponent<RectTransform>().anchoredPosition = Vector3.zero);
-                        DeleteNote(item.gameObject);
-                        return;
-                    }
-                default: break;
-            }
+        if (!item.gameObject.activeSelf) // 만약 비활성화 되있다면 다음으로 넘어가서 재시작!
+        {
+            noteCheckIndex++;
+
+        if (noteCheckIndex == poolingMax)
+            noteCheckIndex = 0;
+            
+            CheckNote();
+        }
+
+        int hit = item.isHit(noteLine.transform.position);
+        if ((hit % 4) > 0)
+        {
+            Camera.main.transform.DOShakePosition(shakeTime, shakePower / (hit % 4));
+            DeleteNote(item.gameObject);
         }
     }
 

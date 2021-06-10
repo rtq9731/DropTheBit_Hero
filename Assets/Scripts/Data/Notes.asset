@@ -15,7 +15,7 @@ MonoBehaviour:
   SheetName: Assets/Scripts/Data/Data.xlsx
   WorksheetName: Notes
   dataArray:
-  - songname: So_Happy
-    datapath: Notes/So_Happy
   - songname: Faded
     datapath: Notes/Faded
+  - songname: So_Happy
+    datapath: Notes/So_Happy

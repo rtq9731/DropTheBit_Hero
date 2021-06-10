@@ -5,16 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    [SerializeField] Notes noteSheet;
+    [SerializeField] public Notes noteSheet;
     [SerializeField] Monster enemySheet;
     [SerializeField] Weapons weaponSheet;
-    [SerializeField] OsuParser parsingManager = null;
+    public OsuParser parsingManager = null;
 
     public List<string> weaponNames = new List<string>();
+
+    [SerializeField] public string nowPlaySong = "";
+
     private Dictionary<string, MonsterData> monsters = new Dictionary<string, MonsterData>();
     private Dictionary<string, WeaponsData> weapons = new Dictionary<string, WeaponsData>();
     private Dictionary<string, GameObject> enemyPrefabs = new Dictionary<string, GameObject>();
-
 
     private int money = 0;
     private int killCount = 0;
@@ -28,6 +30,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     void Awake()
     {
+        parsingManager.Parsing();
         InputCommonEnemyData();
         InputWeponData();
     }
@@ -41,6 +44,11 @@ public class GameManager : MonoSingleton<GameManager>
     {
         GameObject temp = enemyPrefabs[nameKey];
         Instantiate(temp, new Vector2(8, 1), Quaternion.identity);
+    }
+
+    public AudioClip GetMusic()
+    {
+        return Resources.Load($"{Application.dataPath}/Resources/SongMP3/{nowPlaySong}") as AudioClip;
     }
 
     public int GetMoney()
@@ -70,7 +78,6 @@ public class GameManager : MonoSingleton<GameManager>
             weaponNames.Add(weaponSheet.dataArray[i].Name);
         }
     }
-
 
     public void GetEnemyDataFromName(string name, out float hp, out int cost)
     {
