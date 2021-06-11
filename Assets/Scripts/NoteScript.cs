@@ -29,17 +29,14 @@ public class NoteScript : MonoBehaviour
     {
         if(Vector2.Distance(linePos, this.transform.position) <= whereIsPerfect)
         {
-            rhythmManager.CrateEffect("PERFECT");
             return 1;
         }
         else if (Vector2.Distance(linePos, this.transform.position) <= whereIsGood)
         {
-            rhythmManager.CrateEffect("GOOD");
             return 2;
         }
         else if(Vector2.Distance(linePos, this.transform.position) <= whereIsMiss)
         {
-            rhythmManager.CrateEffect("MISS");
             return 3;
         }
         else if (Vector2.Distance(linePos, this.transform.position) >= whereIsMiss && transform.position.x >= rhythmManager.transform.position.x)

@@ -52,9 +52,9 @@ public class RhythmManager : MonoBehaviour
 
     private void Update()
     {
-        if(isPlayingNote && noteTimer >= GameManager.Instance.parsingManager.BeatmapData["So_Happy"].HitObjects[noteMakeIndex].Time - 1000)
+        if(isPlayingNote && noteTimer >= GameManager.Instance.parsingManager.BeatmapData["Faded"].HitObjects[noteMakeIndex].Time - 1000)
         {
-            if (GameManager.Instance.parsingManager.BeatmapData["So_Happy"].HitObjects.Count < noteMakeIndex)
+            if (GameManager.Instance.parsingManager.BeatmapData["Faded"].HitObjects.Count < noteMakeIndex)
                 return;
 
             noteMakeIndex++;
@@ -105,9 +105,14 @@ public class RhythmManager : MonoBehaviour
             notesforPooling[indexforNotePooling].gameObject.SetActive(true);
         }
 
-        notesforPooling[indexforNotePooling].transform.position = noteMakeTr.position;
-        notesforPooling[indexforNotePooling].GetComponent<NoteScript>().SetRhythmManager(this);
-        notesforPooling[indexforNotePooling].transform.DOMoveX(noteLine.transform.position.x - noteEndXOffset, -(noteLineDistance / (noteLine.transform.position.x - noteEndXOffset))).SetEase(Ease.Linear);
+
+        Transform noteTr = notesforPooling[indexforNotePooling].transform;
+        noteTr.position = noteMakeTr.position;
+        noteTr.GetComponent<NoteScript>().SetRhythmManager(this);
+        noteTr.DOMoveX(
+            noteLine.transform.position.x - noteEndXOffset,
+            -(noteLineDistance / (noteLine.transform.position.x - noteEndXOffset))
+            ).SetEase(Ease.Linear);
 
         indexforNotePooling++;
         if (indexforNotePooling == poolingMax)
@@ -116,8 +121,9 @@ public class RhythmManager : MonoBehaviour
         }
 
     }
-    public void CrateEffect(string text)
+    public void CrateEffect(int n) // Perfect = 1, Good = 2, Miss = 3
     {
+        Debug.Log("이펙트 출력!");
         if (effects.Count < poolingMax)
         {
             effects.Add(Instantiate(hitEffectPrefab, hitEffectTransform));
@@ -128,21 +134,21 @@ public class RhythmManager : MonoBehaviour
         }
 
         NoteHitEffect nowEffect = effects[indexforEffectPooling].GetComponent<NoteHitEffect>();
-        switch (text)
+        switch (n)
         {
-            case "PERFECT":
+            case 1:
                 {
                     nowEffect.text.color = hitEffectColors.perfectColor;
                     nowEffect.text.text = "PERFECT";
                     break;
                 }
-            case "GOOD":
+            case 2:
                 {
                     nowEffect.text.color = hitEffectColors.goodColor;
                     nowEffect.text.text = "GOOD";
                     break;
                 }
-            case "MISS":
+            case 3:
                 {
                     nowEffect.text.color = hitEffectColors.missColor;
                     nowEffect.text.text = "MISS";
@@ -189,9 +195,12 @@ public class RhythmManager : MonoBehaviour
         }
 
         int hit = item.isHit(noteLine.transform.position);
+        
+
         if ((hit % 4) > 0)
         {
             //Camera.main.transform.DOShakePosition(shakeTime, shakePower / (hit / 4));
+            CrateEffect(hit);
             DeleteNote(item.gameObject);
             noteCheckIndex++; // 다음 노트를 검사하게 Index++;
             if (noteCheckIndex == poolingMax)
