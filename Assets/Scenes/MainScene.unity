@@ -536,7 +536,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &186843377
 RectTransform:
   m_ObjectHideFlags: 0
@@ -676,7 +676,10 @@ MonoBehaviour:
   notePrefab: {fileID: 3381818881106091728, guid: 3e2f980d92657204485ee035c2a88470,
     type: 3}
   noteLine: {fileID: 923608344}
+  hitEffectPrefab: {fileID: 0}
   audioSource: {fileID: 186843378}
+  noteMakeTr: {fileID: 0}
+  hitEffectTransform: {fileID: 0}
   poolingMax: 20
   noteOffset: 1
   shakePower: 10
@@ -1394,6 +1397,7 @@ MonoBehaviour:
   weaponSheet: {fileID: 11400000, guid: cfa89dfc637c57344800e4999c810e58, type: 2}
   parsingManager: {fileID: 429422855}
   weaponNames: []
+  nowPlaySong: 
 --- !u!114 &429422855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1406,7 +1410,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b23894f9aeab47b499c78b602588fedd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  songName: So_Happy
 --- !u!43 &437970643
 Mesh:
   m_ObjectHideFlags: 0

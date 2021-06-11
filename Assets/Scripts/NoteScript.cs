@@ -12,19 +12,19 @@ public class NoteScript : MonoBehaviour
 
     public void SetRhythmManager(RhythmManager rhythm)
     {
-        Debug.Log("HI");
         rhythmManager = rhythm;
     }
 
     private void Update()
     {
-        if(rhythmManager.transform.position.x + transform.position.x <= rhythmManager.transform.position.x - whereIsMiss)
-            rhythmManager.CheckNote();
+        //if(rhythmManager.noteLine.transform.position.x + this.transform.position.x <= -whereIsMiss)
+        //{
+        //    rhythmManager.CheckNote();
+        //}
     }
 
     public int isHit(Vector2 linePos) // Perfect = 1, Good = 2, Miss = 3, None = 4
     {
-        Debug.Log(Vector2.Distance(linePos, this.transform.position));
         if(Vector2.Distance(linePos, this.transform.position) <= whereIsPerfect)
         {
             rhythmManager.CrateEffect("PERFECT");

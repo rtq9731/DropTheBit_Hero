@@ -88,6 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3dd457c9229f684190832744da61753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  whereIsPerfect: 3
-  whereIsGood: 3
-  whereIsMiss: 3
+  whereIsPerfect: 0.5
+  whereIsGood: 1
+  whereIsMiss: 1
+  rhythmManager: {fileID: 0}

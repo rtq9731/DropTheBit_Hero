@@ -14,7 +14,8 @@ public class RhythmManager : MonoBehaviour
     }
 
     [SerializeField] GameObject notePrefab;
-    [SerializeField] GameObject noteLine;
+    [SerializeField] public GameObject noteLine;
+    [SerializeField] GameObject hitEffectPrefab;
     [SerializeField] AudioSource audioSource;
     [SerializeField] Transform noteMakeTr;
     [SerializeField] Transform hitEffectTransform;
@@ -42,6 +43,7 @@ public class RhythmManager : MonoBehaviour
     private void Start()
     {
         Invoke("StartStopSong", 2f);
+        Debug.Log(Vector2.Distance(noteMakeTr.GetComponent<RectTransform>().anchoredPosition, noteLine.GetComponent<RectTransform>().anchoredPosition));
     }
 
     private void Update()
@@ -112,7 +114,7 @@ public class RhythmManager : MonoBehaviour
     {
         if (effects.Count < poolingMax)
         {
-            effects.Add(Instantiate(notePrefab, transform));
+            effects.Add(Instantiate(hitEffectPrefab, hitEffectTransform));
         }
         else
         {
@@ -152,8 +154,6 @@ public class RhythmManager : MonoBehaviour
         seq.Join(nowEffect.text.DOFade(0, 1));
         seq.OnComplete(() => nowEffect.gameObject.SetActive(false));
 
-        //seq.Play();
-
         indexforEffectPooling++;
         if (indexforEffectPooling == poolingMax)
         {
@@ -187,6 +187,7 @@ public class RhythmManager : MonoBehaviour
         {
             Camera.main.transform.DOShakePosition(shakeTime, shakePower / (hit % 4));
             DeleteNote(item.gameObject);
+            noteCheckIndex++; // 다음 노트를 검사하게 Index++;
         }
     }
 
