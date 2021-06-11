@@ -13,14 +13,16 @@ public class NoteScript : MonoBehaviour
     public void SetRhythmManager(RhythmManager rhythm)
     {
         rhythmManager = rhythm;
+        Debug.Log(rhythmManager.noteLine.transform.position.x - (whereIsPerfect + whereIsGood));
     }
 
     private void Update()
     {
-        //if(rhythmManager.noteLine.transform.position.x + this.transform.position.x <= -whereIsMiss)
-        //{
-        //    rhythmManager.CheckNote();
-        //}
+        if ( this.transform.position.x + 0.5 <= rhythmManager.noteLine.transform.position.x - (whereIsPerfect + whereIsGood))
+        {
+            Debug.Log("판정 범위 밖으로 벗어나 리셋합니다.");
+            rhythmManager.CheckNote();
+        }
     }
 
     public int isHit(Vector2 linePos) // Perfect = 1, Good = 2, Miss = 3, None = 4
@@ -40,11 +42,13 @@ public class NoteScript : MonoBehaviour
             rhythmManager.CrateEffect("MISS");
             return 3;
         }
-        else if (Vector2.Distance(linePos, this.transform.position) >= whereIsMiss)
+        else if (Vector2.Distance(linePos, this.transform.position) >= whereIsMiss && transform.position.x >= rhythmManager.transform.position.x)
         {
             return 4;
         }
-
-        return 3;
+        else
+        {
+            return 3;
+        }
     }
 }

@@ -13,6 +13,7 @@ public class RhythmManager : MonoBehaviour
         public Color missColor = new Color(0.6792453f, 0, 0.06030021f, 1);
     }
 
+
     [SerializeField] GameObject notePrefab;
     [SerializeField] public GameObject noteLine;
     [SerializeField] GameObject hitEffectPrefab;
@@ -23,6 +24,9 @@ public class RhythmManager : MonoBehaviour
     [SerializeField] float noteOffset = 2f;
     [SerializeField] float shakePower = 0f;
     [SerializeField] float shakeTime = 0f;
+    [SerializeField] float noteEndXOffset = 0f;
+
+    private float noteLineDistance = 0f;
 
     private HitEffectColors hitEffectColors = new HitEffectColors();
 
@@ -42,8 +46,8 @@ public class RhythmManager : MonoBehaviour
 
     private void Start()
     {
+        noteLineDistance = Vector2.Distance(noteMakeTr.position, noteLine.transform.position);
         Invoke("StartStopSong", 2f);
-        Debug.Log(Vector2.Distance(noteMakeTr.GetComponent<RectTransform>().anchoredPosition, noteLine.GetComponent<RectTransform>().anchoredPosition));
     }
 
     private void Update()
@@ -100,9 +104,11 @@ public class RhythmManager : MonoBehaviour
         {
             notesforPooling[indexforNotePooling].gameObject.SetActive(true);
         }
+
         notesforPooling[indexforNotePooling].transform.position = noteMakeTr.position;
         notesforPooling[indexforNotePooling].GetComponent<NoteScript>().SetRhythmManager(this);
-        notesforPooling[indexforNotePooling].transform.DOMoveX(noteLine.transform.position.x, 1f).SetEase(Ease.Linear);
+        notesforPooling[indexforNotePooling].transform.DOMoveX(noteLine.transform.position.x - noteEndXOffset, -(noteLineDistance / (noteLine.transform.position.x - noteEndXOffset))).SetEase(Ease.Linear);
+
         indexforNotePooling++;
         if (indexforNotePooling == poolingMax)
         {
@@ -185,9 +191,11 @@ public class RhythmManager : MonoBehaviour
         int hit = item.isHit(noteLine.transform.position);
         if ((hit % 4) > 0)
         {
-            Camera.main.transform.DOShakePosition(shakeTime, shakePower / (hit % 4));
+            //Camera.main.transform.DOShakePosition(shakeTime, shakePower / (hit / 4));
             DeleteNote(item.gameObject);
             noteCheckIndex++; // 다음 노트를 검사하게 Index++;
+            if (noteCheckIndex == poolingMax)
+                noteCheckIndex = 0;
         }
     }
 
