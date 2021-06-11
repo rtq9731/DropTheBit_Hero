@@ -16,11 +16,11 @@ public class WeaponUpUI : MonoBehaviour
         MakeUpgradePanels();
     }
 
-    public void UnlockNewWeapon(short index, UpgradePanel upgradePanel)
+    public void UnlockNewWeapon(short indexforNotePooling, UpgradePanel upgradePanel)
     {
-        WeaponsData temp = GameManager.Instance.GetWeponDictionary()[GameManager.Instance.weaponNames[index]];
+        WeaponsData temp = GameManager.Instance.GetWeponDictionary()[GameManager.Instance.weaponNames[indexforNotePooling]];
         upgradePanel.isUnlocked = true;
-        upgradePanels[index].Refresh(upgradePanel.isUnlocked);
+        upgradePanels[indexforNotePooling].Refresh(upgradePanel.isUnlocked);
     }
 
     public void MakeUpgradePanels()

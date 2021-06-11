@@ -6,24 +6,38 @@ using DG.Tweening;
 
 public class RhythmManager : MonoBehaviour
 {
+    class HitEffectColors
+    {
+        public Color perfectColor = new Color(1, 0.8874891f, 0, 1);
+        public Color goodColor = new Color(0.6792453f, 0.9150943f, 0.06030021f, 1);
+        public Color missColor = new Color(0.6792453f, 0, 0.06030021f, 1);
+    }
+
     [SerializeField] GameObject notePrefab;
     [SerializeField] GameObject noteLine;
     [SerializeField] AudioSource audioSource;
     [SerializeField] Transform noteMakeTr;
+    [SerializeField] Transform hitEffectTransform;
     [SerializeField] int poolingMax = 5;
     [SerializeField] float noteOffset = 2f;
     [SerializeField] float shakePower = 0f;
     [SerializeField] float shakeTime = 0f;
 
+    private HitEffectColors hitEffectColors = new HitEffectColors();
+
     public List<GameObject> notesforPooling = new List<GameObject>();
-    private int index = 0;
+    private List<GameObject> effects = new List<GameObject>();
+
+    private int indexforEffectPooling = 0;
+    private int indexforNotePooling = 0;
+    private int noteMakeIndex = 0;
+    private int noteCheckIndex = 0;
 
     private float noteTimer = 0;
 
     private bool isPlayingNote = false;
 
-    private int noteMakeIndex = 0;
-    private int noteCheckIndex = 0;
+
 
     private void Start()
     {
@@ -82,14 +96,68 @@ public class RhythmManager : MonoBehaviour
         }
         else
         {
-            notesforPooling[index].gameObject.SetActive(true);
+            notesforPooling[indexforNotePooling].gameObject.SetActive(true);
         }
-        notesforPooling[index].transform.position = noteMakeTr.position;
-        notesforPooling[index].transform.DOMoveX(noteLine.transform.position.x, 1f).SetEase(Ease.Linear);
-        index++;
-        if (index == poolingMax)
+        notesforPooling[indexforNotePooling].transform.position = noteMakeTr.position;
+        notesforPooling[indexforNotePooling].GetComponent<NoteScript>().SetRhythmManager(this);
+        notesforPooling[indexforNotePooling].transform.DOMoveX(noteLine.transform.position.x, 1f).SetEase(Ease.Linear);
+        indexforNotePooling++;
+        if (indexforNotePooling == poolingMax)
         {
-            index = 0; // index가 최대치라면 다시 초기화
+            indexforNotePooling = 0; // indexforNotePooling가 최대치라면 다시 초기화
+        }
+
+    }
+    public void CrateEffect(string text)
+    {
+        if (effects.Count < poolingMax)
+        {
+            effects.Add(Instantiate(notePrefab, transform));
+        }
+        else
+        {
+            effects[indexforEffectPooling].gameObject.SetActive(true);
+        }
+
+        NoteHitEffect nowEffect = effects[indexforEffectPooling].GetComponent<NoteHitEffect>();
+        switch (text)
+        {
+            case "PERFECT":
+                {
+                    nowEffect.text.color = hitEffectColors.perfectColor;
+                    nowEffect.text.text = "PERFECT";
+                    break;
+                }
+            case "GOOD":
+                {
+                    nowEffect.text.color = hitEffectColors.goodColor;
+                    nowEffect.text.text = "GOOD";
+                    break;
+                }
+            case "MISS":
+                {
+                    nowEffect.text.color = hitEffectColors.missColor;
+                    nowEffect.text.text = "MISS";
+                    break;
+                }
+        }
+
+        nowEffect.transform.position = hitEffectTransform.position;
+
+        Sequence seq = DOTween.Sequence();
+        seq.OnStart(() =>{
+            nowEffect.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+            });
+        seq.Append(nowEffect.GetComponent<RectTransform>().DOAnchorPosY(50, 1).SetEase(Ease.InBack));
+        seq.Join(nowEffect.text.DOFade(0, 1));
+        seq.OnComplete(() => nowEffect.gameObject.SetActive(false));
+
+        //seq.Play();
+
+        indexforEffectPooling++;
+        if (indexforEffectPooling == poolingMax)
+        {
+            indexforEffectPooling = 0; // indexforNotePooling가 최대치라면 다시 초기화
         }
 
     }
@@ -100,7 +168,7 @@ public class RhythmManager : MonoBehaviour
         DOTween.Complete(note);
     }
 
-    private void CheckNote()
+    public void CheckNote()
     {
         var item = notesforPooling[noteCheckIndex].GetComponent<NoteScript>();
 
@@ -108,8 +176,8 @@ public class RhythmManager : MonoBehaviour
         {
             noteCheckIndex++;
 
-        if (noteCheckIndex == poolingMax)
-            noteCheckIndex = 0;
+            if (noteCheckIndex == poolingMax)
+                noteCheckIndex = 0;
             
             CheckNote();
         }

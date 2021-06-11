@@ -48,7 +48,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public AudioClip GetMusic()
     {
-        return Resources.Load($"{Application.dataPath}/Resources/SongMP3/{nowPlaySong}") as AudioClip;
+        return Resources.Load($"SongMP3/{nowPlaySong}") as AudioClip;
     }
 
     public int GetMoney()
