@@ -19,7 +19,7 @@ TextureImporter:
     second: Attack1_8
   - first:
       213: 6238536850125145498
-    second: Attack1_6
+    second: Attack1_5
   - first:
       213: -7367232305435581187
     second: Attack1_7
@@ -40,7 +40,7 @@ TextureImporter:
     second: Attack1_14
   - first:
       213: 9049670758512633567
-    second: Attack1_15
+    second: Attack1_6
   - first:
       213: -2319477856403320534
     second: Attack1_16
@@ -190,7 +190,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Attack1_6
+      name: Attack1_5
       rect:
         serializedVersion: 2
         x: 1109
@@ -232,7 +232,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Attack1_15
+      name: Attack1_6
       rect:
         serializedVersion: 2
         x: 1359

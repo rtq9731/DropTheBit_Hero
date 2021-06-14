@@ -50,7 +50,7 @@ public class RhythmManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "BossScene")
         {
-            BossSceneManager.Instance.hpSlider.maxValue = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count;
+            BossSceneManager.Instance.progressBar.maxValue = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count;
             isBossScene = true;
             Animator.StringToHash("Attack1");
         }
@@ -66,16 +66,19 @@ public class RhythmManager : MonoBehaviour
 
         }
 
-        if(isPlayingNote && noteTimer >= GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time - 1000)
-        {
-            if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count < noteMakeIndex)
-            {
-                FinishRhythm();
-                return;
-            }
 
-            noteMakeIndex++;
-            CrateNote();
+        if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count > noteMakeIndex)
+        {
+            if (isPlayingNote && noteTimer >= GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time - 1000)
+            {
+                noteMakeIndex++;
+                CrateNote();
+            }
+        }
+        else
+        {
+            FinishRhythm();
+            return;
         }
 
         if (isPlayingNote)
@@ -109,10 +112,30 @@ public class RhythmManager : MonoBehaviour
     void FinishRhythm()
     {
         isPlayingNote = false;
+        if(isBossScene)
+        {
+            BossSceneManager.Instance.FinishFight();
+        }
     }
 
     void CrateNote()
     {
+        if (isBossScene)
+        {
+            int randNum = Random.Range(1, 3);
+            switch (randNum)
+            {
+                case 1:
+                    BossSceneManager.Instance.bossAnimator.SetTrigger(BossSceneManager.Instance.bossAttack1Hash);
+                    break;
+                case 2:
+                    BossSceneManager.Instance.bossAnimator.SetTrigger(BossSceneManager.Instance.bossAttack2Hash);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         if (notesforPooling.Count < poolingMax)
         {
             notesforPooling.Add(Instantiate(notePrefab, transform));
@@ -138,25 +161,9 @@ public class RhythmManager : MonoBehaviour
         }
 
     }
+
     public void CrateEffect(int n) // Perfect = 1, Good = 2, Miss = 3
     {
-        int randNum = Random.Range(1, 3);
-
-        if (isBossScene)
-        {
-            switch (randNum)
-            {
-                case 1:
-                    BossSceneManager.Instance.bossAnimator.SetTrigger(BossSceneManager.Instance.bossAttack1Hash);
-                    break;
-                case 2:
-                    BossSceneManager.Instance.bossAnimator.SetTrigger(BossSceneManager.Instance.bossAttack2Hash);
-                    break;
-                default:
-                    break;
-            }
-        }
-
         if (effects.Count < poolingMax)
         {
             effects.Add(Instantiate(hitEffectPrefab, hitEffectTransform));
@@ -174,6 +181,13 @@ public class RhythmManager : MonoBehaviour
                     nowEffect.text.color = hitEffectColors.perfectColor;
                     GameManager.Instance.Combo += 2;
                     nowEffect.text.text = $"PERFECT X {GameManager.Instance.Combo}";
+
+                    if (isBossScene)
+                    {
+                        BossSceneManager.Instance.progressBar.value += 2;
+                        BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerAttackHash);
+                    }
+
                     break;
                 }
             case 2:
@@ -181,6 +195,13 @@ public class RhythmManager : MonoBehaviour
                     nowEffect.text.color = hitEffectColors.goodColor;
                     ++GameManager.Instance.Combo;
                     nowEffect.text.text = $"GOOD X {GameManager.Instance.Combo}";
+
+                    if (isBossScene)
+                    {
+                        BossSceneManager.Instance.progressBar.value++;
+                        BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerAttackHash);
+                    }
+
                     break;
                 }
             case 3:
@@ -188,6 +209,13 @@ public class RhythmManager : MonoBehaviour
                     nowEffect.text.color = hitEffectColors.missColor;
                     GameManager.Instance.Combo = 0;
                     nowEffect.text.text = "MISS";
+
+                    if (isBossScene)
+                    {
+                        BossSceneManager.Instance.progressBar.value--;
+                        BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerHitHash);
+                    }
+
                     break;
                 }
         }
@@ -232,8 +260,7 @@ public class RhythmManager : MonoBehaviour
 
         int hit = item.isHit(noteLine.transform.position);
         
-
-        if ((hit % 4) > 0)
+        if ((hit % 4) > 0) // None이 아닌 경우
         {
             //Camera.main.transform.DOShakePosition(shakeTime, shakePower / (hit / 4));
             CrateEffect(hit);
