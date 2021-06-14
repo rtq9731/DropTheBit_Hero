@@ -31,9 +31,13 @@ public class RhythmManager : MonoBehaviour
     private int noteMakeIndex = 0;
     private int noteCheckIndex = 0;
 
+    private int currentTimingPointIndex = 0;
+
+    TimingPoint currentTimingPoint = new TimingPoint();
+
     private float noteTimer = 0;
     private float noteLineDistance = 0f;
-
+    private bool isTimingPointPlay = true;
 
     [Header("콤보 이펙트 관련")]
     [SerializeField] Transform hitEffectTransform;
@@ -66,11 +70,26 @@ public class RhythmManager : MonoBehaviour
 
         }
 
+        if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].TimingPoints[currentTimingPointIndex].Offset - 1 < noteTimer && isTimingPointPlay)
+        {
+            currentTimingPoint = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].TimingPoints[currentTimingPointIndex];
+            Debug.Log(currentTimingPoint.Offset / 1000);
+            ++currentTimingPointIndex;
+            if(currentTimingPointIndex == GameManager.Instance.parsingManager.BeatmapData[parsingSongName].TimingPoints.Count)
+            {
+                isTimingPointPlay = false;
+            }
+        }
 
         if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count > noteMakeIndex)
         {
-            if (isPlayingNote && noteTimer >= GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time - 1000)
+            if (isPlayingNote && noteTimer >= GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time - 1000) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 1000ms 빼줄 것임.
             {
+                //if(GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name == "HitSlider") // 롱노트를 만들도록 해야함
+                //{
+                //    return;
+                //}
+
                 noteMakeIndex++;
                 CrateNote();
             }
@@ -222,13 +241,15 @@ public class RhythmManager : MonoBehaviour
 
         nowEffect.transform.position = hitEffectTransform.position;
 
-        Sequence seq = DOTween.Sequence();
-        seq.OnStart(() =>{
-            nowEffect.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+        {
+            Sequence seq = DOTween.Sequence();
+            seq.OnStart(() => {
+                nowEffect.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
             });
-        seq.Append(nowEffect.GetComponent<RectTransform>().DOAnchorPosY(50, 1).SetEase(Ease.InBack));
-        seq.Join(nowEffect.text.DOFade(0, 1));
-        seq.OnComplete(() => nowEffect.gameObject.SetActive(false));
+            seq.Append(nowEffect.GetComponent<RectTransform>().DOAnchorPosY(50, 1).SetEase(Ease.InBack));
+            seq.Join(nowEffect.text.DOFade(0, 1));
+            seq.OnComplete(() => nowEffect.gameObject.SetActive(false));
+        }
 
         indexforEffectPooling++;
         if (indexforEffectPooling == poolingMax)
