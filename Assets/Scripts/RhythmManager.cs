@@ -23,12 +23,15 @@ public class RhythmManager : MonoBehaviour
     [SerializeField] Transform noteMakeTr;
     [SerializeField] string parsingSongName = ""; // for test
     [SerializeField] int poolingMax = 5;
+    [SerializeField] int longNotePoolingMax = 5;
     [SerializeField] float noteEndXOffset = 0f;
 
     private List<GameObject> notesforPooling = new List<GameObject>();
+    private List<GameObject> longNoteList = new List<GameObject>();
 
     private int indexforNotePooling = 0;
     private int noteMakeIndex = 0;
+    private int longNoteMakeIndex = 0;
     private int noteCheckIndex = 0;
 
     private int currentTimingPointIndex = 0;
@@ -85,10 +88,11 @@ public class RhythmManager : MonoBehaviour
         {
             if (isPlayingNote && noteTimer >= GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time - 1000) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 1000ms 빼줄 것임.
             {
-                //if(GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name == "HitSlider") // 롱노트를 만들도록 해야함
-                //{
-                //    return;
-                //}
+                if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name == "HitSlider") // 롱노트를 만들도록 해야함
+                {
+                    CreateLongNote((HitSlider)GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex]);
+                    return;
+                }
 
                 noteMakeIndex++;
                 CrateNote();
@@ -179,6 +183,28 @@ public class RhythmManager : MonoBehaviour
             indexforNotePooling = 0; // indexforNotePooling가 최대치라면 다시 초기화
         }
 
+    }
+
+    void CreateLongNote(HitSlider slider)
+    {
+
+        if (notesforPooling.Count < poolingMax)
+        {
+            notes.Add(Instantiate(notePrefab, transform));
+        }
+        else
+        {
+            notesforPooling[indexforNotePooling].gameObject.SetActive(true);
+        }
+
+        float myLength = GetSliderLengthInMs(slider);
+    }
+
+    float GetSliderLengthInMs(HitSlider slider)
+    {
+        var pixelsPerBeat = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].SliderMultiplier * currentTimingPoint.MsPerBeat;
+        var sliderLengthInBeats = (slider.PixelLength * slider.Repeat) / pixelsPerBeat;
+        return pixelsPerBeat * sliderLengthInBeats;
     }
 
     public void CrateEffect(int n) // Perfect = 1, Good = 2, Miss = 3
