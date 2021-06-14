@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using DG.Tweening;
 
 public class RhythmManager : MonoBehaviour
@@ -13,49 +14,65 @@ public class RhythmManager : MonoBehaviour
         public Color missColor = new Color(0.6792453f, 0, 0.06030021f, 1);
     }
 
+    [Header("오디오 관련")]
+    [SerializeField] AudioSource audioSource;
 
+    [Header("노트 관련")]
     [SerializeField] GameObject notePrefab;
     [SerializeField] public GameObject noteLine;
-    [SerializeField] GameObject hitEffectPrefab;
-    [SerializeField] AudioSource audioSource;
     [SerializeField] Transform noteMakeTr;
-    [SerializeField] Transform hitEffectTransform;
+    [SerializeField] string parsingSongName = ""; // for test
     [SerializeField] int poolingMax = 5;
-    [SerializeField] float noteOffset = 2f;
-    [SerializeField] float shakePower = 0f;
-    [SerializeField] float shakeTime = 0f;
     [SerializeField] float noteEndXOffset = 0f;
 
-    private float noteLineDistance = 0f;
+    private List<GameObject> notesforPooling = new List<GameObject>();
 
-    private HitEffectColors hitEffectColors = new HitEffectColors();
-
-    public List<GameObject> notesforPooling = new List<GameObject>();
-    private List<GameObject> effects = new List<GameObject>();
-
-    private int indexforEffectPooling = 0;
     private int indexforNotePooling = 0;
     private int noteMakeIndex = 0;
     private int noteCheckIndex = 0;
 
     private float noteTimer = 0;
+    private float noteLineDistance = 0f;
+
+
+    [Header("콤보 이펙트 관련")]
+    [SerializeField] Transform hitEffectTransform;
+    [SerializeField] GameObject hitEffectPrefab;
+
+    private List<GameObject> effects = new List<GameObject>();
+    private HitEffectColors hitEffectColors = new HitEffectColors();
+    private int indexforEffectPooling = 0;
 
     private bool isPlayingNote = false;
-
-
+    private bool isBossScene = false;
 
     private void Start()
     {
+        if (SceneManager.GetActiveScene().name == "BossScene")
+        {
+            BossSceneManager.Instance.hpSlider.maxValue = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count;
+            isBossScene = true;
+            Animator.StringToHash("Attack1");
+        }
+
         noteLineDistance = Vector2.Distance(noteMakeTr.position, noteLine.transform.position);
         Invoke("StartStopSong", 2f);
     }
 
     private void Update()
     {
-        if(isPlayingNote && noteTimer >= GameManager.Instance.parsingManager.BeatmapData["Faded"].HitObjects[noteMakeIndex].Time - 1000)
+        if(isBossScene)
         {
-            if (GameManager.Instance.parsingManager.BeatmapData["Faded"].HitObjects.Count < noteMakeIndex)
+
+        }
+
+        if(isPlayingNote && noteTimer >= GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time - 1000)
+        {
+            if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count < noteMakeIndex)
+            {
+                FinishRhythm();
                 return;
+            }
 
             noteMakeIndex++;
             CrateNote();
@@ -123,7 +140,23 @@ public class RhythmManager : MonoBehaviour
     }
     public void CrateEffect(int n) // Perfect = 1, Good = 2, Miss = 3
     {
-        Debug.Log("이펙트 출력!");
+        int randNum = Random.Range(1, 3);
+
+        if (isBossScene)
+        {
+            switch (randNum)
+            {
+                case 1:
+                    BossSceneManager.Instance.bossAnimator.SetTrigger(BossSceneManager.Instance.bossAttack1Hash);
+                    break;
+                case 2:
+                    BossSceneManager.Instance.bossAnimator.SetTrigger(BossSceneManager.Instance.bossAttack2Hash);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         if (effects.Count < poolingMax)
         {
             effects.Add(Instantiate(hitEffectPrefab, hitEffectTransform));
@@ -139,18 +172,21 @@ public class RhythmManager : MonoBehaviour
             case 1:
                 {
                     nowEffect.text.color = hitEffectColors.perfectColor;
-                    nowEffect.text.text = "PERFECT";
+                    GameManager.Instance.Combo += 2;
+                    nowEffect.text.text = $"PERFECT X {GameManager.Instance.Combo}";
                     break;
                 }
             case 2:
                 {
                     nowEffect.text.color = hitEffectColors.goodColor;
-                    nowEffect.text.text = "GOOD";
+                    ++GameManager.Instance.Combo;
+                    nowEffect.text.text = $"GOOD X {GameManager.Instance.Combo}";
                     break;
                 }
             case 3:
                 {
                     nowEffect.text.color = hitEffectColors.missColor;
+                    GameManager.Instance.Combo = 0;
                     nowEffect.text.text = "MISS";
                     break;
                 }

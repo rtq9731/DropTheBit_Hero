@@ -20,7 +20,9 @@ public class GameManager : MonoSingleton<GameManager>
 
     private int money = 0;
     private int killCount = 0;
+    private int combo = 0;
 
+    public int Combo { get { return combo; } set { combo = value; } }
     public int KillCount { get { return killCount; } set { killCount = value; MainSceneManager.Instance.topUI.UpdateCurrentKillCount(); } }
 
     public Dictionary<string, WeaponsData> GetWeponDictionary()

@@ -684,6 +684,7 @@ MonoBehaviour:
   noteOffset: 1
   shakePower: 10
   shakeTime: 1
+  noteEndXOffset: 0
   notesforPooling: []
 --- !u!1 &192068836
 GameObject:
@@ -4824,9 +4825,9 @@ MonoBehaviour:
   - {fileID: 1384527477}
   backgroundSpeeds:
   - 0
-  - 0.05
-  - 0.25
-  - 0.25
+  - 0.0075
+  - 0.075
+  - 0.1
   isScroll: 1
 --- !u!43 &1718997194
 Mesh:

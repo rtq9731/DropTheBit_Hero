@@ -13,14 +13,12 @@ public class NoteScript : MonoBehaviour
     public void SetRhythmManager(RhythmManager rhythm)
     {
         rhythmManager = rhythm;
-        Debug.Log(rhythmManager.noteLine.transform.position.x - (whereIsPerfect + whereIsGood));
     }
 
     private void Update()
     {
         if ( this.transform.position.x + 0.5 <= rhythmManager.noteLine.transform.position.x - (whereIsPerfect + whereIsGood))
         {
-            Debug.Log("판정 범위 밖으로 벗어나 리셋합니다.");
             rhythmManager.CheckNote();
         }
     }
