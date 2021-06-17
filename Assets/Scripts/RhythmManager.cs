@@ -19,6 +19,7 @@ public class RhythmManager : MonoBehaviour
 
     [Header("노트 관련")]
     [SerializeField] GameObject notePrefab;
+    [SerializeField] GameObject longNotePrefab;
     [SerializeField] public GameObject noteLine;
     [SerializeField] Transform noteMakeTr;
     [SerializeField] string parsingSongName = ""; // for test
@@ -52,7 +53,7 @@ public class RhythmManager : MonoBehaviour
 
     private bool isPlayingNote = false;
     private bool isBossScene = false;
-
+    
     private void Start()
     {
         if (SceneManager.GetActiveScene().name == "BossScene")
@@ -76,7 +77,6 @@ public class RhythmManager : MonoBehaviour
         if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].TimingPoints[currentTimingPointIndex].Offset - 1 < noteTimer && isTimingPointPlay)
         {
             currentTimingPoint = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].TimingPoints[currentTimingPointIndex];
-            Debug.Log(currentTimingPoint.Offset / 1000);
             ++currentTimingPointIndex;
             if(currentTimingPointIndex == GameManager.Instance.parsingManager.BeatmapData[parsingSongName].TimingPoints.Count)
             {
@@ -86,16 +86,20 @@ public class RhythmManager : MonoBehaviour
 
         if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count > noteMakeIndex)
         {
-            if (isPlayingNote && noteTimer >= GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time - 1000) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 1000ms 빼줄 것임.
+            float noteTiming = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time;
+            if (isPlayingNote && noteTimer >= noteTiming) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 1000ms 빼줄 것임.
             {
-                if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name == "HitSlider") // 롱노트를 만들도록 해야함
+                Debug.Log(GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name);
+                if ((GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함;
                 {
+                    noteMakeIndex++;
                     CreateLongNote((HitSlider)GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex]);
-                    return;
                 }
-
-                noteMakeIndex++;
-                CrateNote();
+                else // 일반 노트
+                {
+                    noteMakeIndex++;
+                    CrateNote();
+                }
             }
         }
         else
@@ -168,14 +172,11 @@ public class RhythmManager : MonoBehaviour
             notesforPooling[indexforNotePooling].gameObject.SetActive(true);
         }
 
-
         Transform noteTr = notesforPooling[indexforNotePooling].transform;
         noteTr.position = noteMakeTr.position;
-        noteTr.GetComponent<NoteScript>().SetRhythmManager(this);
-        noteTr.DOMoveX(
-            noteLine.transform.position.x - noteEndXOffset,
-            -(noteLineDistance / (noteLine.transform.position.x - noteEndXOffset))
-            ).SetEase(Ease.Linear);
+        NoteScript nc = noteTr.GetComponent<NoteScript>();
+        nc.SetRhythmManager(this);
+        nc.SetSpeed(noteLineDistance);
 
         indexforNotePooling++;
         if (indexforNotePooling == poolingMax)
@@ -190,14 +191,25 @@ public class RhythmManager : MonoBehaviour
 
         if (notesforPooling.Count < poolingMax)
         {
-            notes.Add(Instantiate(notePrefab, transform));
+            longNoteList.Add(Instantiate(longNotePrefab, transform));
         }
         else
         {
-            notesforPooling[indexforNotePooling].gameObject.SetActive(true);
+            longNoteList[longNoteMakeIndex].gameObject.SetActive(true);
         }
 
-        float myLength = GetSliderLengthInMs(slider);
+        longNoteList[longNoteMakeIndex].gameObject.transform.position = noteMakeTr.position;
+        LongNoteScript longNote = longNoteList[longNoteMakeIndex].GetComponent<LongNoteScript>();
+        float longNoteLength = GetSliderLengthInMs(slider);
+        longNote.InitLongNote(longNoteLength, noteTimer, noteLine.transform.position, noteMakeTr.position, this, -(noteLineDistance / noteLine.transform.position.x)); // 노트 초기화
+        longNote.SetSpeed(noteLineDistance);
+
+        longNoteMakeIndex++;
+        if (longNoteMakeIndex == longNotePoolingMax)
+        {
+            longNoteMakeIndex = 0; // longNoteMakeIndex가 최대치라면 다시 초기화
+        }
+
     }
 
     float GetSliderLengthInMs(HitSlider slider)
@@ -293,6 +305,11 @@ public class RhythmManager : MonoBehaviour
 
     public void CheckNote()
     {
+        if(notesforPooling.Count == 0) // 목록이 없으면 그냥 리턴
+        {
+            return;
+        }
+
         var item = notesforPooling[noteCheckIndex].GetComponent<NoteScript>();
 
         if (!item.gameObject.activeSelf) // 만약 비활성화 되있다면 다음으로 넘어가서 재시작!
@@ -312,7 +329,9 @@ public class RhythmManager : MonoBehaviour
             //Camera.main.transform.DOShakePosition(shakeTime, shakePower / (hit / 4));
             CrateEffect(hit);
             DeleteNote(item.gameObject);
+
             noteCheckIndex++; // 다음 노트를 검사하게 Index++;
+
             if (noteCheckIndex == poolingMax)
                 noteCheckIndex = 0;
         }
