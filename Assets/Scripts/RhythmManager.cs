@@ -89,17 +89,17 @@ public class RhythmManager : MonoBehaviour
             float noteTiming = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time;
             if (isPlayingNote && noteTimer >= noteTiming) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 1000ms 빼줄 것임.
             {
-                Debug.Log(GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name);
-                if ((GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함;
-                {
-                    noteMakeIndex++;
-                    CreateLongNote((HitSlider)GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex]);
-                }
-                else // 일반 노트
-                {
+                //Debug.Log(GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name);
+                //if ((GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함;
+                //{
+                //    noteMakeIndex++;
+                //    CreateLongNote((HitSlider)GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex]);
+                //}
+                //else // 일반 노트
+                //{
                     noteMakeIndex++;
                     CrateNote();
-                }
+                //}
             }
         }
         else
@@ -201,8 +201,7 @@ public class RhythmManager : MonoBehaviour
         longNoteList[longNoteMakeIndex].gameObject.transform.position = noteMakeTr.position;
         LongNoteScript longNote = longNoteList[longNoteMakeIndex].GetComponent<LongNoteScript>();
         float longNoteLength = GetSliderLengthInMs(slider);
-        longNote.InitLongNote(longNoteLength, noteTimer, noteLine.transform.position, noteMakeTr.position, this, -(noteLineDistance / noteLine.transform.position.x)); // 노트 초기화
-        longNote.SetSpeed(noteLineDistance);
+        longNote.InitLongNote(noteLine.transform.position, noteLineDistance); // 노트 초기화
 
         longNoteMakeIndex++;
         if (longNoteMakeIndex == longNotePoolingMax)

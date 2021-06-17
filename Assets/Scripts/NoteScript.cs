@@ -11,13 +11,13 @@ public class NoteScript : MonoBehaviour
 
     public RhythmManager rhythmManager = null;
 
-    private float moveSpeed = 0;
     public void SetRhythmManager(RhythmManager rhythm)
     {
         rhythmManager = rhythm;
         hitSound = rhythm.GetComponents<AudioSource>()[1];
     }
 
+    private float moveSpeed = 0;
     public void SetSpeed(float speed)
     {
         moveSpeed = speed;
@@ -32,7 +32,7 @@ public class NoteScript : MonoBehaviour
     {
         transform.Translate(new Vector3(-Time.deltaTime * moveSpeed, 0, 0));
 
-        if ( this.transform.position.x + 0.5 <= rhythmManager.noteLine.transform.position.x - (whereIsPerfect + whereIsGood))
+        if ( this.transform.position.x <= rhythmManager.noteLine.transform.position.x && Vector2.Distance(transform.position, rhythmManager.noteLine.transform.position) >= whereIsPerfect + whereIsGood + whereIsMiss)
         {
             rhythmManager.CheckNote();
         }
