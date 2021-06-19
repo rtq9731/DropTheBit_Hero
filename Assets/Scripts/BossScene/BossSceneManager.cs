@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +22,9 @@ public class BossSceneManager : MonoBehaviour
         bossAttack2Hash = Animator.StringToHash("Attack2");
         playerAttackHash = Animator.StringToHash("Attack");
         playerHitHash = Animator.StringToHash("Hit");
+
+        Screen.SetResolution(1440, 2560, true);
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
 
         Instance = this;
     }

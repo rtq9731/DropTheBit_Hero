@@ -23,7 +23,27 @@ public class GameManager : MonoSingleton<GameManager>
     private int combo = 0;
 
     public int Combo { get { return combo; } set { combo = value; } }
-    public int KillCount { get { return killCount; } set { killCount = value; MainSceneManager.Instance.topUI.UpdateCurrentKillCount(); } }
+
+    public int KillCount { get { return killCount; } 
+        set 
+        {
+            killCount = value;
+            MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
+
+            if(killCount % 3 == 0)
+            {
+                MainSceneManager.Instance.CallBoss(killCount);
+            }
+
+        } 
+    }
+
+    public void ChangeSceneToBossScene()
+    {
+        DG.Tweening.DOTween.Clear();
+        SceneManager.LoadScene("BossScene");
+    }
+
 
     public Dictionary<string, WeaponsData> GetWeponDictionary()
     {
@@ -97,10 +117,5 @@ public class GameManager : MonoSingleton<GameManager>
             hp = 0;
             cost = 0;
         }
-    }
-
-    public void SceneChange(string sceneName)
-    {
-        SceneManager.LoadScene(sceneName);
     }
 }

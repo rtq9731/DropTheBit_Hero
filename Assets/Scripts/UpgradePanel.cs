@@ -27,10 +27,15 @@ public class UpgradePanel : MonoBehaviour
         Refresh(this.isUnlocked);
     }
 
-    public void Refresh(bool isUnlocked)
+    /// <summary>
+    /// 메세지들을 새로고침 해줍니다.
+    /// </summary>
+    public void Refresh(bool isUnlocked) // 원본함수
     {
+        upgradeBtn.onClick.RemoveAllListeners();
+
         // this.weaponImage.sprite = Resources.Load($"Images/{weaponName.text}") as Sprite;
-        if(upgradeCount == 0)
+        if (upgradeCount == 0)
         {
             this.upgradeCostText.text = $"업그레이드 비용 : {upgradeCost}원"; // 업그레이드가 안된 경우 그냥 원가만 표시
         }
@@ -53,10 +58,15 @@ public class UpgradePanel : MonoBehaviour
         }
 
         OnOffLockPanel(isUnlocked);
-    } // 원본함수
+    }
+    
+    /// <summary>
+    /// 메세지들을 새로고침 해줍니다.
+    /// </summary>
     public void Refresh()
     {
-        // this.weaponImage.sprite = Resources.Load($"Images/{weaponName.text}") as Sprite;
+        upgradeBtn.onClick.RemoveAllListeners();
+
         if (upgradeCount == 0)
         {
             this.upgradeCostText.text = $"업그레이드 비용 : {upgradeCost}원"; // 업그레이드가 안된 경우 그냥 원가만 표시
@@ -78,7 +88,7 @@ public class UpgradePanel : MonoBehaviour
             this.currentUpgradeText.text = $"현재 업그레이드 단계 : {upgradeCount}"; // 업그레이드 단계 표시
             upgradeBtn.onClick.AddListener(() => Upgrade()); // 최대로 업그레이드 되지 않았다면 업그레이드 가능
         }
-    } // 오버로딩
+    }
 
     private void OnOffLockPanel(bool isOn)
     {
@@ -87,6 +97,7 @@ public class UpgradePanel : MonoBehaviour
 
     private void Upgrade()
     {
+        Debug.Log(GameManager.Instance.GetMoney() < upgradeCount * upgradeCost);
 
         if(upgradeCount == 0)
         {
@@ -98,18 +109,17 @@ public class UpgradePanel : MonoBehaviour
         }
         else
         {
-            if (GameManager.Instance.GetMoney() < upgradeCost * upgradeCost) // 돈이 적으면 취소
+            if (GameManager.Instance.GetMoney() < upgradeCount * upgradeCost) // 돈이 적으면 취소
             {
                 return;
             }
-            GameManager.Instance.AddMoney(-upgradeCost * upgradeCount);
+            GameManager.Instance.AddMoney(-(upgradeCount * upgradeCount));
         }
 
         ++upgradeCount;
 
         MainSceneManager.Instance.Player.ATK += indexforNotePooling + upgradeCount * 0.5f;
         upgradeBtn.onClick.RemoveAllListeners();
-        Debug.Log(upgradeCount);
         Refresh();
     }
 }

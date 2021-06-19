@@ -20,8 +20,15 @@ public class MainSceneManager : MonoBehaviour
     [SerializeField] public TopUI topUI;
     [SerializeField] public WeaponUpUI upgradeUI;
     [SerializeField] public AudioSource hitSound;
+    [SerializeField] public InputPanel InputPanel;
+    [SerializeField] public LeftUI leftUI;
 
     public Player Player { get { return player; } set { player = value; } }
+
+    public void CallBoss(int killCount)
+    {
+        leftUI.SetActiveTrueBtnBoss();
+    }
 
     public void ScrollingBackground()
     {
