@@ -10,6 +10,8 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] Weapons weaponSheet;
     public OsuParser parsingManager = null;
 
+    private RhythmManager rhythmManager;
+
     public List<string> weaponNames = new List<string>();
 
     [SerializeField] public string nowPlaySong = "";
@@ -40,8 +42,18 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void ChangeSceneToBossScene()
     {
+        parsingManager.Parsing();
         DG.Tweening.DOTween.Clear();
         SceneManager.LoadScene("BossScene");
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+        Invoke("GetRhythmManager" , 0.1f);
+        Screen.SetResolution(2560, 1440, true);
+    }
+
+    private void GetRhythmManager()
+    {
+        rhythmManager = FindObjectOfType<RhythmManager>();
+        rhythmManager.parsingSongName = nowPlaySong;
     }
 
 
@@ -52,7 +64,6 @@ public class GameManager : MonoSingleton<GameManager>
 
     void Awake()
     {
-        parsingManager.Parsing();
         InputCommonEnemyData();
         InputWeponData();
     }

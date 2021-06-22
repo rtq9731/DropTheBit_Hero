@@ -20,10 +20,11 @@ public class RhythmManager : MonoBehaviour
     [SerializeField] GameObject longNotePrefab;
     [SerializeField] public GameObject noteLine;
     [SerializeField] Transform noteMakeTr;
-    [SerializeField] string parsingSongName = ""; // for test
     [SerializeField] int poolingMax = 5;
     [SerializeField] int longNotePoolingMax = 5;
     [SerializeField] float noteEndXOffset = 0f;
+
+   public string parsingSongName = "";
 
     private List<GameObject> notesforPooling = new List<GameObject>();
     private List<GameObject> longNoteList = new List<GameObject>();
@@ -85,7 +86,7 @@ public class RhythmManager : MonoBehaviour
         if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count > noteMakeIndex)
         {
             float noteTiming = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time;     
-            if (isPlayingNote && noteTimer >= noteTiming) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 1000ms 빼줄 것임.
+            if (isPlayingNote && noteTimer >= noteTiming - currentTimingPoint.MsPerBeat) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 1000ms 빼줄 것임.
             {
                 //Debug.Log(GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name);
                 //if ((GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함;
@@ -95,8 +96,8 @@ public class RhythmManager : MonoBehaviour
                 //}
                 //else // 일반 노트
                 //{
-                Debug.Log(noteTimer);
-                    noteMakeIndex++;
+                    Debug.Log(noteTimer);
+                    ++noteMakeIndex;    
                     CrateNote();
                 //}
             }
