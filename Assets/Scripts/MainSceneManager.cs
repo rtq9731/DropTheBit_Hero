@@ -27,6 +27,7 @@ public class MainSceneManager : MonoBehaviour
 
     public void CallBoss(int killCount)
     {
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
         leftUI.SetActiveTrueBtnBoss();
     }
 

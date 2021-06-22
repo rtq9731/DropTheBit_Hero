@@ -1293,7 +1293,7 @@ MonoBehaviour:
   weaponSheet: {fileID: 11400000, guid: cfa89dfc637c57344800e4999c810e58, type: 2}
   parsingManager: {fileID: 429422855}
   weaponNames: []
-  nowPlaySong: So_Happy
+  nowPlaySong: Faded
 --- !u!114 &429422855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1618,10 +1618,10 @@ Camera:
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
-  m_TargetEye: 0
+  m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 0
-  m_AllowDynamicResolution: 0
+  m_AllowDynamicResolution: 1
   m_ForceIntoRT: 0
   m_OcclusionCulling: 0
   m_StereoConvergence: 10

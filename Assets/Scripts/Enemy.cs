@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if(state == EnemyState.Die && !isDie)
+        if (state == EnemyState.Die && !isDie)
         {
             isDie = true;
             animator.Play("Enemy_Die");

@@ -45,9 +45,7 @@ public class GameManager : MonoSingleton<GameManager>
         parsingManager.Parsing();
         DG.Tweening.DOTween.Clear();
         SceneManager.LoadScene("BossScene");
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
         Invoke("GetRhythmManager" , 0.1f);
-        Screen.SetResolution(2560, 1440, true);
     }
 
     private void GetRhythmManager()

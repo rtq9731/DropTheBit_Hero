@@ -17,4 +17,4 @@ MonoBehaviour:
   dataArray:
   - name: Skeleton
     hp: 100
-    cost: 3000
+    cost: 300

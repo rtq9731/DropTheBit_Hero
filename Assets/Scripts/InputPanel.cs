@@ -22,7 +22,7 @@ public class InputPanel : MonoBehaviour
     public void InitInputPanel(string message)
     {
         this.message.text = message;
-        btnCancel.onClick.AddListener(() => gameObject.GetComponent<RectTransform>().DOAnchorPosY(2000, 0.5f).OnComplete(() => gameObject.SetActive(false)));
+        btnCancel.onClick.AddListener(() => realInputPanel.GetComponent<RectTransform>().DOAnchorPosY(2000, 0.5f).OnComplete(() => gameObject.SetActive(false)));
     }
 
     public Button GetBtnOk()

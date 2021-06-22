@@ -23,15 +23,15 @@ MonoBehaviour:
   - index: 2
     name: "\uAF43\uD540 \uB098\uBB47\uAC00\uC9C0"
     upgradecount: 0
-    upgradecost: 20
+    upgradecost: 50
     isunlocked: 0
   - index: 3
     name: "\uBAA9\uAC80"
     upgradecount: 0
-    upgradecost: 30
+    upgradecost: 250
     isunlocked: 0
   - index: 4
     name: "\uCD08\uBCF4\uC790\uC758 \uAC80"
     upgradecount: 0
-    upgradecost: 40
+    upgradecost: 1250
     isunlocked: 0
