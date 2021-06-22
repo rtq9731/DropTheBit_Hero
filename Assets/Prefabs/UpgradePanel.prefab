@@ -67,11 +67,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 74a9e9cf5234ce44a92929b4edcf0fea, type: 3}
-    m_FontSize: 75
+    m_FontSize: 128
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
-    m_MaxSize: 75
+    m_MaxSize: 128
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -337,6 +337,7 @@ MonoBehaviour:
   currentUpgradeText: {fileID: 4112345912444051257}
   upgradeBtn: {fileID: 4112345912984953448}
   lockPanel: {fileID: 8342969051721591524}
+  isUnlocked: 0
 --- !u!1 &4112345912444051259
 GameObject:
   m_ObjectHideFlags: 0
@@ -750,7 +751,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

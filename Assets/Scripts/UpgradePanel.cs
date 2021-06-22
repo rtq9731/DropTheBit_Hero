@@ -14,15 +14,15 @@ public class UpgradePanel : MonoBehaviour
 
     int upgradeCost = 0;
     short upgradeCount = 0;
-    short indexforNotePooling = 0;
+    short weaponIndex = 0;
     public bool isUnlocked = false;
 
-    public void InitUpgradePanel(string weaponName, short upgradeCount, int upgradeCost, short indexforNotePooling, bool isUnlocked)
+    public void InitUpgradePanel(string weaponName, short upgradeCount, int upgradeCost, short weaponIndex, bool isUnlocked)
     {
         this.weaponName.text = weaponName;
         this.upgradeCount = upgradeCount;
         this.upgradeCost = upgradeCost;
-        this.indexforNotePooling = indexforNotePooling;
+        this.weaponIndex = weaponIndex;
         this.isUnlocked = isUnlocked;
         Refresh(this.isUnlocked);
     }
@@ -49,7 +49,7 @@ public class UpgradePanel : MonoBehaviour
         {
             upgradeBtn.GetComponentInChildren<Text>().text = "최대로 업그레이드 됨!"; // 최대로 업그레이드 됐다면 다음으로 넘김
             this.currentUpgradeText.text = "현재 업그레이드 단계 : 최대"; // 최대로 업그레이드 됨으로 표시
-            MainSceneManager.Instance.upgradeUI.UnlockNewWeapon(this.indexforNotePooling, this);
+            MainSceneManager.Instance.upgradeUI.UnlockNewWeapon(this.weaponIndex, this);
         }
         else
         {
@@ -81,7 +81,7 @@ public class UpgradePanel : MonoBehaviour
         {
             upgradeBtn.GetComponentInChildren<Text>().text = "최대로 업그레이드 됨!"; // 최대로 업그레이드 됐다면 다음으로 넘김
             this.currentUpgradeText.text = "현재 업그레이드 단계 : 최대"; // 최대로 업그레이드 됨으로 표시
-            MainSceneManager.Instance.upgradeUI.UnlockNewWeapon(this.indexforNotePooling, this);
+            MainSceneManager.Instance.upgradeUI.UnlockNewWeapon(this.weaponIndex, this);
         }
         else
         {
@@ -118,7 +118,7 @@ public class UpgradePanel : MonoBehaviour
 
         ++upgradeCount;
 
-        MainSceneManager.Instance.Player.ATK += indexforNotePooling + upgradeCount * 0.5f;
+        MainSceneManager.Instance.Player.ATK += weaponIndex + upgradeCount * 0.5f;
         upgradeBtn.onClick.RemoveAllListeners();
         Refresh();
     }

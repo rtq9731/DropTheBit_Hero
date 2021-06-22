@@ -30,6 +30,13 @@ public class MainSceneManager : MonoBehaviour
         leftUI.SetActiveTrueBtnBoss();
     }
 
+    public void CallNextEnmey()
+    {
+        Debug.Log(GameManager.Instance.EnemyNames[GameManager.Instance.NowEnemyIndex]);
+        GameObject temp = GameManager.Instance.EnemyPrefabs[GameManager.Instance.EnemyNames[GameManager.Instance.NowEnemyIndex]];
+        Instantiate(temp, new Vector2(8, 1), Quaternion.identity);
+    }
+
     public void SceneChange()
     {
         GameManager.Instance.ChangeSceneToBossScene();

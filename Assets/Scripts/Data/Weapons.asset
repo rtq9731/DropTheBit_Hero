@@ -35,3 +35,8 @@ MonoBehaviour:
     upgradecount: 0
     upgradecost: 1250
     isunlocked: 0
+  - index: 5
+    name: "\uB2F4\uAE08\uC9C8\uB41C \uCD08\uBCF4\uC790\uC758 \uAC80"
+    upgradecount: 0
+    upgradecost: 6000
+    isunlocked: 0

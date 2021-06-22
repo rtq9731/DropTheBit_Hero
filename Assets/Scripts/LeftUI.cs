@@ -9,6 +9,11 @@ public class LeftUI : MonoBehaviour
     [SerializeField] Button btnBoss;
     [SerializeField] GameObject noticePanel;
 
+    private void Start()
+    {
+        btnBoss.interactable = false;
+    }
+
     /// <summary>
     /// 보스로 향하는 버튼을 활성화 시켜주는 메소드
     /// </summary>

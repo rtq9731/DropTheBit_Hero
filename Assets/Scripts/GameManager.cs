@@ -8,6 +8,10 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] public Notes noteSheet;
     [SerializeField] Monster enemySheet;
     [SerializeField] Weapons weaponSheet;
+
+    int nowEnemyIndex = 0;
+    public int NowEnemyIndex { get { return nowEnemyIndex; } }
+
     public OsuParser parsingManager = null;
 
     private RhythmManager rhythmManager;
@@ -19,6 +23,11 @@ public class GameManager : MonoSingleton<GameManager>
     private Dictionary<string, MonsterData> monsters = new Dictionary<string, MonsterData>();
     private Dictionary<string, WeaponsData> weapons = new Dictionary<string, WeaponsData>();
     private Dictionary<string, GameObject> enemyPrefabs = new Dictionary<string, GameObject>();
+
+    public Dictionary<string, GameObject> EnemyPrefabs { get { return enemyPrefabs; } }
+
+    private List<string> enemyNames = new List<string>();
+    public List<string> EnemyNames { get { return enemyNames; } }
 
     private int money = 0;
     private int killCount = 0;
@@ -37,6 +46,11 @@ public class GameManager : MonoSingleton<GameManager>
             if(killCount % 3 == 0)
             {
                 MainSceneManager.Instance.CallBoss(killCount);
+            }
+
+            if(killCount % 5 == 0)
+            {
+                nowEnemyIndex++;
             }
 
         } 
@@ -83,12 +97,7 @@ public class GameManager : MonoSingleton<GameManager>
     private void Start()
     {
         enemyPrefabs.Add("Skeleton", Resources.Load("Enemies/Skeleton") as GameObject);
-    }
-
-    public void CallNextEnmey(string nameKey)
-    {
-        GameObject temp = enemyPrefabs[nameKey];
-        Instantiate(temp, new Vector2(8, 1), Quaternion.identity);
+        enemyPrefabs.Add("Skeleton1", Resources.Load("Enemies/Skeleton1") as GameObject);
     }
 
     public AudioClip GetMusic()
@@ -112,6 +121,7 @@ public class GameManager : MonoSingleton<GameManager>
         for (int i = 0; i < enemySheet.dataArray.Length; i++)
         {
             monsters.Add(enemySheet.dataArray[i].Name, enemySheet.dataArray[i]);
+            enemyNames.Add(enemySheet.dataArray[i].Name);
         }
     }
 

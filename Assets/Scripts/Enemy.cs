@@ -68,7 +68,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        GameManager.Instance.CallNextEnmey(data.Name);
+        MainSceneManager.Instance.CallNextEnmey();
         transform.DOMoveX(-7.75f, 2f).OnComplete(()=> {
             Destroy(this.gameObject);
             });

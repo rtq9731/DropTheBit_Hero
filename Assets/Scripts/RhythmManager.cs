@@ -40,7 +40,7 @@ public class RhythmManager : MonoBehaviour
 
     private float noteTimer = 0;
     private float noteLineDistance = 0f;
-    private bool isTimingPointPlay = true;
+    private bool isTimingPointPlay = false;
 
     [Header("콤보 이펙트 관련")]
     [SerializeField] Transform hitEffectTransform;
@@ -69,46 +69,52 @@ public class RhythmManager : MonoBehaviour
         if(GameManager.Instance.isFinishParshing > 0)
         {
             GameManager.Instance.isFinishParshing--;
+            Debug.Log("노트 로딩!");
             StartStopSong();
         }
 
-        if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].TimingPoints[currentTimingPointIndex].Offset < noteTimer && isTimingPointPlay)
+        if(isTimingPointPlay)
         {
-            currentTimingPoint = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].TimingPoints[currentTimingPointIndex];
-            ++currentTimingPointIndex;
-            if(currentTimingPointIndex == GameManager.Instance.parsingManager.BeatmapData[parsingSongName].TimingPoints.Count)
+            if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].TimingPoints[currentTimingPointIndex].Offset < noteTimer)
             {
-                isTimingPointPlay = false;
+                currentTimingPoint = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].TimingPoints[currentTimingPointIndex];
+                ++currentTimingPointIndex;
+                if (currentTimingPointIndex == GameManager.Instance.parsingManager.BeatmapData[parsingSongName].TimingPoints.Count)
+                {
+                    isTimingPointPlay = false;
+                }
             }
         }
 
-        if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count > noteMakeIndex)
-        {
-            float noteTiming = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time;     
-            if (isPlayingNote && noteTimer >= noteTiming - currentTimingPoint.MsPerBeat) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 오프셋 빼줄 것임.
-            {
-                Debug.Log(GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name);
-                if ((GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함;
-                {
-                    noteMakeIndex++;
-                    //CreateLongNote((HitSlider)GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex]);
-                }
-                else // 일반 노트
-                {
-                    ++noteMakeIndex;
-                    CrateNote();
-                }
-            }
-        }
-        else
-        {
-            FinishRhythm();
-            return;
-        }
 
         if (isPlayingNote)
         {
             noteTimer += Time.deltaTime * 1000;
+
+            if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count > noteMakeIndex)
+            {
+                float noteTiming = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time;
+                if (isPlayingNote && noteTimer >= noteTiming - currentTimingPoint.MsPerBeat) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 오프셋 빼줄 것임.
+                {
+                    Debug.Log(GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name);
+                    if ((GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함;
+                    {
+                        noteMakeIndex++;
+                        //CreateLongNote((HitSlider)GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex]);
+                    }
+                    else // 일반 노트
+                    {
+                        ++noteMakeIndex;
+                        CrateNote();
+                    }
+                }
+            }
+            else
+            {
+                FinishRhythm();
+                return;
+            }
+
         }
 
         if(Input.GetMouseButtonDown(0))
@@ -123,8 +129,9 @@ public class RhythmManager : MonoBehaviour
             audioSource.clip = GameManager.Instance.GetMusic();
 
         isPlayingNote = !isPlayingNote;
+        isTimingPointPlay = !isTimingPointPlay;
 
-        if(isPlayingNote)
+        if (isPlayingNote)
         {
             audioSource.Play();
         }
