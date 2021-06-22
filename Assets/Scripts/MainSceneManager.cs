@@ -27,8 +27,12 @@ public class MainSceneManager : MonoBehaviour
 
     public void CallBoss(int killCount)
     {
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
         leftUI.SetActiveTrueBtnBoss();
+    }
+
+    public void SceneChange()
+    {
+        GameManager.Instance.ChangeSceneToBossScene();
     }
 
     public void ScrollingBackground()

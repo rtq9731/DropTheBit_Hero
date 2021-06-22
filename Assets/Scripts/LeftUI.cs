@@ -14,6 +14,7 @@ public class LeftUI : MonoBehaviour
     /// </summary>
     public void SetActiveTrueBtnBoss()
     {
+
         noticePanel.SetActive(true);
 
         btnBoss.interactable = true;

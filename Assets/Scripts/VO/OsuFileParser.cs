@@ -110,6 +110,7 @@ public class OsuFileParser
         Debug.Log("osuBMParser: Finished beatmap parsing");
 #endif
 
+        GameManager.Instance.isFinishParshing++;
     }
 
     private OsuFileSection testNewSection(string data)

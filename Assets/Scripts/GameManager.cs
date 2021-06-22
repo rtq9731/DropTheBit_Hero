@@ -24,6 +24,8 @@ public class GameManager : MonoSingleton<GameManager>
     private int killCount = 0;
     private int combo = 0;
 
+    public int isFinishParshing;
+
     public int Combo { get { return combo; } set { combo = value; } }
 
     public int KillCount { get { return killCount; } 
@@ -42,16 +44,28 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void ChangeSceneToBossScene()
     {
-        parsingManager.Parsing();
-        DG.Tweening.DOTween.Clear();
+        StartCoroutine(ChangeScene());
+    }
+    private IEnumerator ChangeScene()
+    {
         SceneManager.LoadScene("BossScene");
-        Invoke("GetRhythmManager" , 0.1f);
+        while (SceneManager.GetActiveScene().name != "BossScene")
+        {
+            yield return null;
+        }
+        Screen.orientation = ScreenOrientation.Landscape;
+        Screen.SetResolution(2560, 1440, Screen.fullScreen);
+        parsingManager.Parsing();
+        yield return new WaitForSeconds(0.5f);
+        GetRhythmManager();
+        DG.Tweening.DOTween.Clear();
     }
 
     private void GetRhythmManager()
     {
         rhythmManager = FindObjectOfType<RhythmManager>();
         rhythmManager.parsingSongName = nowPlaySong;
+        rhythmManager.SetRhythem();
     }
 
 
