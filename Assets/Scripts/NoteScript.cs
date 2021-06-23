@@ -23,11 +23,6 @@ public class NoteScript : MonoBehaviour
         moveSpeed = speed;
     }
 
-    public void OnDisable()
-    {
-        hitSound.Play();
-    }
-
     private void Update()
     {
         transform.Translate(new Vector3(-Time.deltaTime * moveSpeed, 0, 0));
@@ -42,10 +37,12 @@ public class NoteScript : MonoBehaviour
     {
         if (Vector2.Distance(linePos, this.transform.position) <= whereIsPerfect)
         {
+            hitSound.Play();
             return 1;
         }
         else if (Vector2.Distance(linePos, this.transform.position) <= whereIsPerfect + whereIsGood)
         {
+            hitSound.Play();
             return 2;
         }
         else if (Vector2.Distance(linePos, this.transform.position) <= whereIsPerfect + whereIsGood + whereIsMiss)

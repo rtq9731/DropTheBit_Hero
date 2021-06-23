@@ -48,7 +48,7 @@ public class GameManager : MonoSingleton<GameManager>
                 MainSceneManager.Instance.CallBoss(killCount);
             }
 
-            if(killCount % 5 == 0)
+            if(killCount % 5 == 0 && killCount < enemyPrefabs.Count * 5)
             {
                 nowEnemyIndex++;
             }

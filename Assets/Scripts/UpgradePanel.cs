@@ -37,11 +37,15 @@ public class UpgradePanel : MonoBehaviour
         // this.weaponImage.sprite = Resources.Load($"Images/{weaponName.text}") as Sprite;
         if (upgradeCount == 0)
         {
-            this.upgradeCostText.text = $"업그레이드 비용 : {upgradeCost}원"; // 업그레이드가 안된 경우 그냥 원가만 표시
+            this.upgradeCostText.text = $"업그레이드 비용 : {upgradeCost}원"; // 첫 업그레이드가 안된 경우 그냥 원가만 표시
+        }
+        else if (upgradeCount < 5)
+        {
+            this.upgradeCostText.text = $"업그레이드 비용 : {upgradeCost * upgradeCount}원"; // 첫 업그레이드가 끝난 경우 원가 * 업그레이드 단계로 표시
         }
         else
         {
-            this.upgradeCostText.text = $"업그레이드 비용 : {upgradeCost * upgradeCount}원"; // 업그레이드가 끝난 경우 원가 * 업그레이드 단계로 표시
+            this.upgradeCostText.text = $"업그레이드 비용 : 최대로 업그레이드 됨!";
         }
 
 
@@ -59,11 +63,12 @@ public class UpgradePanel : MonoBehaviour
 
         OnOffLockPanel(isUnlocked);
     }
-    
+
+
     /// <summary>
     /// 메세지들을 새로고침 해줍니다.
     /// </summary>
-    public void Refresh()
+    private void Refresh() // 오버로딩 ( 내부용 )
     {
         upgradeBtn.onClick.RemoveAllListeners();
 
@@ -97,14 +102,13 @@ public class UpgradePanel : MonoBehaviour
 
     private void Upgrade()
     {
-        Debug.Log(GameManager.Instance.GetMoney() < upgradeCount * upgradeCost);
-
         if(upgradeCount == 0)
         {
             if (GameManager.Instance.GetMoney() < upgradeCost) // 돈이 적으면 취소
             {
                 return;
             }
+
             GameManager.Instance.AddMoney(-upgradeCost);
         }
         else
@@ -113,11 +117,10 @@ public class UpgradePanel : MonoBehaviour
             {
                 return;
             }
-            GameManager.Instance.AddMoney(-(upgradeCount * upgradeCount));
+
+            GameManager.Instance.AddMoney(-(upgradeCost * upgradeCount));
         }
-
         ++upgradeCount;
-
         MainSceneManager.Instance.Player.ATK += weaponIndex + upgradeCount * 0.5f;
         upgradeBtn.onClick.RemoveAllListeners();
         Refresh();

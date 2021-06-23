@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class BossSceneManager : MonoBehaviour
 {
@@ -7,6 +8,10 @@ public class BossSceneManager : MonoBehaviour
     [SerializeField] public Animator bossAnimator;
     [SerializeField] public Animator playerAnimator;
     [SerializeField] public Slider progressBar = null;
+
+    [Header("전투 결과 관련")]
+    [SerializeField] GameObject bgPanel;
+
 
     public static BossSceneManager Instance = null;
 

@@ -18,8 +18,8 @@ public class RhythmManager : MonoBehaviour
     [Header("노트 관련")]
     [SerializeField] GameObject notePrefab;
     [SerializeField] GameObject longNotePrefab;
-    [SerializeField] public GameObject noteLine;
     [SerializeField] Transform noteMakeTr;
+    [SerializeField] public GameObject noteLine;
     [SerializeField] int poolingMax = 5;
     [SerializeField] int longNotePoolingMax = 5;
     [SerializeField] float noteEndXOffset = 0f;
@@ -53,11 +53,6 @@ public class RhythmManager : MonoBehaviour
     private bool isPlayingNote = false;
     private bool isBossScene = false;
     
-    private void Start()
-    {
-        noteLineDistance = Vector2.Distance(noteMakeTr.position, noteLine.transform.position);
-    }
-
     public void SetRhythem()
     {
         BossSceneManager.Instance.progressBar.maxValue = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count;
@@ -69,8 +64,8 @@ public class RhythmManager : MonoBehaviour
         if(GameManager.Instance.isFinishParshing > 0)
         {
             GameManager.Instance.isFinishParshing--;
-            Debug.Log("노트 로딩!");
-            StartStopSong();
+            if(isPlayingNote == false )
+                StartStopSong();
         }
 
         if(isTimingPointPlay)
@@ -100,7 +95,7 @@ public class RhythmManager : MonoBehaviour
                     if ((GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함;
                     {
                         noteMakeIndex++;
-                        //CreateLongNote((HitSlider)GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex]);
+                        CreateLongNote((HitSlider)GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex]);
                     }
                     else // 일반 노트
                     {
@@ -130,6 +125,7 @@ public class RhythmManager : MonoBehaviour
 
         isPlayingNote = !isPlayingNote;
         isTimingPointPlay = !isTimingPointPlay;
+        noteLineDistance = Vector2.Distance(noteMakeTr.position, noteLine.transform.position);
 
         if (isPlayingNote)
         {
@@ -144,10 +140,7 @@ public class RhythmManager : MonoBehaviour
     void FinishRhythm()
     {
         isPlayingNote = false;
-        if(isBossScene)
-        {
-            BossSceneManager.Instance.FinishFight();
-        }
+        BossSceneManager.Instance.FinishFight();
     }
 
     void CrateNote()
@@ -206,7 +199,7 @@ public class RhythmManager : MonoBehaviour
         longNoteList[longNoteMakeIndex].gameObject.transform.position = noteMakeTr.position;
         LongNoteScript longNote = longNoteList[longNoteMakeIndex].GetComponent<LongNoteScript>();
         float longNoteLength = GetSliderLengthInMs(slider);
-        longNote.InitLongNote(noteLine.transform.position, noteLineDistance); // 노트 초기화
+        longNote.InitLongNote(noteLine.transform.position, noteLineDistance, longNoteLength, noteMakeTr.position); // 노트 초기화
 
         longNoteMakeIndex++;
         if (longNoteMakeIndex == longNotePoolingMax)

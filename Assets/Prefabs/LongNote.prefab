@@ -263,9 +263,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25f8be2a6f55663429e3f0ca7707cfb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  line: {fileID: 4954112851365228991}
+  tailTr: {fileID: 4954112850397848744}
   whereIsPerfect: 0.5
   whereIsGood: 1
   whereIsMiss: 1
-  myTailTr: {fileID: 4954112850397848744}
-  lineRenderer: {fileID: 4954112851365228991}
-  rhythmManager: {fileID: 0}
