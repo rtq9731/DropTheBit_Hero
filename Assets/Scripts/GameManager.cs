@@ -20,11 +20,14 @@ public class GameManager : MonoSingleton<GameManager>
 
     [SerializeField] public string nowPlaySong = "";
 
-    private Dictionary<string, MonsterData> monsters = new Dictionary<string, MonsterData>();
-    private Dictionary<string, WeaponsData> weapons = new Dictionary<string, WeaponsData>();
-    private Dictionary<string, GameObject> enemyPrefabs = new Dictionary<string, GameObject>();
+    private Dictionary<string, MonsterData> enemyDatas = new Dictionary<string, MonsterData>();
+    public Dictionary<string,MonsterData> EnemyDatas { get { return enemyDatas; } }
 
-    public Dictionary<string, GameObject> EnemyPrefabs { get { return enemyPrefabs; } }
+    private Dictionary<string, WeaponsData> weapons = new Dictionary<string, WeaponsData>();
+
+    private GameObject enemyPrefab;
+
+    public GameObject EnemyPrefab { get { return enemyPrefab; } }
 
     private List<string> enemyNames = new List<string>();
     public List<string> EnemyNames { get { return enemyNames; } }
@@ -45,10 +48,10 @@ public class GameManager : MonoSingleton<GameManager>
 
             if(killCount % 3 == 0)
             {
-                MainSceneManager.Instance.CallBoss(killCount);
+                MainSceneManager.Instance.CallBoss();
             }
 
-            if(killCount % 5 == 0 && killCount < enemyPrefabs.Count * 5)
+            if(killCount % 5 == 0 && killCount < enemyNames.Count * 5)
             {
                 nowEnemyIndex++;
             }
@@ -58,10 +61,19 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void ChangeSceneToBossScene()
     {
-        StartCoroutine(ChangeScene());
+        StartCoroutine(ChangeSceneToBoss());
     }
-    private IEnumerator ChangeScene()
+
+    public void ChangeSceneToMainScene()
     {
+        StartCoroutine(ChangeSceneToMain());
+    }
+
+    private IEnumerator ChangeSceneToBoss()
+    {
+        DG.Tweening.DOTween.Clear();
+        PlayerPrefs.SetInt("killCount", killCount);
+        PlayerPrefs.SetFloat("ATK", MainSceneManager.Instance.Player.ATK);
         SceneManager.LoadScene("BossScene");
         while (SceneManager.GetActiveScene().name != "BossScene")
         {
@@ -75,11 +87,24 @@ public class GameManager : MonoSingleton<GameManager>
         DG.Tweening.DOTween.Clear();
     }
 
+    private IEnumerator ChangeSceneToMain()
+    {
+        DG.Tweening.DOTween.Clear();
+        SceneManager.LoadScene("MainScene");
+        while (SceneManager.GetActiveScene().name != "MainScene")
+        {
+            yield return null;
+        }
+        MainSceneManager.Instance.Player.ATK = PlayerPrefs.GetFloat("ATK");
+        killCount = PlayerPrefs.GetInt("killCount");
+        Screen.orientation = ScreenOrientation.Portrait;
+        Screen.SetResolution(1440, 2560, Screen.fullScreen);
+    }
+
     private void GetRhythmManager()
     {
         rhythmManager = FindObjectOfType<RhythmManager>();
         rhythmManager.parsingSongName = nowPlaySong;
-        rhythmManager.SetRhythem();
     }
 
 
@@ -96,8 +121,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void Start()
     {
-        enemyPrefabs.Add("Skeleton", Resources.Load("Enemies/Skeleton") as GameObject);
-        enemyPrefabs.Add("Skeleton1", Resources.Load("Enemies/Skeleton1") as GameObject);
+        enemyPrefab = Resources.Load("Enemies/Skeleton") as GameObject;
     }
 
     public AudioClip GetMusic()
@@ -120,7 +144,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         for (int i = 0; i < enemySheet.dataArray.Length; i++)
         {
-            monsters.Add(enemySheet.dataArray[i].Name, enemySheet.dataArray[i]);
+            enemyDatas.Add(enemySheet.dataArray[i].Name, enemySheet.dataArray[i]);
             enemyNames.Add(enemySheet.dataArray[i].Name);
         }
     }
@@ -131,24 +155,6 @@ public class GameManager : MonoSingleton<GameManager>
         {
             weapons.Add(weaponSheet.dataArray[i].Name, weaponSheet.dataArray[i]);
             weaponNames.Add(weaponSheet.dataArray[i].Name);
-        }
-    }
-
-    public void GetEnemyDataFromName(string name, out float hp, out int cost)
-    {
-        MonsterData tempData = monsters[name];
-        if (tempData != null)
-        {
-            hp = tempData.HP;
-            cost = tempData.Cost;
-        }
-        else
-        {
-#if UNITY_EDITOR
-            Debug.Log($"can't find the Monster by {name}");
-#endif
-            hp = 0;
-            cost = 0;
         }
     }
 }

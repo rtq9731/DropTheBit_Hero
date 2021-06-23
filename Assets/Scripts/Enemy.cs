@@ -7,101 +7,78 @@ public class Enemy : MonoBehaviour
 {
 
     [SerializeField] Animator animator;
-    [SerializeField] MonsterData data;
 
-    EnemyState state = EnemyState.Walk;
-    EnemyState State { get { return state; } set { state = value; isStateChange = true; } }
+    private int cost = 0;
+    private float hp = 0;
+    float timer = 0f;
 
-    bool isStateChange = true;
-    bool isDie = false;
+    private bool isDead = false;
 
-    enum EnemyState
+    private int attackHash = Animator.StringToHash("Attack");
+    private int hitHash = Animator.StringToHash("Hit");
+    private int dieHash = Animator.StringToHash("Die");
+
+    private void Update()
     {
-        Walk,
-        Atk,
-        Hit,
-        Die
-    };
-
-    private void Start()
-    {
-        State = EnemyState.Walk;
+        timer += Time.deltaTime;
+        if( timer % 1 == 0 && !isDead)
+        {
+            animator.SetTrigger(attackHash);
+        }
     }
 
     private void OnEnable()
     {
-        data = new MonsterData();
-        StartCoroutine(InputData());
+        MoveToFightPos();
     }
 
-    private void Update()
+    public void InitEnemy(int cost, float hp)
     {
-        if (state == EnemyState.Die && !isDie)
-        {
-            isDie = true;
-            animator.Play("Enemy_Die");
-            GameManager.Instance.AddMoney(data.Cost);
-            GameManager.Instance.KillCount++;
-            MainSceneManager.Instance.Player.RemoveEnmey();
-            Invoke("Die", 0.93f);
-        }
+        this.cost = cost;
+        this.hp = hp;
+        timer = 0f;
+        isDead = false;
+    }
 
-        if(isStateChange)
-        {
-            switch (State)
-            {
-                case EnemyState.Walk:
-                    MoveToFightPos();
-                    break;
-                case EnemyState.Atk:
-                    break;
-                case EnemyState.Die:
-                    break;
-                case EnemyState.Hit:
-                    break;
-                default:
-                    break;
-            }
-        }
-
+    private void DieAction()
+    {
+        animator.SetTrigger(dieHash);
+        GameManager.Instance.AddMoney(cost);
+        GameManager.Instance.KillCount++;
+        MainSceneManager.Instance.Player.RemoveEnmey();
+        Invoke("Die", 0.93f);
     }
 
     private void Die()
     {
-        MainSceneManager.Instance.CallNextEnmey();
+        MainSceneManager.Instance.CallNextEnemy();
         transform.DOMoveX(-7.75f, 2f).OnComplete(()=> {
-            Destroy(this.gameObject);
+            gameObject.SetActive(false);
             });
     }
 
     public void Hit(float damage)
     {
-        if (data.HP <= 0)
+        if (isDead)
         {
-            State = EnemyState.Die;
             return;
         }
-        animator.Play("Enemy_Hit");
-        data.AddDamage(damage);
-        State = EnemyState.Hit;
+
+        hp -= damage;
+        if (hp <= 0)
+        {
+            isDead = true;
+            DieAction();
+            return;
+        }
+        animator.SetTrigger(hitHash);
     }
 
     private void MoveToFightPos()
     {
-        isStateChange = false;
-        transform.DOMoveX(1f, 1f).SetEase(Ease.OutCubic).OnComplete(() => { 
-            State = EnemyState.Atk;
+        transform.DOMoveX(1f, 1f).SetEase(Ease.OutCubic).OnComplete(() => {
+            animator.SetTrigger(attackHash);
             MainSceneManager.Instance.Player.SetEnmey(this);
         });
-    }
-
-    private IEnumerator InputData()
-    {
-        string[] temp = name.Split('(');
-        string tempName = temp[0];
-        yield return new WaitForSeconds(0.1f);
-        GameManager.Instance.GetEnemyDataFromName(tempName, out float hp, out int cost);
-        data.InitData(hp, cost, tempName);
-        yield return null;
     }
 }

@@ -33,6 +33,11 @@ public class Player : MonoBehaviour
         state = PlayerState.Walk;
     }
 
+    private void Start()
+    {
+        MoveToFight();
+    }
+
     private void Update()
     {
         if(isStateChange)
@@ -40,12 +45,6 @@ public class Player : MonoBehaviour
             switch (state)
             {
                 case PlayerState.Walk:
-
-                    if(isFirstFight)
-                    {
-                        MoveToFight();
-                    }
-
                     Clearanimator();
                     break;
                 case PlayerState.Atk:

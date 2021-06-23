@@ -6,6 +6,7 @@ using DG.Tweening;
 public class LongNoteScript : MonoBehaviour
 {
     [SerializeField] LineRenderer line;
+    [SerializeField] Transform headTr;
     [SerializeField] Transform tailTr;
 
     [Header("Perfect가 뜰 거리")] [SerializeField] float whereIsPerfect = 0f;
@@ -19,7 +20,7 @@ public class LongNoteScript : MonoBehaviour
     private Vector2 noteStartPos;
     private Vector2 noteLinePos;
 
-    bool isMoving = true; // 움직여야 하는 타이밍인지.
+    bool isMovingHead = true; // 머리가 움직여야 하는 타이밍인지.
     bool isMovingTail = false; // 만약 꼬리가 움직여야하는 타이밍인지
 
     public void InitLongNote(Vector2 noteLinePos, float speed, float length, Vector2 noteStartPos)
@@ -28,16 +29,16 @@ public class LongNoteScript : MonoBehaviour
         this.noteLinePos = noteLinePos;
         this.noteStartPos = noteStartPos;
         moveSpeed = speed;
-        isMoving = true;
+        isMovingHead = true;
     }
 
 
     private void Update()
     {
 
-        if(isMoving)
+        if(isMovingHead)
         {
-            transform.Translate(new Vector3(-Time.deltaTime * moveSpeed, 0, 0)); // 머리가 움직여야 할 때 움직이기.
+            headTr.Translate(new Vector3(-Time.deltaTime * moveSpeed, 0, 0)); // 머리가 움직여야 할 때 움직이기.
             tailTr.position = noteStartPos; // 시작 위치에 고정
         }
 
@@ -46,13 +47,14 @@ public class LongNoteScript : MonoBehaviour
             tailTr.Translate(new Vector3(-Time.deltaTime * moveSpeed, 0, 0)); // 꼬리가 움직여야 할 때 움직이기.
         }
 
-        if(transform.position.x <= noteLinePos.x && Vector2.Distance(transform.position, noteLinePos) <= 0.001f) // 노트 판정 위치에 머리가 도착했을 때
+        if(Vector2.Distance(headTr.position, noteLinePos) <= 0.01f) // 노트 판정 위치에 머리가 도착했을 때
         {
-            isMoving = false; // 머리가 그만 움직여서 그자리에 엄추게 함.
+            isMovingHead = false; // 머리가 그만 움직여서 그자리에 엄추게 함.
         }
-        if(tailTr.position.x <= noteLinePos.x && Vector2.Distance(tailTr.position, noteLinePos) <= 0.001f) // 만약 노트 판정 위치에 꼬리가 도착하면
+        if(tailTr.position.x <= noteLinePos.x && Vector2.Distance(tailTr.position, noteLinePos) >= whereIsPerfect + whereIsGood + whereIsMiss) // 만약 노트 판정 위치를 지나 에 꼬리가 도착하면
         {
-            Delete(); // 지우기.
+            Debug.Log("꼬리가 도착했답니다!");
+            Delete(); // 지우기. (테스트 용이고, 판정 계산할 것임.
         }
 
         timer += Time.deltaTime * 1000;
@@ -60,6 +62,9 @@ public class LongNoteScript : MonoBehaviour
         {
             isMovingTail = true;
         }
+
+        line.SetPosition(0, headTr.position);
+        line.SetPosition(1, tailTr.position);
 
     }
 
@@ -71,21 +76,21 @@ public class LongNoteScript : MonoBehaviour
     }
 
 
-    public int isHit(Vector2 linePos) // Perfect = 1, Good = 2, Miss = 3, None = 4
+    public int isHit(Vector2 linePos, Transform tr) // Perfect = 1, Good = 2, Miss = 3, None = 4
     {
-        if (Vector2.Distance(linePos, this.transform.position) <= whereIsPerfect)
+        if (Vector2.Distance(linePos, tr.position) <= whereIsPerfect)
         {
             return 1;
         }
-        else if (Vector2.Distance(linePos, this.transform.position) <= whereIsPerfect + whereIsGood)
+        else if (Vector2.Distance(linePos, tr.position) <= whereIsPerfect + whereIsGood)
         {
             return 2;
         }
-        else if (Vector2.Distance(linePos, this.transform.position) <= whereIsPerfect + whereIsGood + whereIsMiss)
+        else if (Vector2.Distance(linePos, tr.position) <= whereIsPerfect + whereIsGood + whereIsMiss)
         {
             return 3;
         }
-        else if (Vector2.Distance(linePos, this.transform.position) >= whereIsPerfect + whereIsGood + whereIsMiss && transform.position.x >= linePos.x)
+        else if (Vector2.Distance(linePos, tr.position) >= whereIsPerfect + whereIsGood + whereIsMiss && tr.position.x >= linePos.x)
         {
             return 4;
         }

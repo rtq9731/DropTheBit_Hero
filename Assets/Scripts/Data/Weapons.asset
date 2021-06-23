@@ -40,3 +40,8 @@ MonoBehaviour:
     upgradecount: 0
     upgradecost: 6000
     isunlocked: 0
+  - index: 6
+    name: "\uAC80"
+    upgradecount: 0
+    upgradecost: 12000
+    isunlocked: 0

@@ -17,24 +17,51 @@ public class MainSceneManager : MonoBehaviour
 
     [SerializeField] BackGroundMove backGround;
     [SerializeField] Player player;
+    [SerializeField] Transform enemyPoolTr;
     [SerializeField] public TopUI topUI;
     [SerializeField] public WeaponUpUI upgradeUI;
     [SerializeField] public AudioSource hitSound;
     [SerializeField] public InputPanel InputPanel;
     [SerializeField] public LeftUI leftUI;
 
+    public List<GameObject> enemyPool = new List<GameObject>();
+
     public Player Player { get { return player; } set { player = value; } }
 
-    public void CallBoss(int killCount)
+    private void Start()
+    {
+        CallNextEnemy();
+    }
+
+    public void CallBoss()
     {
         leftUI.SetActiveTrueBtnBoss();
     }
 
-    public void CallNextEnmey()
+    public void CallNextEnemy()
     {
-        Debug.Log(GameManager.Instance.EnemyNames[GameManager.Instance.NowEnemyIndex]);
-        GameObject temp = GameManager.Instance.EnemyPrefabs[GameManager.Instance.EnemyNames[GameManager.Instance.NowEnemyIndex]];
-        Instantiate(temp, new Vector2(8, 1), Quaternion.identity);
+        foreach (var item in enemyPool)
+        {
+            if(!item.activeSelf) // 만약 풀 안에 ActiveFalse된 오브젝트가 있다면.
+            {
+                MonsterData data = GameManager.Instance.EnemyDatas[GameManager.Instance.EnemyNames[GameManager.Instance.NowEnemyIndex]];
+                item.GetComponent<Enemy>().InitEnemy(data.Cost, data.HP);
+                item.GetComponent<Transform>().position = new Vector2(8, 1);
+                item.SetActive(true);
+                return;
+            }
+        }
+
+        MakeNewEnemyInPool();
+    }
+
+    private void MakeNewEnemyInPool()
+    {
+        GameObject temp = Instantiate(GameManager.Instance.EnemyPrefab, new Vector2(8, 1), Quaternion.identity, enemyPoolTr);
+        MonsterData data = GameManager.Instance.EnemyDatas[GameManager.Instance.EnemyNames[GameManager.Instance.NowEnemyIndex]];
+        temp.GetComponent<Enemy>().InitEnemy(data.Cost, data.HP);
+        temp.GetComponent<Transform>().position = new Vector2(8, 1);
+        enemyPool.Add(temp);
     }
 
     public void SceneChange()

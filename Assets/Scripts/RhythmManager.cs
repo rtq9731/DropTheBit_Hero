@@ -51,13 +51,6 @@ public class RhythmManager : MonoBehaviour
     private int indexforEffectPooling = 0;
 
     private bool isPlayingNote = false;
-    private bool isBossScene = false;
-    
-    public void SetRhythem()
-    {
-        BossSceneManager.Instance.progressBar.maxValue = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count;
-        isBossScene = true;
-    }
 
     private void Update()
     {
@@ -88,14 +81,17 @@ public class RhythmManager : MonoBehaviour
 
             if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count > noteMakeIndex)
             {
+                BossSceneManager.Instance.progressBar.maxValue = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count;
                 float noteTiming = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time;
                 if (isPlayingNote && noteTimer >= noteTiming - currentTimingPoint.MsPerBeat) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 오프셋 빼줄 것임.
                 {
                     Debug.Log(GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name);
                     if ((GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함;
                     {
-                        noteMakeIndex++;
-                        CreateLongNote((HitSlider)GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex]);
+                        ++noteMakeIndex;
+                        CrateNote();
+                        //noteMakeIndex++;
+                        //CreateLongNote((HitSlider)GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex]);
                     }
                     else // 일반 노트
                     {
@@ -145,20 +141,17 @@ public class RhythmManager : MonoBehaviour
 
     void CrateNote()
     {
-        if (isBossScene)
+        int randNum = Random.Range(1, 3);
+        switch (randNum)
         {
-            int randNum = Random.Range(1, 3);
-            switch (randNum)
-            {
-                case 1:
-                    BossSceneManager.Instance.bossAnimator.SetTrigger(BossSceneManager.Instance.bossAttack1Hash);
-                    break;
-                case 2:
-                    BossSceneManager.Instance.bossAnimator.SetTrigger(BossSceneManager.Instance.bossAttack2Hash);
-                    break;
-                default:
-                    break;
-            }
+            case 1:
+                BossSceneManager.Instance.bossAnimator.SetTrigger(BossSceneManager.Instance.bossAttack1Hash);
+                break;
+            case 2:
+                BossSceneManager.Instance.bossAnimator.SetTrigger(BossSceneManager.Instance.bossAttack2Hash);
+                break;
+            default:
+                break;
         }
 
         if (notesforPooling.Count < poolingMax)
@@ -236,11 +229,8 @@ public class RhythmManager : MonoBehaviour
                     GameManager.Instance.Combo += 2;
                     nowEffect.text.text = $"PERFECT X {GameManager.Instance.Combo}";
 
-                    if (isBossScene)
-                    {
-                        BossSceneManager.Instance.progressBar.value += 2;
-                        BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerAttackHash);
-                    }
+                    BossSceneManager.Instance.progressBar.value += 2;
+                    BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerAttackHash);
 
                     break;
                 }
@@ -250,11 +240,8 @@ public class RhythmManager : MonoBehaviour
                     ++GameManager.Instance.Combo;
                     nowEffect.text.text = $"GOOD X {GameManager.Instance.Combo}";
 
-                    if (isBossScene)
-                    {
-                        BossSceneManager.Instance.progressBar.value++;
-                        BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerAttackHash);
-                    }
+                    BossSceneManager.Instance.progressBar.value++;
+                    BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerAttackHash);
 
                     break;
                 }
@@ -263,12 +250,10 @@ public class RhythmManager : MonoBehaviour
                     nowEffect.text.color = hitEffectColors.missColor;
                     GameManager.Instance.Combo = 0;
                     nowEffect.text.text = "MISS";
-
-                    if (isBossScene)
-                    {
-                        BossSceneManager.Instance.progressBar.value--;
-                        BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerHitHash);
-                    }
+                    
+                    BossSceneManager.Instance.progressBar.value--;
+                    BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerHitHash);
+                    
 
                     break;
                 }

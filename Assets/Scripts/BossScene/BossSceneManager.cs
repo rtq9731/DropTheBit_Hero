@@ -11,6 +11,8 @@ public class BossSceneManager : MonoBehaviour
 
     [Header("전투 결과 관련")]
     [SerializeField] GameObject bgPanel;
+    [SerializeField] GameObject resultPanel;
+    [SerializeField] Button btnChangeScene;
 
 
     public static BossSceneManager Instance = null;
@@ -27,12 +29,9 @@ public class BossSceneManager : MonoBehaviour
         bossAttack2Hash = Animator.StringToHash("Attack2");
         playerAttackHash = Animator.StringToHash("Attack");
         playerHitHash = Animator.StringToHash("Hit");
-
-        Screen.SetResolution(1440, 2560, true);
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
-
         Instance = this;
     }
+
     private void OnDestroy()
     {
         Instance = null;
@@ -44,6 +43,8 @@ public class BossSceneManager : MonoBehaviour
 
     public void FinishFight()
     {
-
+        bgPanel.SetActive(true);
+        resultPanel.SetActive(true);
+        btnChangeScene.onClick.AddListener(() => GameManager.Instance.ChangeSceneToMainScene());
     }
 }

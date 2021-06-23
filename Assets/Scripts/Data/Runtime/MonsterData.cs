@@ -19,15 +19,5 @@ public class MonsterData
   [SerializeField]
   int cost;
   public int Cost { get {return cost; } set { this.cost = value;} }
-    public void AddDamage(float damage)
-    {
-        this.hp -= damage;
-    }
-    public void InitData(float hp, int cost, string name)
-    {
-        this.HP = hp;
-        this.Cost = cost;
-        this.Name = name;
-    }
 
 }
