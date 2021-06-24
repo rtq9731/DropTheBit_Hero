@@ -19,5 +19,5 @@ public class MonsterData
   [SerializeField]
   int cost;
   public int Cost { get {return cost; } set { this.cost = value;} }
-
+  
 }

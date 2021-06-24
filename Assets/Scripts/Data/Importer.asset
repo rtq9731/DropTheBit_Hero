@@ -26,6 +26,10 @@ MonoBehaviour:
     name: Name
     isEnable: 0
     isArray: 0
+  - type: 1
+    name: Image_Path
+    isEnable: 0
+    isArray: 0
   - type: 2
     name: UpgradeCount
     isEnable: 0

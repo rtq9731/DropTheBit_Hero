@@ -13,6 +13,10 @@ public class WeaponsData
   public short Index { get {return index; } set { this.index = value;} }
   
   [SerializeField]
+  string image_path;
+  public string Image_Path { get {return image_path; } set { this.image_path = value;} }
+  
+  [SerializeField]
   string name;
   public string Name { get {return name; } set { this.name = value;} }
   

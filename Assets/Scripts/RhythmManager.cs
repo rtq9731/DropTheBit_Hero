@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -54,6 +55,9 @@ public class RhythmManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Delete))
+            StartCoroutine(FinishRhythm());
+
         if(GameManager.Instance.isFinishParshing > 0)
         {
             GameManager.Instance.isFinishParshing--;
@@ -79,31 +83,29 @@ public class RhythmManager : MonoBehaviour
         {
             noteTimer += Time.deltaTime * 1000;
 
-            if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count > noteMakeIndex)
+            if(GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count <= noteMakeIndex)
             {
-                BossSceneManager.Instance.progressBar.maxValue = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count;
-                float noteTiming = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time;
-                if (isPlayingNote && noteTimer >= noteTiming - currentTimingPoint.MsPerBeat) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 오프셋 빼줄 것임.
-                {
-                    Debug.Log(GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name);
-                    if ((GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함;
-                    {
-                        ++noteMakeIndex;
-                        CrateNote();
-                        //noteMakeIndex++;
-                        //CreateLongNote((HitSlider)GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex]);
-                    }
-                    else // 일반 노트
-                    {
-                        ++noteMakeIndex;
-                        CrateNote();
-                    }
-                }
-            }
-            else
-            {
-                FinishRhythm();
+                StartCoroutine(FinishRhythm());
                 return;
+            }
+
+            BossSceneManager.Instance.progressBar.maxValue = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count;
+            float noteTiming = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time;
+            if (isPlayingNote && noteTimer >= noteTiming - currentTimingPoint.MsPerBeat) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 오프셋 빼줄 것임.
+            {
+                Debug.Log(GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name);
+                if ((GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함;
+                {
+                    ++noteMakeIndex;
+                    CrateNote();
+                    //noteMakeIndex++;
+                    //CreateLongNote((HitSlider)GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex]);
+                }
+                else // 일반 노트
+                {
+                    ++noteMakeIndex;
+                    CrateNote();
+                }
             }
 
         }
@@ -133,10 +135,13 @@ public class RhythmManager : MonoBehaviour
         }
     }
 
-    void FinishRhythm()
+    private IEnumerator FinishRhythm()
     {
+        yield return new WaitForSeconds(1.3f); // 마지막 노트가 지나갈때까지 대기.
+        StartStopSong();
         isPlayingNote = false;
         BossSceneManager.Instance.FinishFight();
+        yield return null;
     }
 
     void CrateNote()
@@ -283,6 +288,8 @@ public class RhythmManager : MonoBehaviour
     {
         note.SetActive(false);
         DOTween.Complete(note);
+
+
     }
 
     public void CheckNote()

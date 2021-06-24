@@ -17,8 +17,10 @@ public class UpgradePanel : MonoBehaviour
     short weaponIndex = 0;
     public bool isUnlocked = false;
 
-    public void InitUpgradePanel(string weaponName, short upgradeCount, int upgradeCost, short weaponIndex, bool isUnlocked)
+    public void InitUpgradePanel(string imageDataPath, string weaponName, short upgradeCount, int upgradeCost, short weaponIndex, bool isUnlocked)
     {
+        weaponImage.sprite = Resources.Load(imageDataPath, typeof(Sprite)) as Sprite;
+        Debug.Log(weaponImage.sprite);
         this.weaponName.text = weaponName;
         this.upgradeCount = upgradeCount;
         this.upgradeCost = upgradeCost;

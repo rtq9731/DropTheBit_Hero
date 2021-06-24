@@ -21,7 +21,7 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] public string nowPlaySong = "";
 
     private Dictionary<string, MonsterData> enemyDatas = new Dictionary<string, MonsterData>();
-    public Dictionary<string,MonsterData> EnemyDatas { get { return enemyDatas; } }
+    public Dictionary<string, MonsterData> EnemyDatas { get { return enemyDatas; } }
 
     private Dictionary<string, WeaponsData> weapons = new Dictionary<string, WeaponsData>();
 
@@ -37,6 +37,7 @@ public class GameManager : MonoSingleton<GameManager>
     private int combo = 0;
 
     public int isFinishParshing;
+    public int WeaponeIndex;
 
     public int Combo { get { return combo; } set { combo = value; } }
 
@@ -137,6 +138,7 @@ public class GameManager : MonoSingleton<GameManager>
     public void AddMoney(int money)
     {
         this.money += money;
+        MainSceneManager.Instance.PlayMoneyEffect(money);
         MainSceneManager.Instance.topUI.UpdateCurrentCoin();
     }
 

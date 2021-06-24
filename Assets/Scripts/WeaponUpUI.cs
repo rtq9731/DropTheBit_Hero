@@ -16,11 +16,12 @@ public class WeaponUpUI : MonoBehaviour
         MakeUpgradePanels();
     }
 
-    public void UnlockNewWeapon(short indexforNotePooling, UpgradePanel upgradePanel)
+    public void UnlockNewWeapon(short index, UpgradePanel upgradePanel)
     {
-        WeaponsData temp = GameManager.Instance.GetWeponDictionary()[GameManager.Instance.weaponNames[indexforNotePooling]];
+        GameManager.Instance.WeaponeIndex++;
+        WeaponsData temp = GameManager.Instance.GetWeponDictionary()[GameManager.Instance.weaponNames[index]];
         upgradePanel.isUnlocked = true;
-        upgradePanels[indexforNotePooling].Refresh(upgradePanel.isUnlocked);
+        upgradePanels[index].Refresh(upgradePanel.isUnlocked);
     }
 
     public void MakeUpgradePanels()
@@ -32,7 +33,7 @@ public class WeaponUpUI : MonoBehaviour
             temp = Instantiate(upgradePanelPrefab, this.transform);
             temp.name = item.Value.Name;
             UpgradePanel tempScript = temp.GetComponent<UpgradePanel>();
-            tempScript.InitUpgradePanel(item.Value.Name, item.Value.Upgradecount, item.Value.Upgradecost, item.Value.Index, item.Value.Isunlocked);
+            tempScript.InitUpgradePanel(item.Value.Image_Path, item.Value.Name, item.Value.Upgradecount, item.Value.Upgradecost, item.Value.Index, item.Value.Isunlocked);
             upgradePanels.Add(tempScript);
         }
     }
