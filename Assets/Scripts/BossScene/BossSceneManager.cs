@@ -66,28 +66,29 @@ public class BossSceneManager : MonoBehaviour
 
     void StartClicker()
     {
-        isActiveCliker = true; // Cliker ON!
-        bossHPBar.maxValue = progressBar.maxValue * 2;
-        Debug.Log(bossHPBar.maxValue);
-        bossHPBar.value = bossHPBar.maxValue;
-        bossHPBar.gameObject.SetActive(true);
-        playerAnimator.transform.position = new Vector2(-2, -2.5f);
-        bossAnimator.transform.position = new Vector2(2, -2.5f);
-        closeUpCam.SetActive(true);
+        clickerText.gameObject.SetActive(true);
+        clickerText.DOText($"빨리 클릭해 보스를 죽이세욧!\n남은시간: {Mathf.Round(clickerTime * 1000) * 0.001f}s", 1f).OnComplete(() => {
+            isActiveCliker = true;
+            bossHPBar.maxValue = progressBar.maxValue * 2;
+            bossHPBar.value = bossHPBar.maxValue;
+            bossHPBar.gameObject.SetActive(true);
+            playerAnimator.transform.position = new Vector2(-2, -2.5f);
+            bossAnimator.transform.position = new Vector2(2, -2.5f);
+            closeUpCam.SetActive(true);
+        }); // Cliker ON!
     }
 
     private void Update()
     {
         if (isActiveCliker)
         {
-            clickerText.text = $"빨리 클릭해 보스를 죽이세욧!\n남은시간: {Mathf.Round(clickerTime * 1000) * 0.001f}s";
 
             if (clickerTime <= 0)
                 FinishClicker();
 
             if (Input.GetMouseButtonDown(0))
             {
-                bossHPBar.value--;
+                bossHPBar.value -= PlayerPrefs.GetFloat("ATK");
                 if(bossHPBar.value <= 0)
                 {
                     FinishClicker();
@@ -104,6 +105,7 @@ public class BossSceneManager : MonoBehaviour
     {
         bgPanel.SetActive(true);
         resultPanel.SetActive(true);
+        clickerText.gameObject.SetActive(false);
         btnChangeScene.onClick.AddListener(() => GameManager.Instance.ChangeSceneToMainScene());
     }
 }

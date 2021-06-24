@@ -9,6 +9,10 @@ using System.Collections;
 public class MonsterData
 {
   [SerializeField]
+  short index;
+  public short Index { get {return index; } set { this.index = value;} }
+  
+  [SerializeField]
   string name;
   public string Name { get {return name; } set { this.name = value;} }
   
@@ -19,5 +23,9 @@ public class MonsterData
   [SerializeField]
   int cost;
   public int Cost { get {return cost; } set { this.cost = value;} }
+  
+  [SerializeField]
+  string animatorcontrollerpath;
+  public string Animatorcontrollerpath { get {return animatorcontrollerpath; } set { this.animatorcontrollerpath = value;} }
   
 }

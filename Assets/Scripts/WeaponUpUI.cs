@@ -14,6 +14,7 @@ public class WeaponUpUI : MonoBehaviour
     private void Start()
     {
         MakeUpgradePanels();
+        Debug.Log(GameManager.Instance.WeaponeIndex);
     }
 
     public void UnlockNewWeapon(short index, UpgradePanel upgradePanel)

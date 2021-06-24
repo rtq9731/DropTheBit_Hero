@@ -15,27 +15,43 @@ MonoBehaviour:
   SheetName: Assets/Scripts/Data/Data.xlsx
   WorksheetName: Monster
   dataArray:
-  - name: "\uD574\uACE8 \uBCD1\uC0AC 1"
+  - index: 1
+    name: "\uC2AC\uB77C\uC784 1"
     hp: 50
     cost: 100
-  - name: "\uD574\uACE8 \uBCD1\uC0AC 2"
+    animatorcontrollerpath: Controllers/01.SlimeController
+  - index: 2
+    name: "\uC2AC\uB77C\uC784 2"
     hp: 100
-    cost: 1000
-  - name: "\uD574\uACE8 \uBCD1\uC0AC 3"
+    cost: 200
+    animatorcontrollerpath: Controllers/01.SlimeController
+  - index: 3
+    name: "\uC2AC\uB77C\uC784 3"
     hp: 150
-    cost: 2000
-  - name: "\uD574\uACE8 \uBCD1\uC0AC 4"
+    cost: 400
+    animatorcontrollerpath: Controllers/01.SlimeController
+  - index: 4
+    name: "\uC2AC\uB77C\uC784 4"
     hp: 200
-    cost: 3000
-  - name: "\uD574\uACE8 \uBCD1\uC0AC 5"
+    cost: 800
+    animatorcontrollerpath: Controllers/01.SlimeController
+  - index: 5
+    name: "\uD574\uACE8 \uBCD1\uC0AC 1"
     hp: 250
-    cost: 4000
-  - name: "\uD574\uACE8 \uBCD1\uC0AC 6"
+    cost: 1000
+    animatorcontrollerpath: Controllers/02.SkeletonController
+  - index: 6
+    name: "\uD574\uACE8 \uBCD1\uC0AC 2"
     hp: 300
-    cost: 5000
-  - name: "\uD574\uACE8 \uBCD1\uC0AC 7"
+    cost: 2000
+    animatorcontrollerpath: Controllers/02.SkeletonController
+  - index: 7
+    name: "\uD574\uACE8 \uBCD1\uC0AC 3"
     hp: 350
-    cost: 6000
-  - name: "\uD574\uACE8 \uBCD1\uC0AC 8"
+    cost: 3000
+    animatorcontrollerpath: Controllers/02.SkeletonController
+  - index: 8
+    name: "\uD574\uACE8 \uBCD1\uC0AC 4"
     hp: 400
-    cost: 7000
+    cost: 4000
+    animatorcontrollerpath: Controllers/02.SkeletonController

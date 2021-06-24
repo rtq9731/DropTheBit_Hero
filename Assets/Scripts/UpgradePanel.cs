@@ -13,7 +13,7 @@ public class UpgradePanel : MonoBehaviour
     [SerializeField] GameObject lockPanel;
 
     int upgradeCost = 0;
-    short upgradeCount = 0;
+    short upgradeCount = 1;
     short weaponIndex = 0;
     public bool isUnlocked = false;
 
@@ -36,12 +36,7 @@ public class UpgradePanel : MonoBehaviour
     {
         upgradeBtn.onClick.RemoveAllListeners();
 
-        // this.weaponImage.sprite = Resources.Load($"Images/{weaponName.text}") as Sprite;
-        if (upgradeCount == 0)
-        {
-            this.upgradeCostText.text = $"업그레이드 비용 : {upgradeCost}원"; // 첫 업그레이드가 안된 경우 그냥 원가만 표시
-        }
-        else if (upgradeCount < 5)
+        if (upgradeCount < 5)
         {
             this.upgradeCostText.text = $"업그레이드 비용 : {upgradeCost * upgradeCount}원"; // 첫 업그레이드가 끝난 경우 원가 * 업그레이드 단계로 표시
         }

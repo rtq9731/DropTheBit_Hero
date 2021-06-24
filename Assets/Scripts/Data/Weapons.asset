@@ -50,5 +50,11 @@ MonoBehaviour:
     image_path: "WeaponImages/06_\uAC80"
     name: "\uAC80"
     upgradecount: 0
-    upgradecost: 12000
+    upgradecost: 30000
+    isunlocked: 0
+  - index: 7
+    image_path: "WeaponImages/07_\uB2F4\uAE08\uC9C8\uB41C \uAC80"
+    name: "\uB2F4\uAE08\uC9C8\uB41C \uAC80"
+    upgradecount: 0
+    upgradecost: 150000
     isunlocked: 0

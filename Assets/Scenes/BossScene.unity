@@ -705,7 +705,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: b032d83383c57fc4aa4da68d4e011134, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -3117,8 +3117,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uBE68\uB9AC \uD074\uB9AD\uD574 \uBCF4\uC2A4\uB97C \uC8FD\uC774\uC138\uC6A7!\n\uB0A8\uC740\uC2DC\uAC04
-    : {} s"
+  m_Text: 
 --- !u!222 &2013452746
 CanvasRenderer:
   m_ObjectHideFlags: 0

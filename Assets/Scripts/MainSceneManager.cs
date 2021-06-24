@@ -16,21 +16,26 @@ public class MainSceneManager : MonoBehaviour
     {
         Instance = null;
     }
+    
 
-    [Header("AnimatorController들")]
-    [SerializeField] RuntimeAnimatorController skeletonController;
-
-    [Header("기타")]
+    [Header("이펙트 관련")]
+    [SerializeField] Transform moneyEffectTr;
     [SerializeField] GameObject moneyEffectPrefab;
-    [SerializeField] Animator effectAnimator;
     [SerializeField] GameObject enemyNameTextPanel;
+    [SerializeField] Animator effectAnimator;
     [SerializeField] Slider enemyHpSlider;
+
+    [Header("배경")]
     [SerializeField] BackGroundMove backGround;
+
+    [Header("상단 UI")]
     [SerializeField] Text atkText = null;
-    [SerializeField] Player player;
+
+    [Header("풀링용")]
     [SerializeField] Transform enemyPoolTr;
     [SerializeField] Transform moneyEffectPoolTr;
-    [SerializeField] Transform moneyEffectTr;
+
+    [Header("여타 참조용 Public 변수들")]
     [SerializeField] public TopUI topUI;
     [SerializeField] public WeaponUpUI upgradeUI;
     [SerializeField] public AudioSource hitSound;
@@ -43,25 +48,33 @@ public class MainSceneManager : MonoBehaviour
     public List<GameObject> enemyPool = new List<GameObject>();
     public Queue<GameObject> moneyEffectPool = new Queue<GameObject>();
 
+    Player player;
     public Player Player { get { return player; } set { player = value; } }
 
     private void Start()
     {
+        player = FindObjectOfType<Player>();
         CallNextEnemy();
         effectAnimator.speed = 0;
     }
 
     private void Update()
     {
-        Debug.Log(Camera.main.ScreenToWorldPoint(nowEnemy.gameObject.transform.position));
         atkText.text = $"공격력\n{player.ATK}";
+
+#if UNITY_EDITOR
+        if(Input.GetKeyDown(KeyCode.Insert))
+        {
+            GameManager.Instance.AddMoney(100000);
+        }
+#endif
 
         if (nowEnemy != null)
         {
-            enemyHpSlider.transform.position = new Vector2(nowEnemy.transform.position.x, nowEnemy.transform.position.y - 0.2f);
-            enemyNameTextPanel.transform.position = new Vector2(nowEnemy.transform.position.x, nowEnemy.transform.position.y + 1f);
+            enemyHpSlider.transform.position = nowEnemy.hpBarPos.position;
+            enemyNameTextPanel.transform.position = nowEnemy.namePanelPos.position;
             enemyNameText.text = GameManager.Instance.EnemyNames[GameManager.Instance.NowEnemyIndex];
-            effectAnimator.GetComponentInParent<Transform>().position = new Vector2(nowEnemy.transform.position.x - 0.45f, nowEnemy.transform.position.y + 0.5f);
+            effectAnimator.GetComponentInParent<Transform>().position = nowEnemy.effectPos.position;
         }
     }
 
@@ -94,15 +107,15 @@ public class MainSceneManager : MonoBehaviour
             {
                 //StopAttackEffect();
                 MonsterData data = GameManager.Instance.EnemyDatas[GameManager.Instance.EnemyNames[GameManager.Instance.NowEnemyIndex]];
-                item.GetComponent<Enemy>().InitEnemy(skeletonController, data.Cost, data.HP);
                 nowEnemy = item.GetComponent<Enemy>();
-                enemyHpSlider.transform.position = new Vector2(nowEnemy.transform.position.x, nowEnemy.transform.position.y - 0.2f);
-                enemyHpSlider.maxValue = item.GetComponent<Enemy>().hp;
-                enemyHpSlider.value = item.GetComponent<Enemy>().hp;
+
 
                 enemyNameText = enemyNameTextPanel.GetComponentInChildren<Text>();
-                enemyNameTextPanel.transform.position = new Vector2(nowEnemy.transform.position.x, nowEnemy.transform.position.y + 2f);
+                nowEnemy.InitEnemy(data.Cost, data.HP);
                 enemyNameText.text = GameManager.Instance.EnemyNames[GameManager.Instance.NowEnemyIndex];
+                enemyHpSlider.maxValue = nowEnemy.hp;
+                enemyHpSlider.value = nowEnemy.hp;
+
                 item.SetActive(true);
 
                 item.GetComponent<Transform>().position = new Vector2(8, 1);
@@ -117,18 +130,21 @@ public class MainSceneManager : MonoBehaviour
     private void MakeNewEnemyInPool()
     {
         GameObject temp = Instantiate(GameManager.Instance.EnemyPrefab, new Vector2(8, 1), Quaternion.identity, enemyPoolTr);
+        temp.SetActive(false);
         MonsterData data = GameManager.Instance.EnemyDatas[GameManager.Instance.EnemyNames[GameManager.Instance.NowEnemyIndex]];
-        temp.GetComponent<Enemy>().InitEnemy(skeletonController, data.Cost, data.HP);
-        temp.GetComponent<Transform>().position = new Vector2(8, 1);
         nowEnemy = temp.GetComponent<Enemy>();
-        enemyHpSlider.transform.position = new Vector2(nowEnemy.transform.position.x, nowEnemy.transform.position.y - 0.2f);
+        nowEnemy.transform.position = new Vector2(8, 1);
+
+        enemyNameText = enemyNameTextPanel.GetComponentInChildren<Text>();
+        enemyNameText.text = nowEnemy.name.Split('(')[0];
+
+        nowEnemy.InitEnemy(data.Cost, data.HP);
         enemyHpSlider.maxValue = nowEnemy.hp;
         enemyHpSlider.value = nowEnemy.hp;
 
-        enemyNameText = enemyNameTextPanel.GetComponentInChildren<Text>();
-        enemyNameTextPanel.transform.position = new Vector2(nowEnemy.transform.position.x, nowEnemy.transform.position.y + 2f);
-        enemyNameText.text = nowEnemy.name.Split('(')[0];
         enemyPool.Add(temp);
+
+        temp.SetActive(true);
     }
 
     public void PlayMoneyEffect(int cost)

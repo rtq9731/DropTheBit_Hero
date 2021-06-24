@@ -55,8 +55,10 @@ public class RhythmManager : MonoBehaviour
 
     private void Update()
     {
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Delete))
             StartCoroutine(FinishRhythm());
+#endif
 
         if(GameManager.Instance.isFinishParshing > 0)
         {

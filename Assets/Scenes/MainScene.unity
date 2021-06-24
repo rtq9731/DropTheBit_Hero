@@ -1503,8 +1503,8 @@ MonoBehaviour:
   enemySheet: {fileID: 11400000, guid: 4d2b0077f8393304f9f93e5ef5096086, type: 2}
   weaponSheet: {fileID: 11400000, guid: cfa89dfc637c57344800e4999c810e58, type: 2}
   parsingManager: {fileID: 429422855}
-  weaponNames: []
   nowPlaySong: Faded
+  weaponNames: []
   isFinishParshing: 0
   WeaponeIndex: 0
 --- !u!114 &429422855
@@ -2543,18 +2543,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4b47b88d9078574bbcf577b41412873, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonController: {fileID: 9100000, guid: f8edd93f48ca7ca4db629fe6a7f155e9, type: 2}
+  player: {fileID: 331970333}
+  moneyEffectTr: {fileID: 1805514908}
   moneyEffectPrefab: {fileID: 8637736018505670351, guid: f91784031c65bf14e98ddc294a7f51bb,
     type: 3}
-  effectAnimator: {fileID: 1953522761}
   enemyNameTextPanel: {fileID: 1757542388}
+  effectAnimator: {fileID: 1953522761}
   enemyHpSlider: {fileID: 1680717761}
   backGround: {fileID: 1714613463}
   atkText: {fileID: 445057898}
-  player: {fileID: 331970333}
   enemyPoolTr: {fileID: 1816628748}
   moneyEffectPoolTr: {fileID: 1413346477}
-  moneyEffectTr: {fileID: 1805514908}
   topUI: {fileID: 1295205254}
   upgradeUI: {fileID: 1806968691}
   hitSound: {fileID: 881692046}
@@ -4209,11 +4208,11 @@ RectTransform:
   m_Father: {fileID: 1345456432}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
-  m_Pivot: {x: 1, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1680717761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4361,11 +4360,11 @@ RectTransform:
   m_Father: {fileID: 1345456432}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -75, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 75}
-  m_Pivot: {x: 0.75, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1757542390
 MonoBehaviour:
   m_ObjectHideFlags: 0

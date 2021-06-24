@@ -9,21 +9,14 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] Monster enemySheet;
     [SerializeField] Weapons weaponSheet;
 
+    SaveClass saveData = new SaveClass();
+
+    #region Getter¿Í º¯¼ö
     int nowEnemyIndex = 0;
     public int NowEnemyIndex { get { return nowEnemyIndex; } }
 
-    public OsuParser parsingManager = null;
-
-    private RhythmManager rhythmManager;
-
-    public List<string> weaponNames = new List<string>();
-
-    [SerializeField] public string nowPlaySong = "";
-
     private Dictionary<string, MonsterData> enemyDatas = new Dictionary<string, MonsterData>();
     public Dictionary<string, MonsterData> EnemyDatas { get { return enemyDatas; } }
-
-    private Dictionary<string, WeaponsData> weapons = new Dictionary<string, WeaponsData>();
 
     private GameObject enemyPrefab;
 
@@ -31,15 +24,24 @@ public class GameManager : MonoSingleton<GameManager>
 
     private List<string> enemyNames = new List<string>();
     public List<string> EnemyNames { get { return enemyNames; } }
-
-    private int money = 0;
-    private int killCount = 0;
     private int combo = 0;
+    public int Combo { get { return combo; } set { combo = value; } }
+    #endregion
+
+    [SerializeField] public string nowPlaySong = "";
+
+    public OsuParser parsingManager = null;
+    private RhythmManager rhythmManager;
+
+    private Dictionary<string, WeaponsData> weapons = new Dictionary<string, WeaponsData>();
+
+    public List<string> weaponNames = new List<string>();
+
+    private decimal money = 0;
+    private int killCount = 0;
 
     public int isFinishParshing;
     public int WeaponeIndex;
-
-    public int Combo { get { return combo; } set { combo = value; } }
 
     public int KillCount { get { return killCount; } 
         set 
@@ -122,7 +124,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void Start()
     {
-        enemyPrefab = Resources.Load("Enemies/Skeleton") as GameObject;
+        enemyPrefab = Resources.Load("Enemies/EnemyPrefab") as GameObject;
     }
 
     public AudioClip GetMusic()
@@ -130,7 +132,7 @@ public class GameManager : MonoSingleton<GameManager>
         return Resources.Load($"SongMP3/{nowPlaySong}") as AudioClip;
     }
 
-    public int GetMoney()
+    public decimal GetMoney()
     {
         return money;
     }

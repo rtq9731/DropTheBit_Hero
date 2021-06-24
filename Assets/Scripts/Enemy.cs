@@ -6,10 +6,14 @@ using DG.Tweening;
 public class Enemy : MonoBehaviour
 {
 
-    [SerializeField] Animator animator;
+    Animator animator;
 
     private float hitOffset = 0.3f;
     private float dieOffset = 0.7f;
+
+    [SerializeField] public Transform hpBarPos = null;
+    [SerializeField] public Transform namePanelPos = null;
+    [SerializeField] public Transform effectPos = null;
 
     private int cost = 0;
     public float hp = 0;
@@ -26,9 +30,26 @@ public class Enemy : MonoBehaviour
         MoveToFightPos();
     }
 
-    public void InitEnemy(RuntimeAnimatorController controller, int cost, float hp)
+    public void InitEnemy(int cost, float hp)
     {
-        this.GetComponent<Animator>().runtimeAnimatorController = controller;
+        MainSceneManager.Instance.UpdateHPSlider();
+        animator = GetComponent<Animator>();
+        animator.runtimeAnimatorController = Resources.Load(GameManager.Instance.EnemyDatas[GameManager.Instance.EnemyNames[GameManager.Instance.NowEnemyIndex]].Animatorcontrollerpath) as RuntimeAnimatorController;
+        if(GameManager.Instance.EnemyNames[GameManager.Instance.NowEnemyIndex].Contains("슬라임")) // 왼쪽 방향으로 걸어가는 적의 경우엔
+        {
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+        else if (GameManager.Instance.EnemyNames[GameManager.Instance.NowEnemyIndex].Contains("해골"))
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else // 오른쪽 방향으로 걷는 적인 경우에
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+            hpBarPos.localPosition = new Vector2(0, -0.25f);
+            namePanelPos.localPosition = new Vector2(0, 1f);
+        }
+        animator = GetComponent<Animator>();
         this.cost = cost;
         this.hp = hp;
         timer = 0f;
