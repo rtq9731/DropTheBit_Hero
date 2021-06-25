@@ -6,36 +6,19 @@ using UnityEngine.UI;
 public class WeaponUpUI : MonoBehaviour
 {
     [SerializeField] GameObject upgradePanelPrefab;
-    [SerializeField] List<UpgradePanel> upgradePanels;
     [SerializeField] GameObject lockObject;
-
-    Dictionary<string, WeaponsData> weapons;
 
     private void Start()
     {
         MakeUpgradePanels();
-        Debug.Log(GameManager.Instance.WeaponeIndex);
     }
 
-    public void UnlockNewWeapon(short index, UpgradePanel upgradePanel)
+    void MakeUpgradePanels()
     {
-        GameManager.Instance.WeaponeIndex++;
-        WeaponsData temp = GameManager.Instance.GetWeponDictionary()[GameManager.Instance.weaponNames[index]];
-        upgradePanel.isUnlocked = true;
-        upgradePanels[index].Refresh(upgradePanel.isUnlocked);
-    }
-
-    public void MakeUpgradePanels()
-    {
-        weapons = GameManager.Instance.GetWeponDictionary();
-        foreach (var item in weapons)
+        for (int i = 0; i < GameManager.Instance.Weapons.Count; i++)
         {
-            GameObject temp;
-            temp = Instantiate(upgradePanelPrefab, this.transform);
-            temp.name = item.Value.Name;
-            UpgradePanel tempScript = temp.GetComponent<UpgradePanel>();
-            tempScript.InitUpgradePanel(item.Value.Image_Path, item.Value.Name, item.Value.Upgradecount, item.Value.Upgradecost, item.Value.Index, item.Value.Isunlocked);
-            upgradePanels.Add(tempScript);
+            GameObject temp = Instantiate(upgradePanelPrefab, transform);
+            temp.GetComponent<UpgradePanel>().InitUpgradePanel(i);
         }
     }
 }

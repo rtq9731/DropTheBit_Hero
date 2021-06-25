@@ -16,7 +16,6 @@ public class MainSceneManager : MonoBehaviour
     {
         Instance = null;
     }
-    
 
     [Header("ÀÌÆåÆ® °ü·Ã")]
     [SerializeField] Transform moneyEffectTr;
@@ -86,7 +85,7 @@ public class MainSceneManager : MonoBehaviour
     public void PlayAttackEffect()
     {
         effectAnimator.speed = 1;
-        effectAnimator.SetTrigger($"Effect{GameManager.Instance.WeaponeIndex}");
+        effectAnimator.SetTrigger($"Effect{GameManager.Instance.weaponIndex}");
     }
 
     public void StopAttackEffect()
@@ -176,7 +175,6 @@ public class MainSceneManager : MonoBehaviour
 
         text.text = cost > 0 ?
         text.text = $"+ {cost}" : text.text = $"- {-cost}";
-        Debug.Log(moneyText.GetComponentInParent<Transform>().gameObject.name);
         moneyText.transform.position = new Vector2(moneyEffectTr.position.x + 1f, moneyEffectTr.position.y - 0.2f);
         moneyText.gameObject.SetActive(true);
         moneyText.transform.DOMoveY(moneyEffectTr.position.y, 1f);

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,96 +12,78 @@ public class UpgradePanel : MonoBehaviour
     [SerializeField] Button upgradeBtn;
     [SerializeField] GameObject lockPanel;
 
-    int upgradeCost = 0;
-    short upgradeCount = 1;
-    short weaponIndex = 0;
-    public bool isUnlocked = false;
+    WeaponsData data;
 
-    public void InitUpgradePanel(string imageDataPath, string weaponName, short upgradeCount, int upgradeCost, short weaponIndex, bool isUnlocked)
+    public void InitUpgradePanel(int index)
     {
-        weaponImage.sprite = Resources.Load(imageDataPath, typeof(Sprite)) as Sprite;
-        Debug.Log(weaponImage.sprite);
-        this.weaponName.text = weaponName;
-        this.upgradeCount = upgradeCount;
-        this.upgradeCost = upgradeCost;
-        this.weaponIndex = weaponIndex;
-        this.isUnlocked = isUnlocked;
-        Refresh(this.isUnlocked);
+        data = GameManager.Instance.GetWeaponByIndex(index);
+        weaponImage.sprite = Resources.Load<Sprite>(data.Image_Path);
+        weaponName.text = data.Name;
+        Refresh(data.Isunlocked);
     }
 
     /// <summary>
-    /// ¸Ş¼¼ÁöµéÀ» »õ·Î°íÄ§ ÇØÁİ´Ï´Ù.
+    /// ë©”ì„¸ì§€ë“¤ì„ ìƒˆë¡œê³ ì¹¨ í•´ì¤ë‹ˆë‹¤.
     /// </summary>
-    public void Refresh(bool isUnlocked) // ¿øº»ÇÔ¼ö
+    public void Refresh(bool isUnlocked) // ì›ë³¸í•¨ìˆ˜
     {
         upgradeBtn.onClick.RemoveAllListeners();
 
-        if (upgradeCount < 5)
+        if (data.Upgradecount < 5)
         {
-            this.upgradeCostText.text = $"¾÷±×·¹ÀÌµå ºñ¿ë : {upgradeCost * upgradeCount}¿ø"; // Ã¹ ¾÷±×·¹ÀÌµå°¡ ³¡³­ °æ¿ì ¿ø°¡ * ¾÷±×·¹ÀÌµå ´Ü°è·Î Ç¥½Ã
+            this.upgradeCostText.text = $"ì—…ê·¸ë ˆì´ë“œ ë¹„ìš© : {data.Upgradecost * data.Upgradecount}ì›"; // ì²« ì—…ê·¸ë ˆì´ë“œê°€ ëë‚œ ê²½ìš° ì›ê°€ * ì—…ê·¸ë ˆì´ë“œ ë‹¨ê³„ë¡œ í‘œì‹œ
         }
         else
         {
-            this.upgradeCostText.text = $"¾÷±×·¹ÀÌµå ºñ¿ë : ÃÖ´ë·Î ¾÷±×·¹ÀÌµå µÊ!";
+            this.upgradeCostText.text = $"ì—…ê·¸ë ˆì´ë“œ ë¹„ìš© : ìµœëŒ€ë¡œ ì—…ê·¸ë ˆì´ë“œ ë¨!";
         }
 
 
-        if(upgradeCount >= 5)
+        if(data.Upgradecount >= 5)
         {
-            upgradeBtn.GetComponentInChildren<Text>().text = "MAX!"; // ÃÖ´ë·Î ¾÷±×·¹ÀÌµå µÆ´Ù¸é ´ÙÀ½À¸·Î ³Ñ±è
-            this.currentUpgradeText.text = "ÇöÀç ¾÷±×·¹ÀÌµå ´Ü°è : ÃÖ´ë"; // ÃÖ´ë·Î ¾÷±×·¹ÀÌµå µÊÀ¸·Î Ç¥½Ã
-            MainSceneManager.Instance.upgradeUI.UnlockNewWeapon(this.weaponIndex, this);
+            upgradeBtn.GetComponentInChildren<Text>().text = "MAX!"; // ìµœëŒ€ë¡œ ì—…ê·¸ë ˆì´ë“œ ëë‹¤ë©´ ë‹¤ìŒìœ¼ë¡œ ë„˜ê¹€
+            this.currentUpgradeText.text = "í˜„ì¬ ì—…ê·¸ë ˆì´ë“œ ë‹¨ê³„ : ìµœëŒ€"; // ìµœëŒ€ë¡œ ì—…ê·¸ë ˆì´ë“œ ë¨ìœ¼ë¡œ í‘œì‹œ
         }
         else
         {
-            this.currentUpgradeText.text = $"ÇöÀç ¾÷±×·¹ÀÌµå ´Ü°è : {upgradeCount}"; // ¾÷±×·¹ÀÌµå ´Ü°è Ç¥½Ã
-            upgradeBtn.onClick.AddListener(() => Upgrade()); // ÃÖ´ë·Î ¾÷±×·¹ÀÌµå µÇÁö ¾Ê¾Ò´Ù¸é ¾÷±×·¹ÀÌµå °¡´É
+            this.currentUpgradeText.text = $"í˜„ì¬ ì—…ê·¸ë ˆì´ë“œ ë‹¨ê³„ : {data.Upgradecount}"; // ì—…ê·¸ë ˆì´ë“œ ë‹¨ê³„ í‘œì‹œ
+            upgradeBtn.onClick.AddListener(() => Upgrade()); // ìµœëŒ€ë¡œ ì—…ê·¸ë ˆì´ë“œ ë˜ì§€ ì•Šì•˜ë‹¤ë©´ ì—…ê·¸ë ˆì´ë“œ ê°€ëŠ¥
         }
-
-        OnOffLockPanel(isUnlocked);
     }
 
-
-    /// <summary>
-    /// ¸Ş¼¼ÁöµéÀ» »õ·Î°íÄ§ ÇØÁİ´Ï´Ù.
-    /// </summary>
-    private void Refresh() // ¿À¹ö·Îµù ( ³»ºÎ¿ë )
+    private void Refresh() // ì˜¤ë²„ë¡œë”© ( ë‚´ë¶€ìš© )
     {
         upgradeBtn.onClick.RemoveAllListeners();
         
-        this.upgradeCostText.text = $"¾÷±×·¹ÀÌµå ºñ¿ë : {upgradeCost * upgradeCount}¿ø"; // ¾÷±×·¹ÀÌµå°¡ ³¡³­ °æ¿ì ¿ø°¡ * ¾÷±×·¹ÀÌµå ´Ü°è·Î Ç¥½Ã
+        this.upgradeCostText.text = $"ì—…ê·¸ë ˆì´ë“œ ë¹„ìš© : {data.Upgradecost * data.Upgradecount}ì›"; // ì—…ê·¸ë ˆì´ë“œê°€ ëë‚œ ê²½ìš° ì›ê°€ * ì—…ê·¸ë ˆì´ë“œ ë‹¨ê³„ë¡œ í‘œì‹œ
 
 
-        if (upgradeCount >= 5)
+        if (data.Upgradecount >= 5)
         {
-            upgradeBtn.GetComponentInChildren<Text>().text = "MAX!"; // ÃÖ´ë·Î ¾÷±×·¹ÀÌµå µÆ´Ù¸é ´ÙÀ½À¸·Î ³Ñ±è
-            this.currentUpgradeText.text = "ÇöÀç ¾÷±×·¹ÀÌµå ´Ü°è : ÃÖ´ë"; // ÃÖ´ë·Î ¾÷±×·¹ÀÌµå µÊÀ¸·Î Ç¥½Ã
-            MainSceneManager.Instance.upgradeUI.UnlockNewWeapon(this.weaponIndex, this);
+            upgradeBtn.GetComponentInChildren<Text>().text = "MAX!"; // ìµœëŒ€ë¡œ ì—…ê·¸ë ˆì´ë“œ ëë‹¤ë©´ ë‹¤ìŒìœ¼ë¡œ ë„˜ê¹€
+            this.currentUpgradeText.text = "í˜„ì¬ ì—…ê·¸ë ˆì´ë“œ ë‹¨ê³„ : ìµœëŒ€"; // ìµœëŒ€ë¡œ ì—…ê·¸ë ˆì´ë“œ ë¨ìœ¼ë¡œ í‘œì‹œ
         }
         else
         {
-            this.currentUpgradeText.text = $"ÇöÀç ¾÷±×·¹ÀÌµå ´Ü°è : {upgradeCount}"; // ¾÷±×·¹ÀÌµå ´Ü°è Ç¥½Ã
-            upgradeBtn.onClick.AddListener(() => Upgrade()); // ÃÖ´ë·Î ¾÷±×·¹ÀÌµå µÇÁö ¾Ê¾Ò´Ù¸é ¾÷±×·¹ÀÌµå °¡´É
+            this.currentUpgradeText.text = $"í˜„ì¬ ì—…ê·¸ë ˆì´ë“œ ë‹¨ê³„ : {data.Upgradecount}"; // ì—…ê·¸ë ˆì´ë“œ ë‹¨ê³„ í‘œì‹œ
+            upgradeBtn.onClick.AddListener(() => Upgrade()); // ìµœëŒ€ë¡œ ì—…ê·¸ë ˆì´ë“œ ë˜ì§€ ì•Šì•˜ë‹¤ë©´ ì—…ê·¸ë ˆì´ë“œ ê°€ëŠ¥
         }
-    }
-
-    private void OnOffLockPanel(bool isOn)
-    {
-        lockPanel.SetActive(!isOn);
     }
 
     private void Upgrade()
     {
         {
-            if (GameManager.Instance.GetMoney() < upgradeCount * upgradeCost) // µ·ÀÌ ÀûÀ¸¸é Ãë¼Ò
+            if (GameManager.Instance.GetMoney() < data.Upgradecost * data.Upgradecount) // ëˆì´ ì ìœ¼ë©´ ì·¨ì†Œ
             {
                 return;
             }
 
-            GameManager.Instance.AddMoney(-(upgradeCost * upgradeCount));
+            GameManager.Instance.AddMoney(-(data.Upgradecost * data.Upgradecount));
         }
-        ++upgradeCount;
-        MainSceneManager.Instance.Player.ATK += weaponIndex + upgradeCount * 0.5f;
+
+        Debug.Log(GameManager.Instance.GetWeaponByIndex(data.Index).Upgradecount);
+        ++data.Upgradecount;
+        MainSceneManager.Instance.Player.ATK += data.Index + data.Upgradecount * 0.5f;
         upgradeBtn.onClick.RemoveAllListeners();
         Refresh();
     }

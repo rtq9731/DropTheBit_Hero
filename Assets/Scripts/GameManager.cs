@@ -13,28 +13,11 @@ public class GameManager : MonoSingleton<GameManager>
     SaveClass saveData;
 
     #region Getter와 변수
-    int nowEnemyIndex = 0;
-    public int NowEnemyIndex { get { return nowEnemyIndex; } }
-
-    private Dictionary<string, MonsterData> enemyDatas = new Dictionary<string, MonsterData>();
-    public Dictionary<string, MonsterData> EnemyDatas { get { return enemyDatas; } }
-
-    private GameObject enemyPrefab;
-
-    public GameObject EnemyPrefab { get { return enemyPrefab; } }
-
-    private List<string> enemyNames = new List<string>();
-    public List<string> EnemyNames { get { return enemyNames; } }
-    private int combo = 0;
-    public int Combo { get { return combo; } set { combo = value; } }
-    #endregion
 
     [SerializeField] public string nowPlaySong = "";
 
     public OsuParser parsingManager = null;
     private RhythmManager rhythmManager;
-
-    private Dictionary<string, WeaponsData> weapons = new Dictionary<string, WeaponsData>();
 
     public List<string> weaponNames = new List<string>();
 
@@ -42,26 +25,68 @@ public class GameManager : MonoSingleton<GameManager>
     private int killCount = 0;
 
     public int isFinishParshing;
-    public int WeaponeIndex;
+    public int weaponIndex;
 
-    public int KillCount { get { return killCount; } 
-        set 
+    private int combo = 0;
+    int nowEnemyIndex = 0;
+
+    private GameObject enemyPrefab;
+
+    private List<string> enemyNames = new List<string>();
+
+    private Dictionary<string, MonsterData> enemyDatas = new Dictionary<string, MonsterData>();
+    private Dictionary<string, WeaponsData> weapons = new Dictionary<string, WeaponsData>();
+
+    public Dictionary<string, WeaponsData> Weapons { get { return weapons; } }
+    public int NowEnemyIndex { get { return nowEnemyIndex; } }
+    public Dictionary<string, MonsterData> EnemyDatas { get { return enemyDatas; } }
+    public GameObject EnemyPrefab { get { return enemyPrefab; } }
+    public List<string> EnemyNames { get { return enemyNames; } }
+    public int Combo { get { return combo; } set { combo = value; } }
+    public AudioClip GetMusic()
+    {
+        return Resources.Load($"SongMP3/{nowPlaySong}") as AudioClip;
+    }
+    public decimal GetMoney()
+    {
+        return money;
+    }
+    private void GetRhythmManager()
+    {
+        rhythmManager = FindObjectOfType<RhythmManager>();
+        rhythmManager.parsingSongName = nowPlaySong;
+    }
+    public int KillCount
+    {
+        get { return killCount; }
+        set
         {
             killCount = value;
             MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
 
-            if(killCount % 3 == 0)
+            if (killCount % 3 == 0)
             {
                 MainSceneManager.Instance.CallBoss();
             }
 
-            if(killCount % 5 == 0 && killCount < enemyNames.Count * 5)
+            if (killCount % 5 == 0 && killCount < enemyNames.Count * 5)
             {
                 nowEnemyIndex++;
             }
 
-        } 
+        }
     }
+    #endregion
+
+    #region 일반 메소드
+
+    public WeaponsData GetWeaponByIndex(int index)
+    {
+        return weapons[weaponNames[index]];
+    }
+    #endregion
+
+    #region Scene 관련
 
     public void ChangeSceneToBossScene()
     {
@@ -90,7 +115,9 @@ public class GameManager : MonoSingleton<GameManager>
         GetRhythmManager();
         DG.Tweening.DOTween.Clear();
     }
+    #endregion
 
+    #region 코루틴
     private IEnumerator ChangeSceneToMain()
     {
         DG.Tweening.DOTween.Clear();
@@ -104,47 +131,9 @@ public class GameManager : MonoSingleton<GameManager>
         Screen.orientation = ScreenOrientation.Portrait;
         Screen.SetResolution(1440, 2560, Screen.fullScreen);
     }
+    #endregion
 
-    private void GetRhythmManager()
-    {
-        rhythmManager = FindObjectOfType<RhythmManager>();
-        rhythmManager.parsingSongName = nowPlaySong;
-    }
-
-
-    public Dictionary<string, WeaponsData> GetWeponDictionary()
-    {
-        return weapons;
-    }
-
-    void Awake()
-    {
-        InputCommonEnemyData();
-        InputWeponData();
-    }
-
-    private void Start()
-    {
-        enemyPrefab = Resources.Load("Enemies/EnemyPrefab") as GameObject;
-    }
-
-    public AudioClip GetMusic()
-    {
-        return Resources.Load($"SongMP3/{nowPlaySong}") as AudioClip;
-    }
-
-    public decimal GetMoney()
-    {
-        return money;
-    }
-
-    public void AddMoney(int money)
-    {
-        this.money += money;
-        MainSceneManager.Instance.PlayMoneyEffect(money);
-        MainSceneManager.Instance.topUI.UpdateCurrentCoin();
-    }
-
+    #region 데이터 초기화 메소드
     private void InputCommonEnemyData()
     {
         for (int i = 0; i < enemySheet.dataArray.Length; i++)
@@ -161,5 +150,41 @@ public class GameManager : MonoSingleton<GameManager>
             weapons.Add(weaponSheet.dataArray[i].Name, weaponSheet.dataArray[i]);
             weaponNames.Add(weaponSheet.dataArray[i].Name);
         }
+    }
+    #endregion
+
+    #region 저장과 불러오기
+
+    public void SaveData()
+    {
+        PlayerPrefs.SetString("Money", money.ToString());
+        PlayerPrefs.SetInt("KillCount", killCount);
+        PlayerPrefs.SetFloat("ATK", MainSceneManager.Instance.Player.ATK);
+        PlayerPrefs.Save();
+    }
+
+    public void LoadData()
+    {
+
+    }
+
+    #endregion
+
+    void Awake()
+    {
+        InputCommonEnemyData();
+        InputWeponData();
+    }
+
+    private void Start()
+    {
+        enemyPrefab = Resources.Load("Enemies/EnemyPrefab") as GameObject;
+    }
+
+    public void AddMoney(int money)
+    {
+        this.money += money;
+        MainSceneManager.Instance.PlayMoneyEffect(money);
+        MainSceneManager.Instance.topUI.UpdateCurrentCoin();
     }
 }
