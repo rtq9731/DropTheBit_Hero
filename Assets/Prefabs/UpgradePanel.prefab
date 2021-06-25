@@ -334,7 +334,6 @@ MonoBehaviour:
   currentUpgradeText: {fileID: 4112345912444051257}
   upgradeBtn: {fileID: 4112345912984953448}
   lockPanel: {fileID: 8342969051721591524}
-  isUnlocked: 0
 --- !u!1 &4112345912444051259
 GameObject:
   m_ObjectHideFlags: 0

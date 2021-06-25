@@ -20,11 +20,16 @@ public class WeaponUpUI : MonoBehaviour
         for (int i = 0; i < GameManager.Instance.Weapons.Count; i++)
         {
             GameObject temp = Instantiate(upgradePanelPrefab, transform);
-            temp.GetComponent<UpgradePanel>().InitUpgradePanel(i);
+            panels.Add(temp.GetComponent<UpgradePanel>());
+        }
+
+        for (int i = 0; i < GameManager.Instance.Weapons.Count; i++)
+        {
+            panels[i].InitUpgradePanel(i);
         }
     }
 
-    public short GetCurrentWeapon()
+    public short GetCurrentWeaponIndex()
     {
         short temp = 0;
         for (int i = 0; i < panels.Count; i++)
@@ -32,8 +37,12 @@ public class WeaponUpUI : MonoBehaviour
             if (panels[i].GetIsUnlocked())
                 temp++;
         }
-
-        Debug.Log(temp);
         return temp;
     }
+
+    public UpgradePanel GetUpgradePanelByIndex(int index)
+    {
+        return panels[index];
+    }
+
 }

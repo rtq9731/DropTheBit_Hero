@@ -96,7 +96,7 @@ public class MainSceneManager : MonoBehaviour
     public void PlayAttackEffect()
     {
         effectAnimator.speed = 1;
-        effectAnimator.SetTrigger($"Effect{upgradeUI.GetCurrentWeapon()}");
+        effectAnimator.SetTrigger($"SlashEffect");
     }
 
     public void StopAttackEffect()
