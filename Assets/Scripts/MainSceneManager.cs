@@ -17,6 +17,8 @@ public class MainSceneManager : MonoBehaviour
         Instance = null;
     }
 
+    [SerializeField] GameObject enemyPrefab;
+
     [Header("이펙트 관련")]
     [SerializeField] Transform moneyEffectTr;
     [SerializeField] GameObject moneyEffectPrefab;
@@ -40,6 +42,7 @@ public class MainSceneManager : MonoBehaviour
     [SerializeField] public AudioSource hitSound;
     [SerializeField] public InputPanel InputPanel;
     [SerializeField] public LeftUI leftUI;
+    [SerializeField] Player player;
 
     Enemy nowEnemy;
     Text enemyNameText;
@@ -47,12 +50,10 @@ public class MainSceneManager : MonoBehaviour
     public List<GameObject> enemyPool = new List<GameObject>();
     public Queue<GameObject> moneyEffectPool = new Queue<GameObject>();
 
-    Player player;
     public Player Player { get { return player; } set { player = value; } }
 
     private void Start()
     {
-        player = FindObjectOfType<Player>();
         CallNextEnemy();
         effectAnimator.speed = 0;
     }
@@ -62,11 +63,21 @@ public class MainSceneManager : MonoBehaviour
         atkText.text = $"공격력\n{player.ATK}";
 
 #if UNITY_EDITOR
+        if(Input.GetKeyDown(KeyCode.Delete))
+        {
+            GameManager.Instance.ClearData();
+        }
+
         if(Input.GetKeyDown(KeyCode.Insert))
         {
             GameManager.Instance.AddMoney(100000);
         }
 #endif
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+
+        }
 
         if (nowEnemy != null)
         {
@@ -85,7 +96,7 @@ public class MainSceneManager : MonoBehaviour
     public void PlayAttackEffect()
     {
         effectAnimator.speed = 1;
-        effectAnimator.SetTrigger($"Effect{GameManager.Instance.weaponIndex}");
+        effectAnimator.SetTrigger($"Effect{upgradeUI.GetCurrentWeapon()}");
     }
 
     public void StopAttackEffect()
@@ -128,7 +139,7 @@ public class MainSceneManager : MonoBehaviour
 
     private void MakeNewEnemyInPool()
     {
-        GameObject temp = Instantiate(GameManager.Instance.EnemyPrefab, new Vector2(8, 1), Quaternion.identity, enemyPoolTr);
+        GameObject temp = Instantiate(enemyPrefab, new Vector2(8, 1), Quaternion.identity, enemyPoolTr);
         temp.SetActive(false);
         MonsterData data = GameManager.Instance.EnemyDatas[GameManager.Instance.EnemyNames[GameManager.Instance.NowEnemyIndex]];
         nowEnemy = temp.GetComponent<Enemy>();

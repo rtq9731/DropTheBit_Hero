@@ -7,14 +7,10 @@ public class TopUI : MonoBehaviour
 {
     [SerializeField] Text coinText;
     [SerializeField] Text killText;
-    
-    private void Awake()
-    {
-        UpdateCurrentCoin();
-    }
 
     public void UpdateCurrentCoin()
     {
+        GameManager.Instance.SaveData();
         if (GameManager.Instance.GetMoney().ToString().Length >= 13) // 1000000000000의자리 = 1T으로 표시
         {
             coinText.text = $"현재 돈 : {System.Math.Round(GameManager.Instance.GetMoney() / 1000000000000, 2)} m";
@@ -39,6 +35,7 @@ public class TopUI : MonoBehaviour
 
     public void UpdateCurrentKillCount()
     {
+        GameManager.Instance.SaveData();
         killText.text = $"토벌 수 : {GameManager.Instance.KillCount}";
     }
 }

@@ -10,8 +10,6 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] Monster enemySheet;
     [SerializeField] Weapons weaponSheet;
 
-    SaveClass saveData;
-
     #region Getter와 변수
 
     [SerializeField] public string nowPlaySong = "";
@@ -21,16 +19,13 @@ public class GameManager : MonoSingleton<GameManager>
 
     public List<string> weaponNames = new List<string>();
 
-    private decimal money = 0;
+    private long money = 0;
     private int killCount = 0;
 
     public int isFinishParshing;
-    public int weaponIndex;
 
     private int combo = 0;
     int nowEnemyIndex = 0;
-
-    private GameObject enemyPrefab;
 
     private List<string> enemyNames = new List<string>();
 
@@ -40,7 +35,6 @@ public class GameManager : MonoSingleton<GameManager>
     public Dictionary<string, WeaponsData> Weapons { get { return weapons; } }
     public int NowEnemyIndex { get { return nowEnemyIndex; } }
     public Dictionary<string, MonsterData> EnemyDatas { get { return enemyDatas; } }
-    public GameObject EnemyPrefab { get { return enemyPrefab; } }
     public List<string> EnemyNames { get { return enemyNames; } }
     public int Combo { get { return combo; } set { combo = value; } }
     public AudioClip GetMusic()
@@ -63,6 +57,7 @@ public class GameManager : MonoSingleton<GameManager>
         {
             killCount = value;
             MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
+            SaveData();
 
             if (killCount % 3 == 0)
             {
@@ -101,8 +96,6 @@ public class GameManager : MonoSingleton<GameManager>
     private IEnumerator ChangeSceneToBoss()
     {
         DG.Tweening.DOTween.Clear();
-        PlayerPrefs.SetInt("killCount", killCount);
-        PlayerPrefs.SetFloat("ATK", MainSceneManager.Instance.Player.ATK);
         SceneManager.LoadScene("BossScene");
         while (SceneManager.GetActiveScene().name != "BossScene")
         {
@@ -126,8 +119,6 @@ public class GameManager : MonoSingleton<GameManager>
         {
             yield return null;
         }
-        MainSceneManager.Instance.Player.ATK = PlayerPrefs.GetFloat("ATK");
-        killCount = PlayerPrefs.GetInt("killCount");
         Screen.orientation = ScreenOrientation.Portrait;
         Screen.SetResolution(1440, 2560, Screen.fullScreen);
     }
@@ -155,17 +146,29 @@ public class GameManager : MonoSingleton<GameManager>
 
     #region 저장과 불러오기
 
+    public void ClearData()
+    {
+        PlayerPrefs.DeleteAll();
+        weapons = new Dictionary<string, WeaponsData>();
+    }
+
     public void SaveData()
     {
         PlayerPrefs.SetString("Money", money.ToString());
         PlayerPrefs.SetInt("KillCount", killCount);
         PlayerPrefs.SetFloat("ATK", MainSceneManager.Instance.Player.ATK);
+        PlayerPrefs.SetInt("EnemyIndex", nowEnemyIndex);
         PlayerPrefs.Save();
+        Debug.Log("Saved!");
     }
 
     public void LoadData()
     {
-
+        long.TryParse(PlayerPrefs.GetString("Money"), out money);
+        killCount = PlayerPrefs.GetInt("KillCount");
+        nowEnemyIndex = PlayerPrefs.GetInt("EnemyIndex");
+        MainSceneManager.Instance.Player.ATK = PlayerPrefs.GetFloat("ATK", 20);
+        Debug.Log("Loaded!");
     }
 
     #endregion
@@ -173,12 +176,14 @@ public class GameManager : MonoSingleton<GameManager>
     void Awake()
     {
         InputCommonEnemyData();
-        InputWeponData();
     }
 
     private void Start()
     {
-        enemyPrefab = Resources.Load("Enemies/EnemyPrefab") as GameObject;
+        LoadData();
+        InputWeponData();
+        MainSceneManager.Instance.topUI.UpdateCurrentCoin();
+        MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
     }
 
     public void AddMoney(int money)

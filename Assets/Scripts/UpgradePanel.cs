@@ -87,4 +87,14 @@ public class UpgradePanel : MonoBehaviour
         upgradeBtn.onClick.RemoveAllListeners();
         Refresh();
     }
+
+    public bool GetIsUnlocked()
+    {
+        if(data.Isunlocked)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }
