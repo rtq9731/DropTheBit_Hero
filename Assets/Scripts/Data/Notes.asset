@@ -15,9 +15,12 @@ MonoBehaviour:
   SheetName: Assets/Scripts/Data/Data.xlsx
   WorksheetName: Notes
   dataArray:
-  - songname: Faded
-    datapath: Notes/Faded
-  - songname: So_Happy
+  - bossname: "\uAC70\uB300 \uC2AC\uB77C\uC784"
+    songname: So_Happy
     datapath: Notes/So_Happy
-  - songname: ' '
-    datapath: 
+  - bossname: "\uB300\uD615 \uD574\uACE8\uBCD1\uC0AC"
+    songname: Faded
+    datapath: Notes/Faded
+  - bossname: "DJ \uD751\uB9C8\uBC95\uC0AC"
+    songname: Cloud_9
+    datapath: Notes/Cloud_9

@@ -9,10 +9,12 @@ public class SaveClass
     private float atk = 0;
     private int killCount = 0;
     private decimal money = 0;
-
-
-    public void InitSaveClass(Dictionary<string, WeaponsData> weapons, float atk, int killCount, decimal money)
+    
+    public SaveClass(Dictionary<string, WeaponsData> weapons, float atk, int killCount, decimal money)
     {
         this.weapons = weapons;
+        this.atk = atk;
+        this.killCount = killCount;
+        this.money = money;
     }
 }

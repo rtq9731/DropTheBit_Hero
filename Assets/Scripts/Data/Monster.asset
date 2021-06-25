@@ -38,20 +38,20 @@ MonoBehaviour:
   - index: 5
     name: "\uD574\uACE8 \uBCD1\uC0AC 1"
     hp: 250
-    cost: 1000
+    cost: 1600
     animatorcontrollerpath: Controllers/02.SkeletonController
   - index: 6
     name: "\uD574\uACE8 \uBCD1\uC0AC 2"
     hp: 300
-    cost: 2000
+    cost: 3200
     animatorcontrollerpath: Controllers/02.SkeletonController
   - index: 7
     name: "\uD574\uACE8 \uBCD1\uC0AC 3"
     hp: 350
-    cost: 3000
+    cost: 6400
     animatorcontrollerpath: Controllers/02.SkeletonController
   - index: 8
     name: "\uD574\uACE8 \uBCD1\uC0AC 4"
     hp: 400
-    cost: 4000
+    cost: 12800
     animatorcontrollerpath: Controllers/02.SkeletonController

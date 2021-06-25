@@ -1,3 +1,4 @@
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,7 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] Monster enemySheet;
     [SerializeField] Weapons weaponSheet;
 
-    SaveClass saveData = new SaveClass();
+    SaveClass saveData;
 
     #region Getter¿Í º¯¼ö
     int nowEnemyIndex = 0;

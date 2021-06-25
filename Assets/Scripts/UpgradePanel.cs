@@ -48,7 +48,7 @@ public class UpgradePanel : MonoBehaviour
 
         if(upgradeCount >= 5)
         {
-            upgradeBtn.GetComponentInChildren<Text>().text = "최대로 업그레이드 됨!"; // 최대로 업그레이드 됐다면 다음으로 넘김
+            upgradeBtn.GetComponentInChildren<Text>().text = "MAX!"; // 최대로 업그레이드 됐다면 다음으로 넘김
             this.currentUpgradeText.text = "현재 업그레이드 단계 : 최대"; // 최대로 업그레이드 됨으로 표시
             MainSceneManager.Instance.upgradeUI.UnlockNewWeapon(this.weaponIndex, this);
         }
@@ -68,20 +68,13 @@ public class UpgradePanel : MonoBehaviour
     private void Refresh() // 오버로딩 ( 내부용 )
     {
         upgradeBtn.onClick.RemoveAllListeners();
-
-        if (upgradeCount == 0)
-        {
-            this.upgradeCostText.text = $"업그레이드 비용 : {upgradeCost}원"; // 업그레이드가 안된 경우 그냥 원가만 표시
-        }
-        else
-        {
-            this.upgradeCostText.text = $"업그레이드 비용 : {upgradeCost * upgradeCount}원"; // 업그레이드가 끝난 경우 원가 * 업그레이드 단계로 표시
-        }
+        
+        this.upgradeCostText.text = $"업그레이드 비용 : {upgradeCost * upgradeCount}원"; // 업그레이드가 끝난 경우 원가 * 업그레이드 단계로 표시
 
 
         if (upgradeCount >= 5)
         {
-            upgradeBtn.GetComponentInChildren<Text>().text = "최대로 업그레이드 됨!"; // 최대로 업그레이드 됐다면 다음으로 넘김
+            upgradeBtn.GetComponentInChildren<Text>().text = "MAX!"; // 최대로 업그레이드 됐다면 다음으로 넘김
             this.currentUpgradeText.text = "현재 업그레이드 단계 : 최대"; // 최대로 업그레이드 됨으로 표시
             MainSceneManager.Instance.upgradeUI.UnlockNewWeapon(this.weaponIndex, this);
         }
@@ -99,16 +92,6 @@ public class UpgradePanel : MonoBehaviour
 
     private void Upgrade()
     {
-        if(upgradeCount == 0)
-        {
-            if (GameManager.Instance.GetMoney() < upgradeCost) // 돈이 적으면 취소
-            {
-                return;
-            }
-
-            GameManager.Instance.AddMoney(-upgradeCost);
-        }
-        else
         {
             if (GameManager.Instance.GetMoney() < upgradeCount * upgradeCost) // 돈이 적으면 취소
             {

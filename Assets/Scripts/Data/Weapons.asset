@@ -18,43 +18,43 @@ MonoBehaviour:
   - index: 1
     image_path: "WeaponImages/01_\uB098\uBB47\uAC00\uC9C0"
     name: "\uB098\uBB47\uAC00\uC9C0"
-    upgradecount: 0
+    upgradecount: 1
     upgradecost: 10
     isunlocked: 1
   - index: 2
     image_path: "WeaponImages/02_\uAF43\uD540 \uB098\uBB47\uAC00\uC9C0"
     name: "\uAF43\uD540 \uB098\uBB47\uAC00\uC9C0"
-    upgradecount: 0
+    upgradecount: 1
     upgradecost: 50
     isunlocked: 0
   - index: 3
     image_path: "WeaponImages/03_\uBAA9\uAC80"
     name: "\uBAA9\uAC80"
-    upgradecount: 0
+    upgradecount: 1
     upgradecost: 250
     isunlocked: 0
   - index: 4
     image_path: "WeaponImages/04_\uCD08\uBCF4\uC790\uC758 \uAC80"
     name: "\uCD08\uBCF4\uC790\uC758 \uAC80"
-    upgradecount: 0
+    upgradecount: 1
     upgradecost: 1250
     isunlocked: 0
   - index: 5
     image_path: "WeaponImages/05_\uB2F4\uAE08\uC9C8\uB41C \uCD08\uBCF4\uC790\uC758
       \uAC80"
     name: "\uB2F4\uAE08\uC9C8\uB41C \uCD08\uBCF4\uC790\uC758 \uAC80"
-    upgradecount: 0
+    upgradecount: 1
     upgradecost: 6000
     isunlocked: 0
   - index: 6
     image_path: "WeaponImages/06_\uAC80"
     name: "\uAC80"
-    upgradecount: 0
+    upgradecount: 1
     upgradecost: 30000
     isunlocked: 0
   - index: 7
     image_path: "WeaponImages/07_\uB2F4\uAE08\uC9C8\uB41C \uAC80"
     name: "\uB2F4\uAE08\uC9C8\uB41C \uAC80"
-    upgradecount: 0
+    upgradecount: 1
     upgradecost: 150000
     isunlocked: 0
