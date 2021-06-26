@@ -21,8 +21,8 @@ public class MonsterData
   public float HP { get {return hp; } set { this.hp = value;} }
   
   [SerializeField]
-  int cost;
-  public int Cost { get {return cost; } set { this.cost = value;} }
+  long cost;
+  public long Cost { get {return cost; } set { this.cost = value;} }
   
   [SerializeField]
   string animatorcontrollerpath;

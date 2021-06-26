@@ -1,0 +1,471 @@
+Using pre-set license
+Built from '2020.3/release' branch; Version is '2020.3.12f1 (b3b2c6512326) revision 11776710'; Using compiler version '192528614'; Build Type 'Release'
+OS: 'Windows 10 Pro; OS build 19042.867; Version 2009; 64bit' Language: 'ko' Physical Memory: 16321 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+ COMMAND LINE ARGUMENTS:
+E:\UnityEditors\2020.3.12f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker1
+-projectPath
+C:/Users/권성빈/Documents/DropTheBit_Hero/DropTheBit_Hero
+-logFile
+Logs/AssetImportWorker1.log
+-srvPort
+51915
+Successfully changed project path to: C:/Users/권성빈/Documents/DropTheBit_Hero/DropTheBit_Hero
+C:/Users/권성빈/Documents/DropTheBit_Hero/DropTheBit_Hero
+Using Asset Import Pipeline V2.
+Refreshing native plugins compatible for Editor in 76.93 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2020.3.12f1 (b3b2c6512326)
+[Subsystems] Discovering subsystems at path E:/UnityEditors/2020.3.12f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/권성빈/Documents/DropTheBit_Hero/DropTheBit_Hero/Assets
+GfxDevice: creating device client; threaded=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce GTX 1060 6GB (ID=0x1c03)
+    Vendor:   
+    VRAM:     6052 MB
+    Driver:   27.21.14.5671
+Initialize mono
+Mono path[0] = 'E:/UnityEditors/2020.3.12f1/Editor/Data/Managed'
+Mono path[1] = 'E:/UnityEditors/2020.3.12f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = 'E:/UnityEditors/2020.3.12f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56740
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: E:/UnityEditors/2020.3.12f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.001232 seconds.
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 86.68 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  2.386 seconds
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.009983 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 62.77 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.689 seconds
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.08 seconds
+Refreshing native plugins compatible for Editor in 1.80 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 2839 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 114.6 MB.
+System memory in use after: 114.8 MB.
+
+Unloading 73 unused Assets to reduce memory usage. Loaded Objects now: 3245.
+Total: 9.282600 ms (FindLiveObjects: 0.829900 ms CreateObjectMapping: 0.203600 ms MarkObjects: 8.112000 ms  DeleteObjects: 0.133000 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  path: Assets/Resources/WeaponImages/06_검.png
+  artifactKey: Guid(326d308c69125e74cba2edf80c44ace4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/06_검.png using Guid(326d308c69125e74cba2edf80c44ace4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '33acab07816411802c89dcab1a403b16') in 0.327345 seconds 
+  Import took 0.331825 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000272 seconds.
+  path: Assets/Resources/WeaponImages/07_담금질된 검.png
+  artifactKey: Guid(f73df6c4a93659a4e8d4e20edf871180) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/07_담금질된 검.png using Guid(f73df6c4a93659a4e8d4e20edf871180) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '405f20c6e1a67e2be25b10c76023badd') in 0.019856 seconds 
+  Import took 0.024327 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000285 seconds.
+  path: Assets/Resources/WeaponImages
+  artifactKey: Guid(aea0b67050b9d474db3ca3c4d128771e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages using Guid(aea0b67050b9d474db3ca3c4d128771e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '13145ad2e8fda5c54ee8724fc86fe2ef') in 0.006237 seconds 
+  Import took 0.010942 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000269 seconds.
+  path: Assets/Resources/WeaponImages/03_목검.png
+  artifactKey: Guid(155d006ab29bac740a877338630e73e9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/03_목검.png using Guid(155d006ab29bac740a877338630e73e9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2f01cd7657aed1409a8085bf2b1ac0aa') in 0.019061 seconds 
+  Import took 0.023448 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000321 seconds.
+  path: Assets/Resources/WeaponImages/01_나뭇가지.png
+  artifactKey: Guid(61bc299563539db4995714571087240d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/01_나뭇가지.png using Guid(61bc299563539db4995714571087240d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '41f27d63e94207e93fc977c0a18a7386') in 0.015520 seconds 
+  Import took 0.020513 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000252 seconds.
+  path: Assets/Resources/WeaponImages/02_꽃핀 나뭇가지.png
+  artifactKey: Guid(8203fc1bc2b925240a36db7db096f255) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/02_꽃핀 나뭇가지.png using Guid(8203fc1bc2b925240a36db7db096f255) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a3c7f85f1343dbde4cbcef7949f9af5b') in 0.023427 seconds 
+  Import took 0.030360 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000273 seconds.
+  path: Assets/Resources/WeaponImages/04_초보자의 검.png
+  artifactKey: Guid(17898d590b5188445b12476cd244395f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/04_초보자의 검.png using Guid(17898d590b5188445b12476cd244395f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '422c6a4816a1576f6d8f9bab862c5cf6') in 0.022989 seconds 
+  Import took 0.029082 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000262 seconds.
+  path: Assets/Resources/WeaponImages/05_담금질된 초보자의 검.png
+  artifactKey: Guid(e720e43a9abf581409367112789a4213) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/05_담금질된 초보자의 검.png using Guid(e720e43a9abf581409367112789a4213) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b42105f830a524cfda0a9a885402734d') in 0.022216 seconds 
+  Import took 0.028669 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3737.304541 seconds.
+  path: Assets/Resources/WeaponImages/07_GlaDos.png
+  artifactKey: Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/07_GlaDos.png using Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ed90642dba17644350540581594cc3a0') in 0.014680 seconds 
+  Import took 0.020768 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.002537 seconds.
+  path: Assets/Resources/WeaponImages/07_GlaDos.png
+  artifactKey: Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/07_GlaDos.png using Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ed90642dba17644350540581594cc3a0') in 0.005724 seconds 
+  Import took 0.010653 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.327545 seconds.
+  path: Assets/Resources/WeaponImages/08_GlaDos2.png
+  artifactKey: Guid(72b4eb75a03f8204eaa04608e32506e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/08_GlaDos2.png using Guid(72b4eb75a03f8204eaa04608e32506e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9b41e5abba7f1815c66ec51511b32800') in 0.011918 seconds 
+  Import took 0.018213 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.003442 seconds.
+  path: Assets/Resources/WeaponImages/08_GlaDos2.png
+  artifactKey: Guid(72b4eb75a03f8204eaa04608e32506e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/08_GlaDos2.png using Guid(72b4eb75a03f8204eaa04608e32506e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9b41e5abba7f1815c66ec51511b32800') in 0.005882 seconds 
+  Import took 0.012096 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 9.075501 seconds.
+  path: Assets/Resources/WeaponImages/07_GlaDos.png
+  artifactKey: Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/07_GlaDos.png using Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7ef3bda0e4a62d1d73a4030a898f7be2') in 0.012120 seconds 
+  Import took 0.017968 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000245 seconds.
+  path: Assets/Resources/WeaponImages/08_GlaDos2.png
+  artifactKey: Guid(72b4eb75a03f8204eaa04608e32506e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/08_GlaDos2.png using Guid(72b4eb75a03f8204eaa04608e32506e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '18cc407d132f027d1f622d19079ae84b') in 0.011017 seconds 
+  Import took 0.016456 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 6.996333 seconds.
+  path: Assets/Resources/WeaponImages/08_GlaDos.png
+  artifactKey: Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/08_GlaDos.png using Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c3c948deceea2f7cf226282e5dcabfa9') in 0.013147 seconds 
+  Import took 0.018699 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 5.895265 seconds.
+  path: Assets/Resources/WeaponImages/09_GlaDos2.png
+  artifactKey: Guid(72b4eb75a03f8204eaa04608e32506e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/09_GlaDos2.png using Guid(72b4eb75a03f8204eaa04608e32506e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '05e698a87a11bca88fb993c9601f1250') in 0.014154 seconds 
+  Import took 0.019824 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 52.728570 seconds.
+  path: Assets/Resources/WeaponImages/09_GlaDos2 1.png
+  artifactKey: Guid(3575e765b5dd76e459357b6fd92c243c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/09_GlaDos2 1.png using Guid(3575e765b5dd76e459357b6fd92c243c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '459f082dff3d1d2dff4060cff882dda5') in 0.012495 seconds 
+  Import took 0.019164 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 19.361529 seconds.
+  path: Assets/Resources/WeaponImages/08_GlaDos.png
+  artifactKey: Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/08_GlaDos.png using Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2940dd2c9044d509d223b838cbb58e43') in 0.014698 seconds 
+  Import took 0.019701 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 7.549350 seconds.
+  path: Assets/Resources/WeaponImages/08_GlaDos.png
+  artifactKey: Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/08_GlaDos.png using Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8874f09f79044d44f81d2b2b8f62c5ee') in 0.013343 seconds 
+  Import took 0.019128 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000372 seconds.
+  path: Assets/Resources/WeaponImages/09_GlaDos2 1.png
+  artifactKey: Guid(3575e765b5dd76e459357b6fd92c243c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/09_GlaDos2 1.png using Guid(3575e765b5dd76e459357b6fd92c243c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c0c76dbd9c8c2cf8312686f6ce527f96') in 0.020637 seconds 
+  Import took 0.027266 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 11.155980 seconds.
+  path: Assets/Resources/WeaponImages/08_짧은 검.png
+  artifactKey: Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/08_짧은 검.png using Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3370345ac02e5730c59863a99776759c') in 0.025975 seconds 
+  Import took 0.031764 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 8.937968 seconds.
+  path: Assets/Resources/WeaponImages/08_글라디우스.png
+  artifactKey: Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/08_글라디우스.png using Guid(48b9fc46f2d9aac47a8f7110acf6950c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2d033ae30481455e2c49d7ab0574666f') in 0.020345 seconds 
+  Import took 0.025318 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 16.169361 seconds.
+  path: Assets/Resources/WeaponImages/09_글라디우스.png
+  artifactKey: Guid(3575e765b5dd76e459357b6fd92c243c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/09_글라디우스.png using Guid(3575e765b5dd76e459357b6fd92c243c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cbb42068895a1e8b2e2803fe099c2014') in 0.012765 seconds 
+  Import took 0.017770 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 29.700716 seconds.
+  path: Assets/Resources/WeaponImages/09_담금질한 글라디우스.png
+  artifactKey: Guid(3575e765b5dd76e459357b6fd92c243c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/WeaponImages/09_담금질한 글라디우스.png using Guid(3575e765b5dd76e459357b6fd92c243c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0182e23ec760757590aa1eaf74739f5a') in 0.039563 seconds 
+  Import took 0.044353 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1731.331021 seconds.
+  path: Assets/Scripts/Data/Data.xlsx
+  artifactKey: Guid(c74cb9e102f09af44a8dc0c3f868c9c9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Data/Data.xlsx using Guid(c74cb9e102f09af44a8dc0c3f868c9c9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c47d732a92daf1578541047390eb04f0') in 0.011914 seconds 
+  Import took 0.018369 seconds .
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.144220 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.82 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.283 seconds
+Platform modules already initialized, skipping
+Switching build target platform(19) subTarget(0) extendedPlatform(0) -> platform(13) subTarget(65536) extendedPlatform(0)
+Refreshing native plugins compatible for Editor in 0.82 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 2829 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 116.8 MB.
+System memory in use after: 117.0 MB.
+
+Unloading 61 unused Assets to reduce memory usage. Loaded Objects now: 3259.
+Total: 6.072200 ms (FindLiveObjects: 0.314100 ms CreateObjectMapping: 0.108300 ms MarkObjects: 5.577000 ms  DeleteObjects: 0.071600 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:graphics/normal-map-encoding: 01000000000000000000000000000000 -> 02000000000000000000000000000000
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 57.488451 seconds.
+  path: Assets/Scripts/Data/Data.xlsx
+  artifactKey: Guid(c74cb9e102f09af44a8dc0c3f868c9c9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Data/Data.xlsx using Guid(c74cb9e102f09af44a8dc0c3f868c9c9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ff72668d6313013d2523638a95ca7522') in 0.016378 seconds 
+  Import took 0.020816 seconds .
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.012993 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.85 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.407 seconds
+Platform modules already initialized, skipping
+Switching build target platform(19) subTarget(0) extendedPlatform(0) -> platform(13) subTarget(65536) extendedPlatform(0)
+Refreshing native plugins compatible for Editor in 0.92 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 2829 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 116.8 MB.
+System memory in use after: 117.1 MB.
+
+Unloading 61 unused Assets to reduce memory usage. Loaded Objects now: 3263.
+Total: 6.565600 ms (FindLiveObjects: 0.327700 ms CreateObjectMapping: 0.247500 ms MarkObjects: 5.919800 ms  DeleteObjects: 0.068500 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:graphics/normal-map-encoding: 01000000000000000000000000000000 -> 02000000000000000000000000000000
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.010078 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 0.79 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.142 seconds
+Platform modules already initialized, skipping
+Switching build target platform(19) subTarget(0) extendedPlatform(0) -> platform(13) subTarget(65536) extendedPlatform(0)
+Refreshing native plugins compatible for Editor in 0.77 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 2829 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 117.0 MB.
+System memory in use after: 117.2 MB.
+
+Unloading 61 unused Assets to reduce memory usage. Loaded Objects now: 3267.
+Total: 5.896900 ms (FindLiveObjects: 0.258200 ms CreateObjectMapping: 0.107200 ms MarkObjects: 5.462700 ms  DeleteObjects: 0.067400 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:graphics/normal-map-encoding: 01000000000000000000000000000000 -> 02000000000000000000000000000000
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 2070.092525 seconds.
+  path: Assets/Scripts/Data/Weapons.asset
+  artifactKey: Guid(cfa89dfc637c57344800e4999c810e58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Data/Weapons.asset using Guid(cfa89dfc637c57344800e4999c810e58) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '18441ff3d96041e71934b9bb4ced361b') in 0.020254 seconds 
+  Import took 0.024973 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 198.110235 seconds.
+  path: Assets/Prefabs/UpgradePanel.prefab
+  artifactKey: Guid(24a4959d4baa1104b931e42398369448) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/UpgradePanel.prefab using Guid(24a4959d4baa1104b931e42398369448) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6fdaf77a5c4237dd2b7c0821bf044db9') in 0.053138 seconds 
+  Import took 0.058743 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 97.066717 seconds.
+  path: Assets/Prefabs/WorkPanel.prefab
+  artifactKey: Guid(6b63d953fa91caf4aad4935ca7f1b92c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/WorkPanel.prefab using Guid(6b63d953fa91caf4aad4935ca7f1b92c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5578ad3d59efa86100ca7f56f4398eee') in 0.013019 seconds 
+  Import took 0.018048 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.003069 seconds.
+  path: Assets/Prefabs/WorkPanel.prefab
+  artifactKey: Guid(6b63d953fa91caf4aad4935ca7f1b92c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Prefabs/WorkPanel.prefab using Guid(6b63d953fa91caf4aad4935ca7f1b92c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5578ad3d59efa86100ca7f56f4398eee') in 0.007349 seconds 
+  Import took 0.013061 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 92.859525 seconds.
+  path: Assets/Sprites/UpgradePanel
+  artifactKey: Guid(5aa4f316b72836b4da028ce2fcc6a268) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Sprites/UpgradePanel using Guid(5aa4f316b72836b4da028ce2fcc6a268) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3db8b66e05d34f50e27a4bd110aa60ed') in 0.003004 seconds 
+  Import took 0.009500 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 18.338823 seconds.
+  path: Assets/Sprites/Panel
+  artifactKey: Guid(336d21eb771bcc044a820413f7c94345) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Sprites/Panel using Guid(336d21eb771bcc044a820413f7c94345) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8eb1773fbf05e0b9ef68d6181872328a') in 0.007538 seconds 
+  Import took 0.012280 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 120.685456 seconds.
+  path: Assets/Scripts/Data/Runtime/WeaponsData.cs
+  artifactKey: Guid(c815ddd908cee634289fd6be0d0775de) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Data/Runtime/WeaponsData.cs using Guid(c815ddd908cee634289fd6be0d0775de) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4587e6eba1bf05e5f08fe1d14ad1dc34') in 0.031069 seconds 
+  Import took 0.054669 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 14.393922 seconds.
+  path: Assets/Scripts/Data/Editor
+  artifactKey: Guid(e4cbfb68fe44d314ea5d18750caeb150) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Data/Editor using Guid(e4cbfb68fe44d314ea5d18750caeb150) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f383e0686fda8139768fdf76a79466da') in 0.009473 seconds 
+  Import took 0.014973 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.469543 seconds.
+  path: Assets/Scripts/Data/Editor/MonsterAssetPostProcessor.cs
+  artifactKey: Guid(5b0f369620d99a1479f191d3ebdaa670) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Data/Editor/MonsterAssetPostProcessor.cs using Guid(5b0f369620d99a1479f191d3ebdaa670) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '57692774c499d371693074d63c8aa56e') in 0.008046 seconds 
+  Import took 0.012898 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.003104 seconds.
+  path: Assets/Scripts/Data/Editor/MonsterAssetPostProcessor.cs
+  artifactKey: Guid(5b0f369620d99a1479f191d3ebdaa670) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Data/Editor/MonsterAssetPostProcessor.cs using Guid(5b0f369620d99a1479f191d3ebdaa670) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '57692774c499d371693074d63c8aa56e') in 0.003180 seconds 
+  Import took 0.010159 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.669834 seconds.
+  path: Assets/Scripts/Data/Editor/WeaponsEditor.cs
+  artifactKey: Guid(a53899511741849448668e99440e0d4d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/Data/Editor/WeaponsEditor.cs using Guid(a53899511741849448668e99440e0d4d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'adaf5a36d738a93ad8df5cc41378a26f') in 0.008207 seconds 
+  Import took 0.013617 seconds .
+
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file

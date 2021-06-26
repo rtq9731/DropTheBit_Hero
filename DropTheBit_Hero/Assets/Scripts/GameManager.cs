@@ -6,9 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    [SerializeField] public Notes noteSheet;
+    [SerializeField] public Note noteSheet;
     [SerializeField] Monster enemySheet;
-    [SerializeField] Weapons weaponSheet;
+    [SerializeField] Weapon weaponSheet;
+    [SerializeField] Work workSheet;
 
     #region Getter와 변수
 
@@ -17,7 +18,8 @@ public class GameManager : MonoSingleton<GameManager>
     public OsuParser parsingManager = null;
     private RhythmManager rhythmManager;
 
-    public List<string> weaponNames = new List<string>();
+    private List<string> weaponNames = new List<string>();
+    private List<string> workNames = new List<string>();
 
     private long money = 0;
     private int killCount = 0;
@@ -30,9 +32,11 @@ public class GameManager : MonoSingleton<GameManager>
     private List<string> enemyNames = new List<string>();
 
     private Dictionary<string, MonsterData> enemyDatas = new Dictionary<string, MonsterData>();
-    private Dictionary<string, WeaponsData> weapons = new Dictionary<string, WeaponsData>();
+    private Dictionary<string, WeaponData> weapons = new Dictionary<string, WeaponData>();
+    private Dictionary<string, WorkData> works = new Dictionary<string, WorkData>();
 
-    public Dictionary<string, WeaponsData> Weapons { get { return weapons; } }
+    public Dictionary<string, WorkData> Works { get { return works; } }
+    public Dictionary<string, WeaponData> Weapons { get { return weapons; } }
     public int NowEnemyIndex { get { return nowEnemyIndex; } }
     public Dictionary<string, MonsterData> EnemyDatas { get { return enemyDatas; } }
     public List<string> EnemyNames { get { return enemyNames; } }
@@ -75,10 +79,16 @@ public class GameManager : MonoSingleton<GameManager>
 
     #region 일반 메소드
 
-    public WeaponsData GetWeaponByIndex(int index)
+    public WeaponData GetWeaponByIndex(int index)
     {
         return weapons[weaponNames[index]];
     }
+
+    public WorkData GetWorkDataByindex(int index)
+    {
+        return works[workNames[index]];
+    }
+
     #endregion
 
     #region Scene 관련
@@ -134,6 +144,15 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
+    private void InputWorkData()
+    {
+        for (int i = 0; i < weaponSheet.dataArray.Length; i++)
+        {
+            works.Add(workSheet.dataArray[i].Name, workSheet.dataArray[i]);
+            workNames.Add(workSheet.dataArray[i].Name);
+        }
+    }
+
     private void InputWeponData()
     {
         for (int i = 0; i < weaponSheet.dataArray.Length; i++)
@@ -149,7 +168,7 @@ public class GameManager : MonoSingleton<GameManager>
     public void ClearData()
     {
         PlayerPrefs.DeleteAll();
-        weapons = new Dictionary<string, WeaponsData>();
+        weapons = new Dictionary<string, WeaponData>();
     }
 
     public void SaveData()
@@ -159,7 +178,9 @@ public class GameManager : MonoSingleton<GameManager>
         PlayerPrefs.SetFloat("ATK", MainSceneManager.Instance.Player.ATK);
         PlayerPrefs.SetInt("EnemyIndex", nowEnemyIndex);
         PlayerPrefs.Save();
+#if UNITY_EDITOR
         Debug.Log("Saved!");
+#endif
     }
 
     public void LoadData()
@@ -168,25 +189,24 @@ public class GameManager : MonoSingleton<GameManager>
         killCount = PlayerPrefs.GetInt("KillCount");
         nowEnemyIndex = PlayerPrefs.GetInt("EnemyIndex");
         MainSceneManager.Instance.Player.ATK = PlayerPrefs.GetFloat("ATK", 20);
+#if UNITY_EDITOR
         Debug.Log("Loaded!");
+#endif
     }
 
     #endregion
 
-    void Awake()
+    void Start()
     {
         InputCommonEnemyData();
-    }
-
-    private void Start()
-    {
         LoadData();
+        InputWorkData();
         InputWeponData();
         MainSceneManager.Instance.topUI.UpdateCurrentCoin();
         MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
     }
 
-    public void AddMoney(int money)
+    public void AddMoney(long money)
     {
         this.money += money;
         MainSceneManager.Instance.PlayMoneyEffect(money);

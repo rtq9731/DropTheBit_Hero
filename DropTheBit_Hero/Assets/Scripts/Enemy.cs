@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] public Transform namePanelPos = null;
     [SerializeField] public Transform effectPos = null;
 
-    private int cost = 0;
+    private long cost = 0;
     public float hp = 0;
     float timer = 0f;
 
@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour
         MoveToFightPos();
     }
 
-    public void InitEnemy(int cost, float hp)
+    public void InitEnemy(long cost, float hp)
     {
         MainSceneManager.Instance.UpdateHPSlider();
         animator = GetComponent<Animator>();

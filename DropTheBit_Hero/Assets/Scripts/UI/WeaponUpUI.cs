@@ -6,26 +6,27 @@ using UnityEngine.UI;
 public class WeaponUpUI : MonoBehaviour
 {
     [SerializeField] GameObject upgradePanelPrefab;
-    [SerializeField] GameObject lockObject;
+    [SerializeField] Transform content;
 
     List<UpgradePanel> panels = new List<UpgradePanel>();
 
     private void Start()
     {
-        MakeUpgradePanels();
+        Invoke("MakeUpgradePanels", 0.01f);
     }
 
     void MakeUpgradePanels()
     {
         for (int i = 0; i < GameManager.Instance.Weapons.Count; i++)
         {
-            GameObject temp = Instantiate(upgradePanelPrefab, transform);
+            GameObject temp = Instantiate(upgradePanelPrefab, content);
             panels.Add(temp.GetComponent<UpgradePanel>());
+            panels[i].InitUpgradePanel(i);
         }
 
         for (int i = 0; i < GameManager.Instance.Weapons.Count; i++)
         {
-            panels[i].InitUpgradePanel(i);
+            panels[i].Refresh(GameManager.Instance.GetWeaponByIndex(i).Isunlocked);
         }
     }
 

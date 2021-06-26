@@ -39,6 +39,7 @@ public class MainSceneManager : MonoBehaviour
     [Header("여타 참조용 Public 변수들")]
     [SerializeField] public TopUI topUI;
     [SerializeField] public WeaponUpUI upgradeUI;
+    [SerializeField] public WorkUI workUI;
     [SerializeField] public AudioSource hitSound;
     [SerializeField] public InputPanel InputPanel;
     [SerializeField] public LeftUI leftUI;
@@ -157,7 +158,7 @@ public class MainSceneManager : MonoBehaviour
         temp.SetActive(true);
     }
 
-    public void PlayMoneyEffect(int cost)
+    public void PlayMoneyEffect(long cost)
     {
         if(moneyEffectPool.Count <= 0)
         {
@@ -176,7 +177,7 @@ public class MainSceneManager : MonoBehaviour
         }
     }
 
-    void InitMoneyEffect(int cost)
+    void InitMoneyEffect(long cost)
     {
         hitSound.Play();
         GameObject moneyText = moneyEffectPool.Dequeue();
@@ -184,8 +185,7 @@ public class MainSceneManager : MonoBehaviour
         moneyText.GetComponentsInChildren<Image>()[1].color = Color.white;
         moneyText.GetComponentInChildren<Text>().color = Color.white;
 
-        text.text = cost > 0 ?
-        text.text = $"+ {cost}" : text.text = $"- {-cost}";
+        text.text = cost > 0 ? text.text = $"+ {cost}" : text.text = $"- {-cost}";
         moneyText.transform.position = new Vector2(moneyEffectTr.position.x + 1f, moneyEffectTr.position.y - 0.2f);
         moneyText.gameObject.SetActive(true);
         moneyText.transform.DOMoveY(moneyEffectTr.position.y, 1f);
@@ -194,7 +194,7 @@ public class MainSceneManager : MonoBehaviour
         moneyEffectPool.Enqueue(moneyText.gameObject);
     }
 
-    void CreateMoneyEffect(int cost)
+    void CreateMoneyEffect(long cost)
     {
         var temp = Instantiate(moneyEffectPrefab, moneyEffectPoolTr);
         temp.SetActive(false);

@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3337288be3568184caf6009047ff9a4a, type: 3}
+  m_Name: Work
+  m_EditorClassIdentifier: 
+  SheetName: Assets/Scripts/Data/Data.xlsx
+  WorksheetName: Work
+  dataArray:
+  - index: 1
+    image_path: "WeaponImages/01_\uB098\uBB47\uAC00\uC9C0"
+    name: "\uAD11\uC0B0 \uD0D0\uD5D8\uD558\uB7EC\uAC00\uAE30"
+    upgradecount: 1
+    upgradecost: 10
+    isunlocked: 1
+    leastup: 10
+  - index: 2
+    image_path: "WeaponImages/02_\uAF43\uD540 \uB098\uBB47\uAC00\uC9C0"
+    name: "\uAC70\uBBF8\uC904 \uC81C\uAC70\uD558\uAE30"
+    upgradecount: 1
+    upgradecost: 50
+    isunlocked: 0
+    leastup: 30
+  - index: 3
+    image_path: "WeaponImages/03_\uBAA9\uAC80"
+    name: "\uC2A4\uCF08\uB808\uD1A4 \uD1F4\uCE58\uD558\uAE30"
+    upgradecount: 1
+    upgradecost: 250
+    isunlocked: 0
+    leastup: 40
+  - index: 4
+    image_path: "WeaponImages/04_\uCD08\uBCF4\uC790\uC758 \uAC80"
+    name: "\uCC44\uC11D\uC7A5\uC5D0\uC11C \uCC44\uC11D\uD558\uAE30"
+    upgradecount: 1
+    upgradecost: 1000
+    isunlocked: 0
+    leastup: 20
+  - index: 5
+    image_path: "WeaponImages/05_\uB2F4\uAE08\uC9C8\uB41C \uCD08\uBCF4\uC790\uC758
+      \uAC80"
+    name: "\uAD11\uC0B0\uC5D0\uC11C \uCC44\uAD11\uD558\uAE30"
+    upgradecount: 1
+    upgradecost: 2000
+    isunlocked: 0
+    leastup: 5
+  - index: 6
+    image_path: "WeaponImages/06_\uAC80"
+    name: "\uBAA9\uAC78\uC774 \uC81C\uC791"
+    upgradecount: 1
+    upgradecost: 15000
+    isunlocked: 0
+    leastup: 30
+  - index: 7
+    image_path: "WeaponImages/07_\uB2F4\uAE08\uC9C8\uB41C \uAC80"
+    name: "\uD3EC\uC158 \uC81C\uC791"
+    upgradecount: 1
+    upgradecost: 50000
+    isunlocked: 0
+    leastup: 30
+  - index: 8
+    image_path: "WeaponImages/08_\uAE00\uB77C\uB514\uC6B0\uC2A4"
+    name: "\uC0AC\uD30C\uC774\uC5B4 \uCC44\uAD11"
+    upgradecount: 1
+    upgradecost: 100000
+    isunlocked: 0
+    leastup: 5
+  - index: 9
+    image_path: "WeaponImages/09_\uB2F4\uAE08\uC9C8\uB41C \uAE00\uB77C\uB514\uC6B0\uC2A4"
+    name: "\uBCF4\uBB3C\uC0C1\uC790 \uCC3E\uAE30"
+    upgradecount: 1
+    upgradecost: 1500000
+    isunlocked: 0
+    leastup: 60
