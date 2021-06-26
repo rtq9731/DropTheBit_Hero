@@ -6,14 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    [SerializeField] public Note noteSheet;
+    [SerializeField] Boss bossSheet;
     [SerializeField] Monster enemySheet;
     [SerializeField] Weapon weaponSheet;
     [SerializeField] Work workSheet;
 
     #region Getter와 변수
 
-    [SerializeField] public string nowPlaySong = "";
+    private ushort currentBossIndex = 0;
 
     public OsuParser parsingManager = null;
     private RhythmManager rhythmManager;
@@ -43,16 +43,11 @@ public class GameManager : MonoSingleton<GameManager>
     public int Combo { get { return combo; } set { combo = value; } }
     public AudioClip GetMusic()
     {
-        return Resources.Load($"SongMP3/{nowPlaySong}") as AudioClip;
+        return Resources.Load($"SongMP3/{bossSheet.dataArray[nowEnemyIndex].Songname}") as AudioClip;
     }
     public decimal GetMoney()
     {
         return money;
-    }
-    private void GetRhythmManager()
-    {
-        rhythmManager = FindObjectOfType<RhythmManager>();
-        rhythmManager.parsingSongName = nowPlaySong;
     }
     public int KillCount
     {
@@ -63,12 +58,19 @@ public class GameManager : MonoSingleton<GameManager>
             MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
             SaveData();
 
-            if (killCount % 3 == 0)
+            if (killCount - 5 == 0)
             {
+                Debug.LogError("-10해서 보스 바꿔주게 하세욧!");
                 MainSceneManager.Instance.CallBoss();
             }
 
-            if (killCount % 5 == 0 && killCount < enemyNames.Count * 5)
+            if (killCount - 10 * (currentBossIndex + 1) <= 0 && bossSheet.dataArray[currentBossIndex].Iscleared)
+            {
+                bossSheet.dataArray[currentBossIndex].Iscleared = true;
+                currentBossIndex++;
+            }
+
+            if (killCount - 10 * (nowEnemyIndex + 1) >= 0 && killCount < enemyNames.Count * 10)
             {
                 nowEnemyIndex++;
             }
@@ -87,6 +89,11 @@ public class GameManager : MonoSingleton<GameManager>
     public WorkData GetWorkDataByindex(int index)
     {
         return works[workNames[index]];
+    }
+
+    public Beatmap GetCurrentBeatmap()
+    {
+        return parsingManager.BeatmapData[bossSheet.dataArray[currentBossIndex].Songname];
     }
 
     #endregion
@@ -113,14 +120,10 @@ public class GameManager : MonoSingleton<GameManager>
         }
         Screen.orientation = ScreenOrientation.Landscape;
         Screen.SetResolution(2560, 1440, Screen.fullScreen);
-        parsingManager.Parsing();
+        parsingManager.Parsing(bossSheet.dataArray[currentBossIndex].Songname);
         yield return new WaitForSeconds(0.5f);
-        GetRhythmManager();
         DG.Tweening.DOTween.Clear();
     }
-    #endregion
-
-    #region 코루틴
     private IEnumerator ChangeSceneToMain()
     {
         DG.Tweening.DOTween.Clear();
@@ -199,9 +202,9 @@ public class GameManager : MonoSingleton<GameManager>
     void Start()
     {
         InputCommonEnemyData();
-        LoadData();
         InputWorkData();
         InputWeponData();
+        LoadData();
         MainSceneManager.Instance.topUI.UpdateCurrentCoin();
         MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
     }

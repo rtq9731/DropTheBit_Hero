@@ -25,8 +25,6 @@ public class RhythmManager : MonoBehaviour
     [SerializeField] int longNotePoolingMax = 5;
     [SerializeField] float noteEndXOffset = 0f;
 
-   public string parsingSongName = "";
-
     private List<GameObject> notesforPooling = new List<GameObject>();
     private List<GameObject> longNoteList = new List<GameObject>();
 
@@ -69,11 +67,11 @@ public class RhythmManager : MonoBehaviour
 
         if(isTimingPointPlay)
         {
-            if (GameManager.Instance.parsingManager.BeatmapData[parsingSongName].TimingPoints[currentTimingPointIndex].Offset < noteTimer)
+            if (GameManager.Instance.GetCurrentBeatmap().TimingPoints[currentTimingPointIndex].Offset < noteTimer)
             {
-                currentTimingPoint = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].TimingPoints[currentTimingPointIndex];
+                currentTimingPoint = GameManager.Instance.GetCurrentBeatmap().TimingPoints[currentTimingPointIndex];
                 ++currentTimingPointIndex;
-                if (currentTimingPointIndex == GameManager.Instance.parsingManager.BeatmapData[parsingSongName].TimingPoints.Count)
+                if (currentTimingPointIndex == GameManager.Instance.GetCurrentBeatmap().TimingPoints.Count)
                 {
                     isTimingPointPlay = false;
                 }
@@ -85,23 +83,23 @@ public class RhythmManager : MonoBehaviour
         {
             noteTimer += Time.deltaTime * 1000;
 
-            if(GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count <= noteMakeIndex)
+            if(GameManager.Instance.GetCurrentBeatmap().HitObjects.Count <= noteMakeIndex)
             {
                 StartCoroutine(FinishRhythm());
                 return;
             }
 
-            BossSceneManager.Instance.progressBar.maxValue = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects.Count;
-            float noteTiming = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].Time;
+            BossSceneManager.Instance.progressBar.maxValue = GameManager.Instance.GetCurrentBeatmap().HitObjects.Count;
+            float noteTiming = GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex].Time;
             if (isPlayingNote && noteTimer >= noteTiming - currentTimingPoint.MsPerBeat) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 오프셋 빼줄 것임.
             {
-                Debug.Log(GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name);
-                if ((GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함;
+                Debug.Log(GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex].GetType().Name);
+                if ((GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함;
                 {
                     ++noteMakeIndex;
                     CrateNote();
                     //noteMakeIndex++;
-                    //CreateLongNote((HitSlider)GameManager.Instance.parsingManager.BeatmapData[parsingSongName].HitObjects[noteMakeIndex]);
+                    //CreateLongNote((HitSlider)GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex]);
                 }
                 else // 일반 노트
                 {
@@ -139,7 +137,7 @@ public class RhythmManager : MonoBehaviour
 
     private IEnumerator FinishRhythm()
     {
-        yield return new WaitForSeconds(1.3f); // 마지막 노트가 지나갈때까지 대기.
+        yield return new WaitForSeconds(2f); // 마지막 노트가 지나갈때까지 대기.
         StartStopSong();
         isPlayingNote = false;
         BossSceneManager.Instance.FinishFight();
@@ -211,7 +209,7 @@ public class RhythmManager : MonoBehaviour
 
     float GetSliderLengthInMs(HitSlider slider)
     {
-        var pixelsPerBeat = GameManager.Instance.parsingManager.BeatmapData[parsingSongName].SliderMultiplier * currentTimingPoint.MsPerBeat;
+        var pixelsPerBeat = GameManager.Instance.GetCurrentBeatmap().SliderMultiplier * currentTimingPoint.MsPerBeat;
         var sliderLengthInBeats = (slider.PixelLength * slider.Repeat) / pixelsPerBeat;
         return pixelsPerBeat * sliderLengthInBeats;
     }
@@ -290,8 +288,6 @@ public class RhythmManager : MonoBehaviour
     {
         note.SetActive(false);
         DOTween.Complete(note);
-
-
     }
 
     public void CheckNote()

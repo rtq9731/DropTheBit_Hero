@@ -9,10 +9,12 @@ public class WorkPanel : MonoBehaviour
     [SerializeField] Text workName;
     [SerializeField] Text upgradeCostText;
     [SerializeField] Text currentUpgradeText;
+    [SerializeField] Slider ProgressBar;
     [SerializeField] Button upgradeBtn;
     [SerializeField] GameObject lockPanel;
 
-    WorkData data = null;
+    public WorkData data = null;
+    WorkUI.WorkYieldTimer timer = null;
 
     public void InitWorkPanel(int index)
     {
@@ -26,21 +28,29 @@ public class WorkPanel : MonoBehaviour
     /// </summary>
     public void Refresh(bool isUnlocked) // 원본함수
     {
-        if(data.Isunlocked) // 이미 해금되었다면 
+
+        if (data.Isunlocked && timer != null)
         {
             return;
         }
 
         lockPanel.SetActive(!isUnlocked); // isUnlocked와 반대로 움직여야함.
-
         data.Isunlocked = isUnlocked;
+
+        if (data.Isunlocked && timer == null)
+        {
+            timer = new WorkUI.WorkYieldTimer(data.Moneycool, data.Yield, ProgressBar);
+        }
+
         upgradeBtn.onClick.RemoveAllListeners();
 
-        this.upgradeCostText.text = $"업그레이드 비용 : {Mathf.RoundToInt(data.Upgradecost * (0.5f * data.Upgradecount))}원"; // 첫 업그레이드가 끝난 경우 원가 * 업그레이드 단계로 표시
+        this.upgradeCostText.text = $"업그레이드 비용 : {Mathf.Round(data.Upgradecost + (0.3f * data.Upgradecount - 1)) + 1}원"; // 첫 업그레이드가 끝난 경우 원가 * 업그레이드 단계로 표시
         this.currentUpgradeText.text = $"현재 업그레이드 단계 : {data.Upgradecount}"; // 업그레이드 단계 표시
-        upgradeBtn.onClick.AddListener(() => Upgrade()); // 최대로 업그레이드 되지 않았다면 업그레이드 가능
+
+        upgradeBtn.onClick.AddListener(() => Upgrade());
     }
-    public void Refresh() // 원본함수
+
+    public void Refresh() // 오버로딩 함수
     {
         if(data.Upgradecount >= data.Leastup) // 최소 업그레이드 이상 업글되면
         {
@@ -49,22 +59,23 @@ public class WorkPanel : MonoBehaviour
 
         upgradeBtn.onClick.RemoveAllListeners();
 
-        this.upgradeCostText.text = $"업그레이드 비용 : {Mathf.RoundToInt(data.Upgradecost * ( 0.5f * data.Upgradecount ))}원"; // 첫 업그레이드가 끝난 경우 원가 * 업그레이드 단계로 표시
+        this.upgradeCostText.text = $"업그레이드 비용 : {Mathf.Round(data.Upgradecost + (0.3f * data.Upgradecount - 1)) + 1}원"; // 첫 업그레이드가 끝난 경우 원가 * 업그레이드 단계로 표시
         this.currentUpgradeText.text = $"현재 업그레이드 단계 : {data.Upgradecount}"; // 업그레이드 단계 표시
+
         upgradeBtn.onClick.AddListener(() => Upgrade()); // 최대로 업그레이드 되지 않았다면 업그레이드 가능
     }
 
     private void Upgrade()
     {
-        if (GameManager.Instance.GetMoney() < data.Upgradecost * data.Upgradecount) // 돈이 적으면 취소
+        if (GameManager.Instance.GetMoney() < Mathf.RoundToInt(data.Upgradecost + (0.3f * data.Upgradecount - 1)) + 1) // 돈이 적으면 취소
         {
             return;
         }
 
-        GameManager.Instance.AddMoney(-Mathf.RoundToInt(data.Upgradecost * (0.5f * data.Upgradecount)));
-
+        GameManager.Instance.AddMoney(-Mathf.RoundToInt(data.Upgradecost + (0.3f * data.Upgradecount - 1)) + 1);
         ++data.Upgradecount;
-        data.Yield += data.Yield * 0.1f;
+        data.Yield += long.Parse(Mathf.RoundToInt(data.Yield * 0.05f).ToString());
+        timer.UpdateData(data.Yield);
         upgradeBtn.onClick.RemoveAllListeners();
         Refresh();
     }

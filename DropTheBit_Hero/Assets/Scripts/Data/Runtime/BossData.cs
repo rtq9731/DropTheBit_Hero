@@ -6,8 +6,12 @@ using System.Collections;
 /// !!! DO NOT CHANGE Tabs to Spaces !!!
 /// 
 [System.Serializable]
-public class NoteData
+public class BossData
 {
+  [SerializeField]
+  short index;
+  public short Index { get {return index; } set { this.index = value;} }
+  
   [SerializeField]
   string bossname;
   public string Bossname { get {return bossname; } set { this.bossname = value;} }
@@ -19,5 +23,9 @@ public class NoteData
   [SerializeField]
   string datapath;
   public string Datapath { get {return datapath; } set { this.datapath = value;} }
+  
+  [SerializeField]
+  bool iscleared;
+  public bool Iscleared { get {return iscleared; } set { this.iscleared = value;} }
   
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WorkUI : MonoBehaviour
 {
@@ -10,31 +11,33 @@ public class WorkUI : MonoBehaviour
     List<WorkPanel> panels = new List<WorkPanel>();
     List<WorkYieldTimer> timers = new List<WorkYieldTimer>();
 
-    class WorkYieldTimer
+    public class WorkYieldTimer
     {
-        public WorkYieldTimer(float cool, float timer, long yield)
+        public WorkYieldTimer(float moneyCool, long yield, Slider slider)
         {
-            this.cool = cool;
-            this.timer = timer;
+            this.cool = moneyCool;
             this.yield = yield;
+            this.slider = slider;
+            MainSceneManager.Instance.workUI.timers.Add(this);
         }
 
         float cool = 0f;
         float timer = 0f;
         long yield = 0;
+        Slider slider = null;
 
         public float Timer
         {
             get { return timer; }
             set
             {
-
                 timer = value;
                 if (timer >= cool)
                 {
                     timer = 0;
                     GameManager.Instance.AddMoney(yield);
                 }
+                slider.value = timer / cool;
 
             }
         }
@@ -47,7 +50,7 @@ public class WorkUI : MonoBehaviour
 
     private void Start()
     {
-        //Invoke("MakeWorkPanels", 0.01f);
+        Invoke("MakeWorkPanels", 0.01f);
     }
 
     private void Update()

@@ -15,8 +15,8 @@ public class BotUI : MonoBehaviour
 
     private void Start()
     {
-        InitToggles();
-        weaponToggle.isOn = true;
+        Invoke("InitToggles", 0.1f);
+        
     }
 
     private void InitToggles()
@@ -27,11 +27,11 @@ public class BotUI : MonoBehaviour
         weaponToggle.onValueChanged.AddListener((x) => UpdateUI(x, weaponToggle, scrollViews[0]));
         workToggle.onValueChanged.AddListener((x) => UpdateUI(x, workToggle, scrollViews[1]));
         //callFriends.onValueChanged.AddListener((x) => UpdateUI(x, callFriends, scrollViews[2]));
+        weaponToggle.isOn = true;
     }
 
     private void UpdateUI(bool isOn, Toggle toggle, GameObject pannel)
     {
-        Debug.Log(isOn);
         if(isOn)
         {
             toggle.GetComponent<RectTransform>().DOAnchorPosY(toggle.GetComponent<RectTransform>().anchoredPosition.y - 30, 0.5f);

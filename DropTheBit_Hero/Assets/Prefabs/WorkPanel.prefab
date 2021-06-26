@@ -711,12 +711,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b538bc6cabe1fce46b197edbdf3982d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  workImage: {fileID: 0}
-  workName: {fileID: 0}
-  upgradeCostText: {fileID: 0}
-  currentUpgradeText: {fileID: 0}
-  upgradeBtn: {fileID: 0}
-  lockPanel: {fileID: 0}
+  workImage: {fileID: 3956385566796767653}
+  workName: {fileID: 3956385567491846198}
+  upgradeCostText: {fileID: 3956385568455247316}
+  currentUpgradeText: {fileID: 3956385567623475022}
+  ProgressBar: {fileID: 5049690645871199318}
+  upgradeBtn: {fileID: 3956385567084859935}
+  lockPanel: {fileID: 8952651665561705107}
+  data:
+    index: 0
+    image_path: 
+    name: 
+    upgradecount: 0
+    upgradecost: 0
+    isunlocked: 0
+    moneycool: 0
+    yield: 0
+    leastup: 0
 --- !u!1 &3956385568455247322
 GameObject:
   m_ObjectHideFlags: 0
@@ -1028,7 +1039,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 3882979155904350315}
   m_FillRect: {fileID: 8464977195326042395}
   m_HandleRect: {fileID: 8813069552641346237}

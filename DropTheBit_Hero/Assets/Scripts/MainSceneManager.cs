@@ -55,7 +55,7 @@ public class MainSceneManager : MonoBehaviour
 
     private void Start()
     {
-        CallNextEnemy();
+        Invoke("CallNextEnemy", 0.01f);
         effectAnimator.speed = 0;
     }
 
@@ -200,11 +200,6 @@ public class MainSceneManager : MonoBehaviour
         temp.SetActive(false);
         moneyEffectPool.Enqueue(temp);
         InitMoneyEffect(cost);
-    }
-
-    public void SceneChange()
-    {
-        GameManager.Instance.ChangeSceneToBossScene();
     }
 
     public void ScrollingBackground()

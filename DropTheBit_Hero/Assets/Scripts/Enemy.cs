@@ -39,15 +39,9 @@ public class Enemy : MonoBehaviour
         {
             GetComponent<SpriteRenderer>().flipX = false;
         }
-        else if (GameManager.Instance.EnemyNames[GameManager.Instance.NowEnemyIndex].Contains("해골"))
-        {
-            GetComponent<SpriteRenderer>().flipX = true;
-        }
         else // 오른쪽 방향으로 걷는 적인 경우에
         {
             GetComponent<SpriteRenderer>().flipX = true;
-            hpBarPos.localPosition = new Vector2(0, -0.25f);
-            namePanelPos.localPosition = new Vector2(0, 1f);
         }
         animator = GetComponent<Animator>();
         this.cost = cost;

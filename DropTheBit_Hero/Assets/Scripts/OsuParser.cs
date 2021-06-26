@@ -6,9 +6,6 @@ using UnityEngine;
 
 public class OsuParser : MonoBehaviour
 {
-
-    // [Header("ParsingSong (DataPath without .osu)")] [SerializeField] string songName = "";
-
     private Dictionary<string, Beatmap> beatmapData = new Dictionary<string, Beatmap>();
     public Dictionary<string, Beatmap> BeatmapData
     {
@@ -16,15 +13,14 @@ public class OsuParser : MonoBehaviour
         private set { beatmapData = value; }
     }
 
-    public void Parsing()
+    public void Parsing(string name)
     {
-        for (int i = 0; i < GameManager.Instance.noteSheet.dataArray.Length; i++)
+        if(beatmapData.TryGetValue(name, out Beatmap beatMap))
         {
-            if(!beatmapData.TryGetValue(GameManager.Instance.noteSheet.dataArray[i].Songname, out Beatmap beatMap))
-            {
-                beatMap = new Beatmap($"{Application.dataPath}/Resources/{GameManager.Instance.noteSheet.dataArray[i].Datapath}.osu");
-                beatmapData.Add(GameManager.Instance.noteSheet.dataArray[i].Songname, beatMap);
-            }
+            return;
         }
+
+        beatMap = new Beatmap($"{Application.dataPath}/Resources/Notes/{name}.osu");
+        beatmapData.Add(name, beatMap);
     }
 }

@@ -37,8 +37,8 @@ public class WorkData
   public float Moneycool { get {return moneycool; } set { this.moneycool = value;} }
   
   [SerializeField]
-  double yield;
-  public double Yield { get {return yield; } set { this.yield = value;} }
+  long yield;
+  public long Yield { get {return yield; } set { this.yield = value;} }
   
   [SerializeField]
   short leastup;

@@ -34,7 +34,7 @@ public class UpgradePanel : MonoBehaviour
         if(data.Upgradecount >= 5)
         {
             upgradeBtn.GetComponentInChildren<Text>().text = "MAX!"; // 최대로 업그레이드 됐다면 다음으로 넘김
-            this.upgradeCostText.text = $"업그레이드 비용 : 최대로 업그레이드 됨!";
+            this.upgradeCostText.text = $"업그레이드 비용 : 최대";
             this.currentUpgradeText.text = "현재 업그레이드 단계 : 최대"; // 최대로 업그레이드 됨으로 표시
             MainSceneManager.Instance.upgradeUI.GetUpgradePanelByIndex(data.Index).Refresh(true);
         }
@@ -54,7 +54,7 @@ public class UpgradePanel : MonoBehaviour
         if (data.Upgradecount >= 5)
         {
             upgradeBtn.GetComponentInChildren<Text>().text = "MAX!"; // 최대로 업그레이드 됐다면 다음으로 넘김
-            this.upgradeCostText.text = $"업그레이드 비용 : 최대로 업그레이드 됨!";
+            this.upgradeCostText.text = $"업그레이드 비용 : 최대";
             this.currentUpgradeText.text = "현재 업그레이드 단계 : 최대"; // 최대로 업그레이드 됨으로 표시
             MainSceneManager.Instance.upgradeUI.GetUpgradePanelByIndex(data.Index).Refresh(true);
         }

@@ -16,48 +16,32 @@ MonoBehaviour:
   scriptFilePath: Scripts/Data/Runtime
   editorScriptFilePath: Scripts/Data/Editor
   sheetName: Data.xlsx
-  workSheetName: Work
+  workSheetName: Boss
   columnHeaderList:
   - type: 2
     name: Index
     isEnable: 0
     isArray: 0
   - type: 1
-    name: Image_Path
+    name: BossName
     isEnable: 0
     isArray: 0
   - type: 1
-    name: Name
+    name: SongName
     isEnable: 0
     isArray: 0
-  - type: 2
-    name: UpgradeCount
-    isEnable: 0
-    isArray: 0
-  - type: 4
-    name: UpgradeCost
+  - type: 1
+    name: DataPath
     isEnable: 0
     isArray: 0
   - type: 8
-    name: isUnlocked
-    isEnable: 0
-    isArray: 0
-  - type: 5
-    name: MoneyCool
-    isEnable: 0
-    isArray: 0
-  - type: 6
-    name: Yield
-    isEnable: 0
-    isArray: 0
-  - type: 2
-    name: leastUp
+    name: isCleared
     isEnable: 0
     isArray: 0
   excelFilePath: Assets/Scripts/Data/Data.xlsx
   SheetNames:
   - Monster
   - Weapon
-  - Note
+  - Boss
   - Work
-  currentSelectedSheet: 3
+  currentSelectedSheet: 2

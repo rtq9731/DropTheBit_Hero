@@ -9,18 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42d5f311d04852c4eb0e1e107b8e15bd, type: 3}
-  m_Name: Note
+  m_Script: {fileID: 11500000, guid: ea492d22e94ed4749be9c484180dc922, type: 3}
+  m_Name: Boss
   m_EditorClassIdentifier: 
   SheetName: Assets/Scripts/Data/Data.xlsx
-  WorksheetName: Note
+  WorksheetName: Boss
   dataArray:
-  - bossname: "\uAC70\uB300 \uC2AC\uB77C\uC784"
+  - index: 1
+    bossname: "\uAC70\uB300 \uC2AC\uB77C\uC784"
     songname: So_Happy
     datapath: Notes/So_Happy
-  - bossname: "\uB300\uD615 \uD574\uACE8\uBCD1\uC0AC"
+    iscleared: 0
+  - index: 2
+    bossname: "\uB300\uD615 \uD574\uACE8\uBCD1\uC0AC"
     songname: Faded
     datapath: Notes/Faded
-  - bossname: "DJ \uD751\uB9C8\uBC95\uC0AC"
+    iscleared: 0
+  - index: 3
+    bossname: "DJ \uD751\uB9C8\uBC95\uC0AC"
     songname: Cloud_9
     datapath: Notes/Cloud_9
+    iscleared: 0

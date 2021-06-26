@@ -7,11 +7,11 @@ using UnityQuickSheet;
 ///
 /// !!! Machine generated code !!!
 ///
-public class NoteAssetPostprocessor : AssetPostprocessor 
+public class BossAssetPostprocessor : AssetPostprocessor 
 {
     private static readonly string filePath = "Assets/Scripts/Data/Data.xlsx";
-    private static readonly string assetFilePath = "Assets/Scripts/Data/Note.asset";
-    private static readonly string sheetName = "Note";
+    private static readonly string assetFilePath = "Assets/Scripts/Data/Boss.asset";
+    private static readonly string sheetName = "Boss";
     
     static void OnPostprocessAllAssets (string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
     {
@@ -20,16 +20,16 @@ public class NoteAssetPostprocessor : AssetPostprocessor
             if (!filePath.Equals (asset))
                 continue;
                 
-            Note data = (Note)AssetDatabase.LoadAssetAtPath (assetFilePath, typeof(Note));
+            Boss data = (Boss)AssetDatabase.LoadAssetAtPath (assetFilePath, typeof(Boss));
             if (data == null) {
-                data = ScriptableObject.CreateInstance<Note> ();
+                data = ScriptableObject.CreateInstance<Boss> ();
                 data.SheetName = filePath;
                 data.WorksheetName = sheetName;
                 AssetDatabase.CreateAsset ((ScriptableObject)data, assetFilePath);
                 //data.hideFlags = HideFlags.NotEditable;
             }
             
-            //data.dataArray = new ExcelQuery(filePath, sheetName).Deserialize<NoteData>().ToArray();		
+            //data.dataArray = new ExcelQuery(filePath, sheetName).Deserialize<BossData>().ToArray();		
 
             //ScriptableObject obj = AssetDatabase.LoadAssetAtPath (assetFilePath, typeof(ScriptableObject)) as ScriptableObject;
             //EditorUtility.SetDirty (obj);
@@ -37,7 +37,7 @@ public class NoteAssetPostprocessor : AssetPostprocessor
             ExcelQuery query = new ExcelQuery(filePath, sheetName);
             if (query != null && query.IsValid())
             {
-                data.dataArray = query.Deserialize<NoteData>().ToArray();
+                data.dataArray = query.Deserialize<BossData>().ToArray();
                 ScriptableObject obj = AssetDatabase.LoadAssetAtPath (assetFilePath, typeof(ScriptableObject)) as ScriptableObject;
                 EditorUtility.SetDirty (obj);
             }
