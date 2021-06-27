@@ -16,7 +16,6 @@ public class BotUI : MonoBehaviour
     private void Start()
     {
         Invoke("InitToggles", 0.1f);
-        
     }
 
     private void InitToggles()
@@ -34,12 +33,22 @@ public class BotUI : MonoBehaviour
     {
         if(isOn)
         {
+            if (toggle.GetComponent<RectTransform>().anchoredPosition.y <= -62)
+            {
+                return;
+            }
             toggle.GetComponent<RectTransform>().DOAnchorPosY(toggle.GetComponent<RectTransform>().anchoredPosition.y - 30, 0.5f);
+            toggle.interactable = false;
             pannel.SetActive(isOn);
         }
         else
         {
+            if(toggle.GetComponent<RectTransform>().anchoredPosition.y >= -32)
+            {
+                return;
+            }
             toggle.GetComponent<RectTransform>().DOAnchorPosY(toggle.GetComponent<RectTransform>().anchoredPosition.y + 30, 0.5f);
+            toggle.interactable = true;
             pannel.SetActive(isOn);
         }
     }

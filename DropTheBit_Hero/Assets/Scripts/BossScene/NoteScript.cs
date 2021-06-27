@@ -29,7 +29,7 @@ public class NoteScript : MonoBehaviour
 
         if ( this.transform.position.x <= rhythmManager.noteLine.transform.position.x && Vector2.Distance(transform.position, rhythmManager.noteLine.transform.position) >= whereIsPerfect + whereIsGood + whereIsMiss)
         {
-            rhythmManager.CheckNote();
+            rhythmManager.DeleteNote(this.gameObject);
         }
     }
 

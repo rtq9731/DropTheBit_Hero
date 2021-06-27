@@ -43,7 +43,7 @@ public class GameManager : MonoSingleton<GameManager>
     public int Combo { get { return combo; } set { combo = value; } }
     public AudioClip GetMusic()
     {
-        return Resources.Load($"SongMP3/{bossSheet.dataArray[nowEnemyIndex].Songname}") as AudioClip;
+        return Resources.Load($"SongMP3/{bossSheet.dataArray[currentBossIndex].Songname}") as AudioClip;
     }
     public decimal GetMoney()
     {
@@ -58,9 +58,8 @@ public class GameManager : MonoSingleton<GameManager>
             MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
             SaveData();
 
-            if (killCount - 5 == 0)
+            if ((currentBossIndex + 1)*10 - killCount <= 0)
             {
-                Debug.LogError("-10해서 보스 바꿔주게 하세욧!");
                 MainSceneManager.Instance.CallBoss();
             }
 

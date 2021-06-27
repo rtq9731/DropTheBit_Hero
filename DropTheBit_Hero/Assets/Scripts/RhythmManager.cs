@@ -284,44 +284,39 @@ public class RhythmManager : MonoBehaviour
 
     }
 
-    private void DeleteNote(GameObject note)
+    public void DeleteNote(GameObject note)
     {
+
+        noteCheckIndex++; // 다음 노트를 검사하게 Index++;
+
+        if (noteCheckIndex == poolingMax)
+            noteCheckIndex = 0;
+
         note.SetActive(false);
         DOTween.Complete(note);
     }
 
-    public void CheckNote()
+    void CheckNote()
     {
-        if(notesforPooling.Count == 0) // 목록이 없으면 그냥 리턴
+        for (int i = 0; i < notesforPooling.Count; i++)
         {
-            return;
+            var item = notesforPooling[i];
+            if (item.activeSelf)
+            {
+                if ((item.GetComponent<NoteScript>().isHit(noteLine.transform.position) % 4) > 0) // None이 아닌 경우
+                {
+                    //Camera.main.transform.DOShakePosition(shakeTime, shakePower / (hit / 4));
+                    CrateEffect(item.GetComponent<NoteScript>().isHit(noteLine.transform.position) % 4);
+                    DeleteNote(item.gameObject);
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
 
-        var item = notesforPooling[noteCheckIndex].GetComponent<NoteScript>();
-
-        if (!item.gameObject.activeSelf) // 만약 비활성화 되있다면 다음으로 넘어가서 재시작!
-        {
-            noteCheckIndex++;
-
-            if (noteCheckIndex == poolingMax)
-                noteCheckIndex = 0;
-            
-            CheckNote();
-        }
-
-        int hit = item.isHit(noteLine.transform.position);
         
-        if ((hit % 4) > 0) // None이 아닌 경우
-        {
-            //Camera.main.transform.DOShakePosition(shakeTime, shakePower / (hit / 4));
-            CrateEffect(hit);
-            DeleteNote(item.gameObject);
-
-            noteCheckIndex++; // 다음 노트를 검사하게 Index++;
-
-            if (noteCheckIndex == poolingMax)
-                noteCheckIndex = 0;
-        }
     }
 
 }
