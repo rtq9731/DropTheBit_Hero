@@ -25,6 +25,7 @@ public class RhythmManager : MonoBehaviour
 
     private Queue<GameObject> noteObjPool = new Queue<GameObject>();
     private Queue<NoteScript> noteCheckPool = new Queue<NoteScript>();
+    private Queue<GameObject> hitEffectPool = new Queue<GameObject>();
     private Queue<GameObject> textEffectPool = new Queue<GameObject>();
 
     private int noteMakeIndex = 0;
@@ -288,6 +289,40 @@ public class RhythmManager : MonoBehaviour
 
         textEffectPool.Enqueue(current);
     }
+
+    void CrateHitEffect()
+    {
+        GameObject current;
+        if (textEffectPool.Count > 0)
+        {
+            if (textEffectPool.Peek().activeSelf)
+            {
+                current = Instantiate(hitEffectPrefab, textEffectPoolObj);
+            }
+            else
+            {
+                current = hitEffectPool.Dequeue();
+            }
+        }
+        else
+        {
+            current = Instantiate(textEffectPrefab, textEffectPoolObj);
+        }
+
+        current.gameObject.SetActive(false);
+        StartCoroutine(PlayHitEffect(current.GetComponent<ParticleSystem>()));
+
+    }
+
+    private IEnumerator PlayHitEffect(ParticleSystem particle)
+    {
+        particle.gameObject.transform.position = noteLine.transform.position;
+        particle.Play();
+        yield return new WaitForSeconds(particle.main.duration);
+        particle.gameObject.SetActive(false);
+        hitEffectPool.Enqueue(particle.gameObject);
+    }
+
 
     void DeleteNote(NoteScript note)
     {
