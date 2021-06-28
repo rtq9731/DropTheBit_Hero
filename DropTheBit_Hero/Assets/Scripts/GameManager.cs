@@ -44,6 +44,7 @@ public class GameManager : MonoSingleton<GameManager>
     public int NowEnemyIndex { get { return nowEnemyIndex; } }
     public Dictionary<string, MonsterData> EnemyDatas { get { return enemyDatas; } }
     public List<string> EnemyNames { get { return enemyNames; } }
+    public float Atk { get { return atk; } }
     public int Combo { get { return combo; } set { combo = value; } }
     public AudioClip GetMusic()
     {
@@ -69,7 +70,7 @@ public class GameManager : MonoSingleton<GameManager>
 
             if (killCount - 10 * (currentBossIndex + 1) <= 0 && bossSheet.dataArray[currentBossIndex].Iscleared)
             {
-                bossSheet.dataArray[currentBossIndex].Iscleared = true;
+                if (bossSheet.dataArray[currentBossIndex].Iscleared)
                 currentBossIndex++;
             }
 
@@ -137,9 +138,9 @@ public class GameManager : MonoSingleton<GameManager>
         StartCoroutine(ChangeSceneToBoss());
     }
 
-    public void ChangeSceneToMainScene()
+    public void ChangeSceneToMainScene(bool isCleared)
     {
-        StartCoroutine(ChangeSceneToMain());
+        StartCoroutine(ChangeSceneToMain(isCleared));
     }
 
     private IEnumerator ChangeSceneToBoss()
@@ -157,7 +158,7 @@ public class GameManager : MonoSingleton<GameManager>
         yield return new WaitForSeconds(0.5f);
         DG.Tweening.DOTween.Clear();
     }
-    private IEnumerator ChangeSceneToMain()
+    private IEnumerator ChangeSceneToMain(bool isCleared)
     {
         DG.Tweening.DOTween.Clear();
         SceneManager.LoadScene("MainScene");
@@ -165,6 +166,7 @@ public class GameManager : MonoSingleton<GameManager>
         {
             yield return null;
         }
+        bossSheet.dataArray[currentBossIndex].Iscleared = isCleared;
         Screen.orientation = ScreenOrientation.Portrait;
         Screen.SetResolution(1440, 2560, Screen.fullScreen);
     }

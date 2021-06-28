@@ -109,6 +109,7 @@ public class RhythmManager : MonoBehaviour
 
         if(Input.GetMouseButtonDown(0))
         {
+            if(noteCheckPool.Count > 0)
             CheckNote();
         }
     }
@@ -219,6 +220,12 @@ public class RhythmManager : MonoBehaviour
      void CrateEffect(int n) // Perfect = 1, Good = 2, Miss = 3
     {
         GameObject current;
+
+        if(n % 3 > 0)
+        {
+            CrateHitEffect();
+        }
+
         if(textEffectPool.Count > 0)
         {
             if (textEffectPool.Peek().activeSelf)
@@ -236,14 +243,14 @@ public class RhythmManager : MonoBehaviour
         }
 
         current.SetActive(true);
-        NoteHitEffect nowEffect = current.GetComponent<NoteHitEffect>();
+        NoteHitEffect currentEffect = current.GetComponent<NoteHitEffect>();
         switch (n)
         {
             case 1:
                 {
-                    nowEffect.text.color = textEffectColors.perfectColor;
+                    currentEffect.text.color = textEffectColors.perfectColor;
                     GameManager.Instance.Combo += 2;
-                    nowEffect.text.text = $"PERFECT X {GameManager.Instance.Combo}";
+                    currentEffect.text.text = $"PERFECT X {GameManager.Instance.Combo}";
 
                     BossSceneManager.Instance.progressBar.value += 2;
                     BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerAttackHash);
@@ -252,9 +259,9 @@ public class RhythmManager : MonoBehaviour
                 }
             case 2:
                 {
-                    nowEffect.text.color = textEffectColors.goodColor;
+                    currentEffect.text.color = textEffectColors.goodColor;
                     ++GameManager.Instance.Combo;
-                    nowEffect.text.text = $"GOOD X {GameManager.Instance.Combo}";
+                    currentEffect.text.text = $"GOOD X {GameManager.Instance.Combo}";
 
                     BossSceneManager.Instance.progressBar.value++;
                     BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerAttackHash);
@@ -263,9 +270,9 @@ public class RhythmManager : MonoBehaviour
                 }
             case 3:
                 {
-                    nowEffect.text.color = textEffectColors.missColor;
+                    currentEffect.text.color = textEffectColors.missColor;
                     GameManager.Instance.Combo = 0;
-                    nowEffect.text.text = "MISS";
+                    currentEffect.text.text = "MISS";
                     
                     BossSceneManager.Instance.progressBar.value--;
                     BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerHitHash);
@@ -275,16 +282,16 @@ public class RhythmManager : MonoBehaviour
                 }
         }
 
-        nowEffect.transform.position = textEffectPoolObj.position;
+        currentEffect.transform.position = textEffectPoolObj.position;
 
         {
             Sequence seq = DOTween.Sequence();
             seq.OnStart(() => {
-                nowEffect.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
+                currentEffect.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 0);
             });
-            seq.Append(nowEffect.GetComponent<RectTransform>().DOAnchorPosY(50, 1).SetEase(Ease.InBack));
-            seq.Join(nowEffect.text.DOFade(0, 1));
-            seq.OnComplete(() => nowEffect.gameObject.SetActive(false));
+            seq.Append(currentEffect.GetComponent<RectTransform>().DOAnchorPosY(50, 1).SetEase(Ease.InBack));
+            seq.Join(currentEffect.text.DOFade(0, 1));
+            seq.OnComplete(() => currentEffect.gameObject.SetActive(false));
         }
 
         textEffectPool.Enqueue(current);
@@ -297,7 +304,7 @@ public class RhythmManager : MonoBehaviour
         {
             if (textEffectPool.Peek().activeSelf)
             {
-                current = Instantiate(hitEffectPrefab, textEffectPoolObj);
+                current = Instantiate(hitEffectPrefab, hitEffectPoolObj);
             }
             else
             {
@@ -306,17 +313,18 @@ public class RhythmManager : MonoBehaviour
         }
         else
         {
-            current = Instantiate(textEffectPrefab, textEffectPoolObj);
+            current = Instantiate(hitEffectPrefab, hitEffectPoolObj);
         }
 
-        current.gameObject.SetActive(false);
-        StartCoroutine(PlayHitEffect(current.GetComponent<ParticleSystem>()));
+        current.gameObject.SetActive(true);
+        ParticleSystem currentParticle = current.GetComponent<ParticleSystem>();
+        StartCoroutine(PlayHitEffect(currentParticle));
 
     }
 
     private IEnumerator PlayHitEffect(ParticleSystem particle)
     {
-        particle.gameObject.transform.position = noteLine.transform.position;
+        particle.transform.position = new Vector3 (noteLine.transform.position.x, noteLine.transform.position.y, -5);
         particle.Play();
         yield return new WaitForSeconds(particle.main.duration);
         particle.gameObject.SetActive(false);
