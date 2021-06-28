@@ -25,13 +25,9 @@ public class RhythmManager : MonoBehaviour
 
     private Queue<GameObject> noteObjPool = new Queue<GameObject>();
     private Queue<NoteScript> noteCheckPool = new Queue<NoteScript>();
-    private Queue<GameObject> effectPool = new Queue<GameObject>();
-
-    private List<GameObject> notesforPooling = new List<GameObject>();
-    private List<GameObject> longNoteList = new List<GameObject>();
+    private Queue<GameObject> textEffectPool = new Queue<GameObject>();
 
     private int noteMakeIndex = 0;
-    private int longNoteMakeIndex = 0;
 
     private int currentTimingPointIndex = 0;
 
@@ -42,12 +38,12 @@ public class RhythmManager : MonoBehaviour
     private bool isTimingPointPlay = false;
 
     [Header("콤보 이펙트 관련")]
-    [SerializeField] Transform hitEffectTransform;
+    [SerializeField] Transform textEffectPoolObj;
+    [SerializeField] Transform hitEffectPoolObj;
+    [SerializeField] GameObject textEffectPrefab;
     [SerializeField] GameObject hitEffectPrefab;
 
-    private List<GameObject> effects = new List<GameObject>();
-    private HitEffectColors hitEffectColors = new HitEffectColors();
-    private int indexforEffectPooling = 0;
+    private HitEffectColors textEffectColors = new HitEffectColors();
 
     private bool isPlayingNote = false;
 
@@ -91,7 +87,7 @@ public class RhythmManager : MonoBehaviour
 
             BossSceneManager.Instance.progressBar.maxValue = GameManager.Instance.GetCurrentBeatmap().HitObjects.Count;
             float noteTiming = GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex].Time;
-            if (isPlayingNote && noteTimer >= noteTiming - 1000 - currentTimingPoint.MsPerBeat) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 오프셋 빼줄 것임.
+            if (isPlayingNote && noteTimer >= noteTiming - 1000 - currentTimingPoint.MsPerBeat) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 1초 + 오프셋 빼줄 것임.
             {
                 Debug.Log(GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex].GetType().Name);
                 if ((GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함
@@ -219,23 +215,23 @@ public class RhythmManager : MonoBehaviour
     //    return pixelsPerBeat * sliderLengthInBeats;
     //}
 
-    public void CrateEffect(int n) // Perfect = 1, Good = 2, Miss = 3
+     void CrateEffect(int n) // Perfect = 1, Good = 2, Miss = 3
     {
         GameObject current;
-        if(effectPool.Count > 0)
+        if(textEffectPool.Count > 0)
         {
-            if (effectPool.Peek().activeSelf)
+            if (textEffectPool.Peek().activeSelf)
             {
-                current = Instantiate(hitEffectPrefab, hitEffectTransform);
+                current = Instantiate(textEffectPrefab, textEffectPoolObj);
             }
             else
             {
-                current = effectPool.Dequeue();
+                current = textEffectPool.Dequeue();
             }
         }
         else
         {
-            current = Instantiate(hitEffectPrefab, hitEffectTransform);
+            current = Instantiate(textEffectPrefab, textEffectPoolObj);
         }
 
         current.SetActive(true);
@@ -244,7 +240,7 @@ public class RhythmManager : MonoBehaviour
         {
             case 1:
                 {
-                    nowEffect.text.color = hitEffectColors.perfectColor;
+                    nowEffect.text.color = textEffectColors.perfectColor;
                     GameManager.Instance.Combo += 2;
                     nowEffect.text.text = $"PERFECT X {GameManager.Instance.Combo}";
 
@@ -255,7 +251,7 @@ public class RhythmManager : MonoBehaviour
                 }
             case 2:
                 {
-                    nowEffect.text.color = hitEffectColors.goodColor;
+                    nowEffect.text.color = textEffectColors.goodColor;
                     ++GameManager.Instance.Combo;
                     nowEffect.text.text = $"GOOD X {GameManager.Instance.Combo}";
 
@@ -266,7 +262,7 @@ public class RhythmManager : MonoBehaviour
                 }
             case 3:
                 {
-                    nowEffect.text.color = hitEffectColors.missColor;
+                    nowEffect.text.color = textEffectColors.missColor;
                     GameManager.Instance.Combo = 0;
                     nowEffect.text.text = "MISS";
                     
@@ -278,7 +274,7 @@ public class RhythmManager : MonoBehaviour
                 }
         }
 
-        nowEffect.transform.position = hitEffectTransform.position;
+        nowEffect.transform.position = textEffectPoolObj.position;
 
         {
             Sequence seq = DOTween.Sequence();
@@ -290,7 +286,7 @@ public class RhythmManager : MonoBehaviour
             seq.OnComplete(() => nowEffect.gameObject.SetActive(false));
         }
 
-        effectPool.Enqueue(current);
+        textEffectPool.Enqueue(current);
     }
 
     void DeleteNote(NoteScript note)

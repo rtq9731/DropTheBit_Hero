@@ -294,7 +294,7 @@ GameObject:
   m_Component:
   - component: {fileID: 239711127}
   m_Layer: 5
-  m_Name: HitEffectPos
+  m_Name: TextEffectPool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -994,7 +994,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7cf83927b957a6548bfcc27e389f222d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 78d734bcaf4ac2f469578b405910d8c6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1410,11 +1410,12 @@ MonoBehaviour:
     type: 3}
   noteMakeTr: {fileID: 150938334}
   noteLine: {fileID: 888267426}
-  poolingMax: 10
-  longNotePoolingMax: 1
   noteEndXOffset: 0
-  hitEffectTransform: {fileID: 239711127}
-  hitEffectPrefab: {fileID: 2546575337142812177, guid: 6966f5706ecc702408928a44d8db5161,
+  textEffectPoolObj: {fileID: 239711127}
+  hitEffectPoolObj: {fileID: 1978074611}
+  textEffectPrefab: {fileID: 2546575337142812177, guid: 6966f5706ecc702408928a44d8db5161,
+    type: 3}
+  hitEffectPrefab: {fileID: 209252758903941349, guid: 12275ba2a36d0af4d95d45954d7fcbcd,
     type: 3}
 --- !u!222 &993305610
 CanvasRenderer:
@@ -1434,7 +1435,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 46f372995c6d4ef45973c62fa6054055, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 74ca4f3c43173ea4bb484685c8d5e4aa, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.038
   m_Pitch: 1
@@ -1732,68 +1733,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1179591176
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1179591179}
-  - component: {fileID: 1179591178}
-  - component: {fileID: 1179591177}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1179591177
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1179591176}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b23894f9aeab47b499c78b602588fedd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1179591178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1179591176}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2adbf4ed1717f8149a22c769c6558d2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bossSheet: {fileID: 11400000, guid: 6a0540118a3a4644aae2626af4a568ec, type: 2}
-  enemySheet: {fileID: 11400000, guid: 4d2b0077f8393304f9f93e5ef5096086, type: 2}
-  weaponSheet: {fileID: 11400000, guid: 89ac399def890c649b63fcf1e02f0f23, type: 2}
-  workSheet: {fileID: 11400000, guid: 3e925474c95eb7149850862b5da5b697, type: 2}
-  parsingManager: {fileID: 1179591177}
-  isFinishParshing: 0
---- !u!4 &1179591179
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1179591176}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1233635915
 GameObject:
   m_ObjectHideFlags: 0
@@ -3029,6 +2968,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1954454801}
   m_CullTransparentMesh: 1
+--- !u!1 &1978074610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1978074611}
+  m_Layer: 0
+  m_Name: EffectPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1978074611
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1978074610}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1992691591
 GameObject:
   m_ObjectHideFlags: 0
@@ -3198,7 +3167,6 @@ GameObject:
   - component: {fileID: 2035215861}
   - component: {fileID: 2035215860}
   - component: {fileID: 2035215859}
-  - component: {fileID: 2035215862}
   - component: {fileID: 2035215863}
   m_Layer: 0
   m_Name: Main Camera
@@ -3272,26 +3240,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2035215862
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2035215858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e188ee899633d0b49870a5ae38b7359d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ratio: {x: 16, y: 9}
-  forceRatioOnAwake: 1
-  listenForWindowChanges: 1
-  createCameraForLetterBoxRendering: 1
-  findCamerasAutomatically: 1
-  letterBoxCameraColor: {r: 0, g: 0, b: 0, a: 1}
-  cameras: []
-  letterBoxCamera: {fileID: 0}
 --- !u!114 &2035215863
 MonoBehaviour:
   m_ObjectHideFlags: 0
