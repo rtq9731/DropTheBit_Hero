@@ -12,13 +12,13 @@ public class UpgradePanel : MonoBehaviour
     [SerializeField] Button upgradeBtn;
     [SerializeField] GameObject lockPanel;
 
-    WeaponData data;
+    int index = 0;
 
     public void InitUpgradePanel(int index)
     {
-        data = GameManager.Instance.GetWeaponByIndex(index);
-        weaponImage.sprite = Resources.Load<Sprite>(data.Image_Path);
-        weaponName.text = data.Name;
+        this.index = index;
+        weaponImage.sprite = Resources.Load<Sprite>(GameManager.Instance.GetWeaponByIndex(index).Image_Path);
+        weaponName.text = GameManager.Instance.GetWeaponByIndex(index).Name;
     }
 
     /// <summary>
@@ -28,20 +28,20 @@ public class UpgradePanel : MonoBehaviour
     {
         lockPanel.SetActive(!isUnlocked); // isUnlocked와 반대로 움직여야함.
 
-        data.Isunlocked = isUnlocked;
+        GameManager.Instance.GetWeaponByIndex(index).Isunlocked = isUnlocked;
         upgradeBtn.onClick.RemoveAllListeners();
 
-        if(data.Upgradecount >= 5)
+        if(GameManager.Instance.GetWeaponByIndex(index).Upgradecount >= 5)
         {
             upgradeBtn.GetComponentInChildren<Text>().text = "MAX!"; // 최대로 업그레이드 됐다면 다음으로 넘김
             this.upgradeCostText.text = $"업그레이드 비용 : 최대";
             this.currentUpgradeText.text = "현재 업그레이드 단계 : 최대"; // 최대로 업그레이드 됨으로 표시
-            MainSceneManager.Instance.upgradeUI.GetUpgradePanelByIndex(data.Index).Refresh(true);
+            MainSceneManager.Instance.upgradeUI.GetUpgradePanelByIndex(GameManager.Instance.GetWeaponByIndex(index).Index).Refresh(true);
         }
         else
         {
-            this.upgradeCostText.text = $"업그레이드 비용 : {data.Upgradecost * data.Upgradecount}원"; // 첫 업그레이드가 끝난 경우 원가 * 업그레이드 단계로 표시
-            this.currentUpgradeText.text = $"현재 업그레이드 단계 : {data.Upgradecount}"; // 업그레이드 단계 표시
+            this.upgradeCostText.text = $"업그레이드 비용 : {GameManager.Instance.GetWeaponByIndex(index).Upgradecost * GameManager.Instance.GetWeaponByIndex(index).Upgradecount}원"; // 첫 업그레이드가 끝난 경우 원가 * 업그레이드 단계로 표시
+            this.currentUpgradeText.text = $"현재 업그레이드 단계 : {GameManager.Instance.GetWeaponByIndex(index).Upgradecount}"; // 업그레이드 단계 표시
             upgradeBtn.onClick.AddListener(() => Upgrade()); // 최대로 업그레이드 되지 않았다면 업그레이드 가능
         }
     }
@@ -50,18 +50,17 @@ public class UpgradePanel : MonoBehaviour
     {
         upgradeBtn.onClick.RemoveAllListeners();
 
-
-        if (data.Upgradecount >= 5)
+        if (GameManager.Instance.GetWeaponByIndex(index).Upgradecount >= 5)
         {
             upgradeBtn.GetComponentInChildren<Text>().text = "MAX!"; // 최대로 업그레이드 됐다면 다음으로 넘김
             this.upgradeCostText.text = $"업그레이드 비용 : 최대";
             this.currentUpgradeText.text = "현재 업그레이드 단계 : 최대"; // 최대로 업그레이드 됨으로 표시
-            MainSceneManager.Instance.upgradeUI.GetUpgradePanelByIndex(data.Index).Refresh(true);
+            MainSceneManager.Instance.upgradeUI.GetUpgradePanelByIndex(GameManager.Instance.GetWeaponByIndex(index).Index).Refresh(true);
         }
         else
         {
-            this.upgradeCostText.text = $"업그레이드 비용 : {data.Upgradecost * data.Upgradecount}원"; // 첫 업그레이드가 끝난 경우 원가 * 업그레이드 단계로 표시
-            this.currentUpgradeText.text = $"현재 업그레이드 단계 : {data.Upgradecount}"; // 업그레이드 단계 표시
+            this.upgradeCostText.text = $"업그레이드 비용 : {GameManager.Instance.GetWeaponByIndex(index).Upgradecost * GameManager.Instance.GetWeaponByIndex(index).Upgradecount}원"; // 첫 업그레이드가 끝난 경우 원가 * 업그레이드 단계로 표시
+            this.currentUpgradeText.text = $"현재 업그레이드 단계 : {GameManager.Instance.GetWeaponByIndex(index).Upgradecount}"; // 업그레이드 단계 표시
             upgradeBtn.onClick.AddListener(() => Upgrade()); // 최대로 업그레이드 되지 않았다면 업그레이드 가능
         }
     }
@@ -69,23 +68,23 @@ public class UpgradePanel : MonoBehaviour
     private void Upgrade()
     {
         {
-            if (GameManager.Instance.GetMoney() < data.Upgradecost * data.Upgradecount) // 돈이 적으면 취소
+            if (GameManager.Instance.GetMoney() < GameManager.Instance.GetWeaponByIndex(index).Upgradecost * GameManager.Instance.GetWeaponByIndex(index).Upgradecount) // 돈이 적으면 취소
             {
                 return;
             }
 
-            GameManager.Instance.AddMoney(-(data.Upgradecost * data.Upgradecount));
+            GameManager.Instance.AddMoney(-(GameManager.Instance.GetWeaponByIndex(index).Upgradecost * GameManager.Instance.GetWeaponByIndex(index).Upgradecount));
         }
 
-        ++data.Upgradecount;
-        MainSceneManager.Instance.Player.ATK += data.Index + data.Upgradecount * 0.5f;
+        ++GameManager.Instance.GetWeaponByIndex(index).Upgradecount;
+        MainSceneManager.Instance.Player.ATK += GameManager.Instance.GetWeaponByIndex(index).Index + GameManager.Instance.GetWeaponByIndex(index).Upgradecount * 0.5f;
         upgradeBtn.onClick.RemoveAllListeners();
         Refresh();
     }
 
     public bool GetIsUnlocked()
     {
-        if(data.Isunlocked)
+        if(GameManager.Instance.GetWeaponByIndex(index).Isunlocked)
         {
             return true;
         }

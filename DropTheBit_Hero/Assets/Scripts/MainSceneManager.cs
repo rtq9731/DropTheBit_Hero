@@ -55,6 +55,7 @@ public class MainSceneManager : MonoBehaviour
 
     private void Start()
     {
+        FindObjectOfType<Image>().material.mainTextureOffset = new Vector2(0, 0);
         Invoke("CallNextEnemy", 0.01f);
         effectAnimator.speed = 0;
     }

@@ -1,4 +1,5 @@
 using System.IO;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,9 @@ public class GameManager : MonoSingleton<GameManager>
 
     #region Getter와 변수
 
+    DataSaveClass saveData;
+    float atk;
+    string filePath;
     private ushort currentBossIndex = 0;
 
     public OsuParser parsingManager = null;
@@ -78,6 +82,28 @@ public class GameManager : MonoSingleton<GameManager>
     }
     #endregion
 
+    #region 유니티 메세지
+
+    private void Awake()
+    {
+        filePath = Application.persistentDataPath + "/SaveData.txt";
+#if UNITY_EDITOR
+        Debug.Log(filePath);
+#endif
+    }
+
+    void Start()
+    {
+        InputCommonEnemyData();
+        InputWorkData();
+        InputWeponData();
+        LoadData();
+        MainSceneManager.Instance.topUI.UpdateCurrentCoin();
+        MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
+    }
+
+    #endregion
+
     #region 일반 메소드
 
     public WeaponData GetWeaponByIndex(int index)
@@ -93,6 +119,13 @@ public class GameManager : MonoSingleton<GameManager>
     public Beatmap GetCurrentBeatmap()
     {
         return parsingManager.BeatmapData[bossSheet.dataArray[currentBossIndex].Songname];
+    }
+
+    public void AddMoney(long money)
+    {
+        this.money += money;
+        MainSceneManager.Instance.PlayMoneyEffect(money);
+        MainSceneManager.Instance.topUI.UpdateCurrentCoin();
     }
 
     #endregion
@@ -118,6 +151,7 @@ public class GameManager : MonoSingleton<GameManager>
             yield return null;
         }
         Screen.orientation = ScreenOrientation.Landscape;
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
         Screen.SetResolution(2560, 1440, Screen.fullScreen);
         parsingManager.Parsing(bossSheet.dataArray[currentBossIndex].Songname);
         yield return new WaitForSeconds(0.5f);
@@ -175,11 +209,21 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void SaveData()
     {
-        PlayerPrefs.SetString("Money", money.ToString());
-        PlayerPrefs.SetInt("KillCount", killCount);
-        PlayerPrefs.SetFloat("ATK", MainSceneManager.Instance.Player.ATK);
-        PlayerPrefs.SetInt("EnemyIndex", nowEnemyIndex);
-        PlayerPrefs.Save();
+        if(saveData == null)
+        {
+            saveData = new DataSaveClass(weapons, works, money, killCount, nowEnemyIndex, MainSceneManager.Instance.Player.ATK);
+        }
+        else
+        {
+            saveData.InitSaveClass(weapons, works, money, killCount, nowEnemyIndex, MainSceneManager.Instance.Player.ATK);
+        }
+        string jsonString = JsonUtility.ToJson(saveData);
+        FileStream fs = new FileStream(filePath, FileMode.Create);
+        byte[] data = Encoding.UTF8.GetBytes(jsonString);
+        fs.Write(data, 0, data.Length);
+        fs.Close();
+        LoadData();
+
 #if UNITY_EDITOR
         Debug.Log("Saved!");
 #endif
@@ -187,31 +231,26 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void LoadData()
     {
-        long.TryParse(PlayerPrefs.GetString("Money"), out money);
-        killCount = PlayerPrefs.GetInt("KillCount");
-        nowEnemyIndex = PlayerPrefs.GetInt("EnemyIndex");
-        MainSceneManager.Instance.Player.ATK = PlayerPrefs.GetFloat("ATK", 20);
+        if (!File.Exists(filePath))
+        {
+            SaveData();
+        }
+
+        FileStream fs = new FileStream(filePath, FileMode.Open);
+        byte[] data = new byte[fs.Length];
+        fs.Read(data, 0, data.Length);
+        fs.Close();
+        string jsonString = Encoding.UTF8.GetString(data);
+        saveData = JsonUtility.FromJson<DataSaveClass>(jsonString);
+
+        atk = 20;
+        saveData.loadData(out weapons, out works, out money, out killCount, out nowEnemyIndex, out atk);
+        MainSceneManager.Instance.Player.ATK = atk;
+
 #if UNITY_EDITOR
         Debug.Log("Loaded!");
 #endif
     }
 
     #endregion
-
-    void Start()
-    {
-        InputCommonEnemyData();
-        InputWorkData();
-        InputWeponData();
-        LoadData();
-        MainSceneManager.Instance.topUI.UpdateCurrentCoin();
-        MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
-    }
-
-    public void AddMoney(long money)
-    {
-        this.money += money;
-        MainSceneManager.Instance.PlayMoneyEffect(money);
-        MainSceneManager.Instance.topUI.UpdateCurrentCoin();
-    }
 }

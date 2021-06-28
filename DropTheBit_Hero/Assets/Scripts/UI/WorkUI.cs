@@ -72,7 +72,7 @@ public class WorkUI : MonoBehaviour
 
         for (int i = 0; i < GameManager.Instance.Weapons.Count; i++)
         {
-            panels[i].Refresh(GameManager.Instance.GetWeaponByIndex(i).Isunlocked);
+            panels[i].Refresh(GameManager.Instance.GetWorkDataByindex(i).Isunlocked);
         }
     }
 

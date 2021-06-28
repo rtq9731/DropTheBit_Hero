@@ -2982,6 +2982,7 @@ MonoBehaviour:
   InputPanel: {fileID: 865768515}
   leftUI: {fileID: 1400112243}
   player: {fileID: 331970333}
+  image: {fileID: 1152319601}
   enemyPool: []
 --- !u!82 &881692046
 AudioSource:
@@ -3514,6 +3515,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1106659142}
   m_CullTransparentMesh: 1
+--- !u!114 &1152319601 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4112345913489052114, guid: 24a4959d4baa1104b931e42398369448,
+    type: 3}
+  m_PrefabInstance: {fileID: 4112345911895259098}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1163310125
 GameObject:
   m_ObjectHideFlags: 0

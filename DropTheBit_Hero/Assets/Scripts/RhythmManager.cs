@@ -21,17 +21,17 @@ public class RhythmManager : MonoBehaviour
     [SerializeField] GameObject longNotePrefab;
     [SerializeField] Transform noteMakeTr;
     [SerializeField] public GameObject noteLine;
-    [SerializeField] int poolingMax = 5;
-    [SerializeField] int longNotePoolingMax = 5;
     [SerializeField] float noteEndXOffset = 0f;
+
+    private Queue<GameObject> noteObjPool = new Queue<GameObject>();
+    private Queue<NoteScript> noteCheckPool = new Queue<NoteScript>();
+    private Queue<GameObject> effectPool = new Queue<GameObject>();
 
     private List<GameObject> notesforPooling = new List<GameObject>();
     private List<GameObject> longNoteList = new List<GameObject>();
 
-    private int indexforNotePooling = 0;
     private int noteMakeIndex = 0;
     private int longNoteMakeIndex = 0;
-    private int noteCheckIndex = 0;
 
     private int currentTimingPointIndex = 0;
 
@@ -91,10 +91,10 @@ public class RhythmManager : MonoBehaviour
 
             BossSceneManager.Instance.progressBar.maxValue = GameManager.Instance.GetCurrentBeatmap().HitObjects.Count;
             float noteTiming = GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex].Time;
-            if (isPlayingNote && noteTimer >= noteTiming - currentTimingPoint.MsPerBeat) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 오프셋 빼줄 것임.
+            if (isPlayingNote && noteTimer >= noteTiming - 1000 - currentTimingPoint.MsPerBeat) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 오프셋 빼줄 것임.
             {
                 Debug.Log(GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex].GetType().Name);
-                if ((GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함;
+                if ((GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함
                 {
                     ++noteMakeIndex;
                     CrateNote();
@@ -159,73 +159,87 @@ public class RhythmManager : MonoBehaviour
                 break;
         }
 
-        if (notesforPooling.Count < poolingMax)
+        GameObject currentNote;
+        if(noteObjPool.Count > 0)
         {
-            notesforPooling.Add(Instantiate(notePrefab, transform));
+            if (noteObjPool.Peek().activeSelf)
+            {
+                currentNote = Instantiate(notePrefab, transform);
+            }
+            else
+            {
+                currentNote = noteObjPool.Dequeue();
+            }
         }
         else
         {
-            notesforPooling[indexforNotePooling].gameObject.SetActive(true);
+            currentNote = Instantiate(notePrefab, transform);
         }
 
-        Transform noteTr = notesforPooling[indexforNotePooling].transform;
+        Transform noteTr = currentNote.transform;
         noteTr.position = noteMakeTr.position;
         NoteScript nc = noteTr.GetComponent<NoteScript>();
+        noteCheckPool.Enqueue(nc);
         nc.SetRhythmManager(this);
         nc.SetSpeed(noteLineDistance);
-
-        indexforNotePooling++;
-        if (indexforNotePooling == poolingMax)
-        {
-            indexforNotePooling = 0; // indexforNotePooling가 최대치라면 다시 초기화
-        }
+        currentNote.SetActive(true);
+        noteObjPool.Enqueue(currentNote);
 
     }
 
-    void CreateLongNote(HitSlider slider)
-    {
+    //void CreateLongNote(HitSlider slider)
+    //{
 
-        if (notesforPooling.Count < poolingMax)
-        {
-            longNoteList.Add(Instantiate(longNotePrefab, transform));
-        }
-        else
-        {
-            longNoteList[longNoteMakeIndex].gameObject.SetActive(true);
-        }
+    //    if (notesforPooling.Count < poolingMax)
+    //    {
+    //        longNoteList.Add(Instantiate(longNotePrefab, transform));
+    //    }
+    //    else
+    //    {
+    //        longNoteList[longNoteMakeIndex].gameObject.SetActive(true);
+    //    }
 
-        longNoteList[longNoteMakeIndex].gameObject.transform.position = noteMakeTr.position;
-        LongNoteScript longNote = longNoteList[longNoteMakeIndex].GetComponent<LongNoteScript>();
-        float longNoteLength = GetSliderLengthInMs(slider);
-        longNote.InitLongNote(noteLine.transform.position, noteLineDistance, longNoteLength, noteMakeTr.position); // 노트 초기화
+    //    longNoteList[longNoteMakeIndex].gameObject.transform.position = noteMakeTr.position;
+    //    LongNoteScript longNote = longNoteList[longNoteMakeIndex].GetComponent<LongNoteScript>();
+    //    float longNoteLength = GetSliderLengthInMs(slider);
+    //    longNote.InitLongNote(noteLine.transform.position, noteLineDistance, longNoteLength, noteMakeTr.position); // 노트 초기화
 
-        longNoteMakeIndex++;
-        if (longNoteMakeIndex == longNotePoolingMax)
-        {
-            longNoteMakeIndex = 0; // longNoteMakeIndex가 최대치라면 다시 초기화
-        }
+    //    longNoteMakeIndex++;
+    //    if (longNoteMakeIndex == longNotePoolingMax)
+    //    {
+    //        longNoteMakeIndex = 0; // longNoteMakeIndex가 최대치라면 다시 초기화
+    //    }
 
-    }
+    //}
 
-    float GetSliderLengthInMs(HitSlider slider)
-    {
-        var pixelsPerBeat = GameManager.Instance.GetCurrentBeatmap().SliderMultiplier * currentTimingPoint.MsPerBeat;
-        var sliderLengthInBeats = (slider.PixelLength * slider.Repeat) / pixelsPerBeat;
-        return pixelsPerBeat * sliderLengthInBeats;
-    }
+    //float GetSliderLengthInMs(HitSlider slider)
+    //{
+    //    var pixelsPerBeat = GameManager.Instance.GetCurrentBeatmap().SliderMultiplier * currentTimingPoint.MsPerBeat;
+    //    var sliderLengthInBeats = (slider.PixelLength * slider.Repeat) / pixelsPerBeat;
+    //    return pixelsPerBeat * sliderLengthInBeats;
+    //}
 
     public void CrateEffect(int n) // Perfect = 1, Good = 2, Miss = 3
     {
-        if (effects.Count < poolingMax)
+        GameObject current;
+        if(effectPool.Count > 0)
         {
-            effects.Add(Instantiate(hitEffectPrefab, hitEffectTransform));
+            if (effectPool.Peek().activeSelf)
+            {
+                current = Instantiate(hitEffectPrefab, hitEffectTransform);
+            }
+            else
+            {
+                current = effectPool.Dequeue();
+            }
         }
         else
         {
-            effects[indexforEffectPooling].gameObject.SetActive(true);
+            current = Instantiate(hitEffectPrefab, hitEffectTransform);
         }
 
-        NoteHitEffect nowEffect = effects[indexforEffectPooling].GetComponent<NoteHitEffect>();
+        current.SetActive(true);
+        NoteHitEffect nowEffect = current.GetComponent<NoteHitEffect>();
         switch (n)
         {
             case 1:
@@ -276,47 +290,46 @@ public class RhythmManager : MonoBehaviour
             seq.OnComplete(() => nowEffect.gameObject.SetActive(false));
         }
 
-        indexforEffectPooling++;
-        if (indexforEffectPooling == poolingMax)
-        {
-            indexforEffectPooling = 0; // indexforNotePooling가 최대치라면 다시 초기화
-        }
-
+        effectPool.Enqueue(current);
     }
 
-    public void DeleteNote(GameObject note)
+    void DeleteNote(NoteScript note)
     {
-
-        noteCheckIndex++; // 다음 노트를 검사하게 Index++;
-
-        if (noteCheckIndex == poolingMax)
-            noteCheckIndex = 0;
-
-        note.SetActive(false);
-        DOTween.Complete(note);
+        note.gameObject.SetActive(false);
+        DOTween.Complete(note.gameObject);
     }
 
-    void CheckNote()
+    public void CheckNote()
     {
-        for (int i = 0; i < notesforPooling.Count; i++)
+        NoteScript currentNote = noteCheckPool.Peek();
+        if (currentNote.isHit(noteLine.transform.position) % 4 > 0)
         {
-            var item = notesforPooling[i];
-            if (item.activeSelf)
-            {
-                if ((item.GetComponent<NoteScript>().isHit(noteLine.transform.position) % 4) > 0) // None이 아닌 경우
-                {
-                    //Camera.main.transform.DOShakePosition(shakeTime, shakePower / (hit / 4));
-                    CrateEffect(item.GetComponent<NoteScript>().isHit(noteLine.transform.position) % 4);
-                    DeleteNote(item.gameObject);
-                }
-                else
-                {
-                    break;
-                }
-            }
+            CrateEffect(currentNote.isHit(noteLine.transform.position) % 4);
+            DeleteNote(noteCheckPool.Dequeue());
         }
+        else
+        {
+            return;
+        }
+        //for (int i = 0; i < notesforPooling.Count; i++)
+        //{
+        //    var item = notesforPooling[i];
+        //    if (item.activeSelf)
+        //    {
+        //        if ((item.GetComponent<NoteScript>().isHit(noteLine.transform.position) % 4) > 0) // None이 아닌 경우
+        //        {
+        //            //Camera.main.transform.DOShakePosition(shakeTime, shakePower / (hit / 4));
+        //            CrateEffect(item.GetComponent<NoteScript>().isHit(noteLine.transform.position) % 4);
+        //            DeleteNote(item.gameObject);
+        //        }
+        //        else
+        //        {
+        //            break;
+        //        }
+        //    }
+        //}
 
-        
+
     }
 
 }
