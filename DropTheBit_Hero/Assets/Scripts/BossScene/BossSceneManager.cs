@@ -17,7 +17,7 @@ public class BossSceneManager : MonoBehaviour
     [SerializeField] GameObject closeUpCam;
     [SerializeField] Slider bossHPBar;
     [SerializeField] Text clickerText;
-    [SerializeField] AudioSource audio;
+    [SerializeField] AudioSource audioSource;
     [SerializeField] Transform soundPool;
     [SerializeField] Transform attackPool;
     [SerializeField] GameObject soundObj;

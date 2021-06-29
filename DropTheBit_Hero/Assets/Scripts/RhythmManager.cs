@@ -21,7 +21,6 @@ public class RhythmManager : MonoBehaviour
     [SerializeField] GameObject longNotePrefab;
     [SerializeField] Transform noteMakeTr;
     [SerializeField] public GameObject noteLine;
-    [SerializeField] float noteEndXOffset = 0f;
 
     private Queue<GameObject> noteObjPool = new Queue<GameObject>();
     private Queue<NoteScript> noteCheckPool = new Queue<NoteScript>();
@@ -65,14 +64,23 @@ public class RhythmManager : MonoBehaviour
 
         if(isTimingPointPlay)
         {
-            if (GameManager.Instance.GetCurrentBeatmap().TimingPoints[currentTimingPointIndex].Offset < noteTimer)
+            if(GameManager.Instance.GetCurrentBeatmap().TimingPoints.Count > 0)
             {
-                currentTimingPoint = GameManager.Instance.GetCurrentBeatmap().TimingPoints[currentTimingPointIndex];
-                ++currentTimingPointIndex;
-                if (currentTimingPointIndex == GameManager.Instance.GetCurrentBeatmap().TimingPoints.Count)
+                if (GameManager.Instance.GetCurrentBeatmap().TimingPoints[currentTimingPointIndex].Offset < noteTimer)
                 {
-                    isTimingPointPlay = false;
+                    currentTimingPoint = GameManager.Instance.GetCurrentBeatmap().TimingPoints[currentTimingPointIndex];
+                    ++currentTimingPointIndex;
+                    if (currentTimingPointIndex == GameManager.Instance.GetCurrentBeatmap().TimingPoints.Count)
+                    {
+                        isTimingPointPlay = false;
+                    }
                 }
+            }
+            else
+            {
+                currentTimingPoint = new TimingPoint();
+                currentTimingPoint.MsPerBeat = 0f;
+                isTimingPointPlay = false;
             }
         }
 
@@ -81,29 +89,29 @@ public class RhythmManager : MonoBehaviour
         {
             noteTimer += Time.deltaTime * 1000;
 
-            if(GameManager.Instance.GetCurrentBeatmap().HitObjects.Count <= noteMakeIndex)
+            if(GameManager.Instance.GetVirtualBeatmaps().timings.Count <= noteMakeIndex)
             {
                 StartCoroutine(FinishRhythm());
                 return;
             }
 
-            BossSceneManager.Instance.progressBar.maxValue = GameManager.Instance.GetCurrentBeatmap().HitObjects.Count;
-            float noteTiming = GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex].Time;
+            BossSceneManager.Instance.progressBar.maxValue = GameManager.Instance.GetVirtualBeatmaps().timings.Count;
+            float noteTiming = GameManager.Instance.GetVirtualBeatmaps().timings[noteMakeIndex];
             if (isPlayingNote && noteTimer >= noteTiming - 1000 - currentTimingPoint.MsPerBeat) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 1초 + 오프셋 빼줄 것임.
             {
-                Debug.Log(GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex].GetType().Name);
-                if ((GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함
-                {
+                //Debug.Log(GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex].GetType().Name);
+                //if ((GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex].GetType().Name == "HitSlider"))// 롱노트를 만들도록 해야함
+                //{
+                //    ++noteMakeIndex;
+                //    CrateNote();
+                //    //noteMakeIndex++;
+                //    //CreateLongNote((HitSlider)GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex]);
+                //}
+                //else // 일반 노트
+                //{
                     ++noteMakeIndex;
                     CrateNote();
-                    //noteMakeIndex++;
-                    //CreateLongNote((HitSlider)GameManager.Instance.GetCurrentBeatmap().HitObjects[noteMakeIndex]);
-                }
-                else // 일반 노트
-                {
-                    ++noteMakeIndex;
-                    CrateNote();
-                }
+                //}
             }
 
         }

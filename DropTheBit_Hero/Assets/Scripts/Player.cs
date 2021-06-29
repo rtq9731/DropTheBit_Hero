@@ -15,8 +15,6 @@ public class Player : MonoBehaviour
 
     private float atkTimer;
 
-    private bool isStateChange = true;
-
     private void Awake()
     {
         animator = GetComponent<Animator>();

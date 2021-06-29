@@ -66,6 +66,7 @@ public class Beatmap
 
     #region hitObjects 
     public List<HitObject> HitObjects { get; set; }
+
     #endregion
     #endregion
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+[System.Serializable]
 public class HitCircle : HitObject
 {
     #region construcors

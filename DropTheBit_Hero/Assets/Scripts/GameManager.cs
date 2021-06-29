@@ -54,6 +54,12 @@ public class GameManager : MonoSingleton<GameManager>
     {
         return money;
     }
+
+    public void UPBossCount()
+    {
+        currentBossIndex++;
+    }
+
     public int KillCount
     {
         get { return killCount; }
@@ -63,7 +69,6 @@ public class GameManager : MonoSingleton<GameManager>
             MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
             SaveData();
 
-            Debug.Log(beatMap.beatmaps[currentBossIndex].isCleared);
             if ((currentBossIndex + 1) * 10 - killCount <= 0)
             {
                 MainSceneManager.Instance.CallBoss();
@@ -84,7 +89,6 @@ public class GameManager : MonoSingleton<GameManager>
     {
         filePath = Application.persistentDataPath + "/SaveData.txt";
 #if UNITY_EDITOR
-        Debug.Log(Application.dataPath);
         Debug.Log(filePath);
 #endif
     }
@@ -119,6 +123,11 @@ public class GameManager : MonoSingleton<GameManager>
         return beatMap.beatmaps[currentBossIndex];
     }
 
+    public BeatMapScriptableObj.VirtualBeatmaps GetVirtualBeatmaps()
+    {
+        return beatMap.virtualBeatmaps[currentBossIndex];
+    }
+
     public void AddMoney(long money)
     {
         this.money += money;
@@ -146,6 +155,7 @@ public class GameManager : MonoSingleton<GameManager>
         {
             parsingManager.Parsing(songs[i].name);
         }
+        beatMap.SetVirtualList();
     }
 
     private IEnumerator ChangeSceneToBoss()

@@ -17,7 +17,6 @@ public class Enemy : MonoBehaviour
 
     private long cost = 0;
     public float hp = 0;
-    float timer = 0f;
 
     private bool isDead = false;
 
@@ -46,7 +45,6 @@ public class Enemy : MonoBehaviour
         animator = GetComponent<Animator>();
         this.cost = cost;
         this.hp = hp;
-        timer = 0f;
         isDead = false;
     }
 
