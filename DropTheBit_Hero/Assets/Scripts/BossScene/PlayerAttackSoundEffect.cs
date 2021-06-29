@@ -10,7 +10,7 @@ public class PlayerAttackSoundEffect : MonoBehaviour
     {
         source = GetComponent<AudioSource>();
         source.Play();
-        Invoke("ActFalse", source.clip.length);
+        BossSceneManager.Instance.Invoke("ActFalse", source.clip.length);
     }
 
     void ActFalse()

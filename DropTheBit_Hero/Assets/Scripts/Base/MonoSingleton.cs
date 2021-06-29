@@ -40,15 +40,8 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+        Debug.Log("GameManager Off!");
         isShutDown = true;
-    }
-    private void OnDestroy()
-    {
-        isShutDown = true;
-    }
-    private void OnEnable()
-    {
-        isShutDown = false;
     }
 
 }

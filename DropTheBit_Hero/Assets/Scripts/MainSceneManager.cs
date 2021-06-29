@@ -65,15 +65,22 @@ public class MainSceneManager : MonoBehaviour
         atkText.text = $"°ø°Ý·Â\n{player.ATK}";
 
 #if UNITY_EDITOR
+
         if(Input.GetKeyDown(KeyCode.Delete))
         {
             GameManager.Instance.ClearData();
         }
 
-        if(Input.GetKeyDown(KeyCode.Insert))
+        if (Input.GetKeyDown(KeyCode.Plus))
         {
             GameManager.Instance.AddMoney(100000);
         }
+
+        if (Input.GetKeyDown(KeyCode.Insert))
+        {
+            GameManager.Instance.ParsingSongs();
+        }
+
 #endif
 
         if(Input.GetKeyDown(KeyCode.Escape))

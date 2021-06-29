@@ -7,10 +7,12 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    [SerializeField] Boss bossSheet;
     [SerializeField] Monster enemySheet;
     [SerializeField] Weapon weaponSheet;
     [SerializeField] Work workSheet;
+    [SerializeField] AudioClip[] songs;
+
+    public BeatMapScriptableObj beatMap;
 
     #region Getter¿Í º¯¼ö
 
@@ -27,8 +29,6 @@ public class GameManager : MonoSingleton<GameManager>
 
     private long money = 0;
     private int killCount = 0;
-
-    public int isFinishParshing;
 
     private int combo = 0;
     int nowEnemyIndex = 0;
@@ -48,7 +48,7 @@ public class GameManager : MonoSingleton<GameManager>
     public int Combo { get { return combo; } set { combo = value; } }
     public AudioClip GetMusic()
     {
-        return Resources.Load($"SongMP3/{bossSheet.dataArray[currentBossIndex].Songname}") as AudioClip;
+        return songs[currentBossIndex];
     }
     public decimal GetMoney()
     {
@@ -59,30 +59,21 @@ public class GameManager : MonoSingleton<GameManager>
         get { return killCount; }
         set
         {
-            Debug.Log(bossSheet.dataArray[currentBossIndex].Iscleared);
             killCount = value;
             MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
             SaveData();
 
-            Debug.Log(bossSheet.dataArray[currentBossIndex].Iscleared);
-            if ((currentBossIndex + 1)*10 - killCount <= 0)
+            Debug.Log(beatMap.beatmaps[currentBossIndex].isCleared);
+            if ((currentBossIndex + 1) * 10 - killCount <= 0)
             {
                 MainSceneManager.Instance.CallBoss();
             }
 
-            Debug.Log(killCount - 10 * (currentBossIndex + 1));
-            if (killCount - 10 * (currentBossIndex + 1) >= 0 && bossSheet.dataArray[currentBossIndex].Iscleared)
+            if (killCount - 10 * (currentBossIndex + 1) >= 0 && beatMap.beatmaps[currentBossIndex].isCleared)
             {
-                if (bossSheet.dataArray[currentBossIndex].Iscleared)
-                currentBossIndex++;
-                Debug.LogWarning(currentBossIndex);
+                if (beatMap.beatmaps[currentBossIndex].isCleared)
+                    currentBossIndex++;
             }
-
-            if (killCount - 10 * (nowEnemyIndex + 1) >= 0 && killCount < enemyNames.Count * 10)
-            {
-                nowEnemyIndex++;
-            }
-
         }
     }
     #endregion
@@ -93,12 +84,14 @@ public class GameManager : MonoSingleton<GameManager>
     {
         filePath = Application.persistentDataPath + "/SaveData.txt";
 #if UNITY_EDITOR
+        Debug.Log(Application.dataPath);
         Debug.Log(filePath);
 #endif
     }
 
     void Start()
     {
+        beatMap = Resources.Load("Notes/BeatMap_Data") as BeatMapScriptableObj;
         InputCommonEnemyData();
         InputWorkData();
         InputWeponData();
@@ -123,7 +116,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public Beatmap GetCurrentBeatmap()
     {
-        return parsingManager.BeatmapData[bossSheet.dataArray[currentBossIndex].Songname];
+        return beatMap.beatmaps[currentBossIndex];
     }
 
     public void AddMoney(long money)
@@ -147,9 +140,20 @@ public class GameManager : MonoSingleton<GameManager>
         StartCoroutine(ChangeSceneToMain(isCleared));
     }
 
+    public void ParsingSongs()
+    {
+        for (int i = 0; i < songs.Length; i++)
+        {
+            parsingManager.Parsing(songs[i].name);
+        }
+    }
+
     private IEnumerator ChangeSceneToBoss()
     {
         DG.Tweening.DOTween.Clear();
+        Screen.orientation = ScreenOrientation.Landscape;
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+        Screen.SetResolution(2560, 1440, Screen.fullScreen);
         SceneManager.LoadScene("BossScene");
         while (SceneManager.GetActiveScene().name != "BossScene")
         {
@@ -158,7 +162,6 @@ public class GameManager : MonoSingleton<GameManager>
         Screen.orientation = ScreenOrientation.Landscape;
         Screen.orientation = ScreenOrientation.LandscapeLeft;
         Screen.SetResolution(2560, 1440, Screen.fullScreen);
-        parsingManager.Parsing(bossSheet.dataArray[currentBossIndex].Songname);
         yield return new WaitForSeconds(0.5f);
         DG.Tweening.DOTween.Clear();
     }
@@ -170,8 +173,7 @@ public class GameManager : MonoSingleton<GameManager>
         {
             yield return null;
         }
-        bossSheet.dataArray[currentBossIndex].Iscleared = isCleared;
-        Debug.Log(currentBossIndex);
+        //bossSheet.dataArray[currentBossIndex].Iscleared = isCleared;
         Screen.orientation = ScreenOrientation.Portrait;
         Screen.SetResolution(1440, 2560, Screen.fullScreen);
     }
@@ -230,10 +232,6 @@ public class GameManager : MonoSingleton<GameManager>
         fs.Write(data, 0, data.Length);
         fs.Close();
         LoadData();
-
-#if UNITY_EDITOR
-        Debug.Log("Saved!");
-#endif
     }
 
     public void LoadData()
@@ -253,10 +251,6 @@ public class GameManager : MonoSingleton<GameManager>
         atk = 20;
         saveData.loadData(out weapons, out works, out money, out killCount, out nowEnemyIndex, out atk, out currentBossIndex);
         MainSceneManager.Instance.Player.ATK = atk;
-
-#if UNITY_EDITOR
-        Debug.Log("Loaded!");
-#endif
     }
 
     #endregion

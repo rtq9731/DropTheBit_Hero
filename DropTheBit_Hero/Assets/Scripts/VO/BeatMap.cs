@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Beatmap
 {
+    public bool isCleared = false;
 
     #region fields
     #region extra

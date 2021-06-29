@@ -1602,12 +1602,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2adbf4ed1717f8149a22c769c6558d2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bossSheet: {fileID: 11400000, guid: 6a0540118a3a4644aae2626af4a568ec, type: 2}
   enemySheet: {fileID: 11400000, guid: 4d2b0077f8393304f9f93e5ef5096086, type: 2}
   weaponSheet: {fileID: 11400000, guid: 89ac399def890c649b63fcf1e02f0f23, type: 2}
   workSheet: {fileID: 11400000, guid: 3e925474c95eb7149850862b5da5b697, type: 2}
+  songs:
+  - {fileID: 8300000, guid: 1edd589ba36b07e4980d322952d4e240, type: 3}
+  - {fileID: 8300000, guid: 5ee49d7b62d003e48aee9b307f62b824, type: 3}
+  - {fileID: 8300000, guid: e9f3c67d5ca735b46b140773113ef4c1, type: 3}
+  beatMap: {fileID: 0}
   parsingManager: {fileID: 429422855}
-  isFinishParshing: 0
 --- !u!114 &429422855
 MonoBehaviour:
   m_ObjectHideFlags: 0

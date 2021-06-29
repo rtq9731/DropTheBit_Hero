@@ -51,19 +51,17 @@ public class RhythmManager : MonoBehaviour
 
     private bool isPlayingNote = false;
 
+    private void Start()
+    {
+        StartStopSong();
+    }
+
     private void Update()
     {
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Delete))
             StartCoroutine(FinishRhythm());
 #endif
-
-        if(GameManager.Instance.isFinishParshing > 0)
-        {
-            GameManager.Instance.isFinishParshing--;
-            if(isPlayingNote == false )
-                StartStopSong();
-        }
 
         if(isTimingPointPlay)
         {
