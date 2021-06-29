@@ -6,9 +6,12 @@ public class PlayerAttackEffectObj : MonoBehaviour
 {
     [SerializeField] Animator animator;
 
+    public Transform weaponAttackPos = null;
+
     void Update()
     {
-        if(animator.GetCurrentAnimatorStateInfo(0).IsName("Exit"))
+        this.transform.position = weaponAttackPos.position;
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Effect_noSprite"))
         {
             gameObject.SetActive(false);
         }

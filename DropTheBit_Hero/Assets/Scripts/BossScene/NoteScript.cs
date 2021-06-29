@@ -35,21 +35,21 @@ public class NoteScript : MonoBehaviour
 
     public int isHit(Vector2 linePos) // Perfect = 1, Good = 2, Miss = 3, None = 4
     {
-        if (Vector2.Distance(linePos, this.transform.position) <= whereIsPerfect)
+        if ((linePos - (Vector2)gameObject.transform.position).magnitude <= whereIsPerfect)
         {
             hitSound.Play();
             return 1;
         }
-        else if (Vector2.Distance(linePos, this.transform.position) <= whereIsPerfect + whereIsGood)
+        else if ((linePos - (Vector2)gameObject.transform.position).magnitude <= whereIsPerfect + whereIsGood)
         {
             hitSound.Play();
             return 2;
         }
-        else if (Vector2.Distance(linePos, this.transform.position) <= whereIsPerfect + whereIsGood + whereIsMiss)
+        else if ((linePos - (Vector2)gameObject.transform.position).magnitude <= whereIsPerfect + whereIsGood + whereIsMiss)
         {
             return 3;
         }
-        else if (Vector2.Distance(linePos, this.transform.position) >= whereIsPerfect + whereIsGood + whereIsMiss && transform.position.x >= linePos.x)
+        else if ((linePos - (Vector2)gameObject.transform.position).magnitude >= whereIsPerfect + whereIsGood + whereIsMiss && transform.position.x >= linePos.x)
         {
             return 4;
         }

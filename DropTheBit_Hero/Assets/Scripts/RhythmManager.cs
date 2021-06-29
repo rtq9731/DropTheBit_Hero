@@ -43,6 +43,9 @@ public class RhythmManager : MonoBehaviour
     [SerializeField] Transform hitEffectPoolObj;
     [SerializeField] GameObject textEffectPrefab;
     [SerializeField] GameObject hitEffectPrefab;
+    [SerializeField] Transform cameraPos;
+    [SerializeField] float cameraShakePower = 5f;
+    [SerializeField] float cameraShakeTime = 0.1f;
 
     private HitEffectColors textEffectColors = new HitEffectColors();
 
@@ -109,8 +112,11 @@ public class RhythmManager : MonoBehaviour
 
         if(Input.GetMouseButtonDown(0))
         {
-            if(noteCheckPool.Count > 0)
-            CheckNote();
+            MouseClickEffect();
+            if (noteCheckPool.Count > 0)
+            {
+                CheckNote();
+            }
         }
     }
 
@@ -324,7 +330,8 @@ public class RhythmManager : MonoBehaviour
 
     private IEnumerator PlayHitEffect(ParticleSystem particle)
     {
-        particle.transform.position = new Vector3 (noteLine.transform.position.x, noteLine.transform.position.y, -5);
+        Vector3 currentPos = Camera.main.ScreenToWorldPoint(noteLine.transform.position);
+        particle.transform.position = new Vector3(currentPos.x, currentPos.y, -5);
         particle.Play();
         yield return new WaitForSeconds(particle.main.duration);
         particle.gameObject.SetActive(false);
@@ -338,11 +345,17 @@ public class RhythmManager : MonoBehaviour
         DOTween.Complete(note.gameObject);
     }
 
+    void MouseClickEffect()
+    {
+        noteLine.transform.DOScale(1.2f, 0.1f).OnComplete(() => noteLine.transform.DOScale(1f, 0.1f));
+    }
+
     public void CheckNote()
     {
         NoteScript currentNote = noteCheckPool.Peek();
         if (currentNote.isHit(noteLine.transform.position) % 4 > 0)
         {
+            cameraPos.DOShakePosition(cameraShakeTime, cameraShakePower);
             CrateEffect(currentNote.isHit(noteLine.transform.position) % 4);
             DeleteNote(noteCheckPool.Dequeue());
         }

@@ -59,19 +59,23 @@ public class GameManager : MonoSingleton<GameManager>
         get { return killCount; }
         set
         {
+            Debug.Log(bossSheet.dataArray[currentBossIndex].Iscleared);
             killCount = value;
             MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
             SaveData();
 
+            Debug.Log(bossSheet.dataArray[currentBossIndex].Iscleared);
             if ((currentBossIndex + 1)*10 - killCount <= 0)
             {
                 MainSceneManager.Instance.CallBoss();
             }
 
-            if (killCount - 10 * (currentBossIndex + 1) <= 0 && bossSheet.dataArray[currentBossIndex].Iscleared)
+            Debug.Log(killCount - 10 * (currentBossIndex + 1));
+            if (killCount - 10 * (currentBossIndex + 1) >= 0 && bossSheet.dataArray[currentBossIndex].Iscleared)
             {
                 if (bossSheet.dataArray[currentBossIndex].Iscleared)
                 currentBossIndex++;
+                Debug.LogWarning(currentBossIndex);
             }
 
             if (killCount - 10 * (nowEnemyIndex + 1) >= 0 && killCount < enemyNames.Count * 10)
@@ -167,6 +171,7 @@ public class GameManager : MonoSingleton<GameManager>
             yield return null;
         }
         bossSheet.dataArray[currentBossIndex].Iscleared = isCleared;
+        Debug.Log(currentBossIndex);
         Screen.orientation = ScreenOrientation.Portrait;
         Screen.SetResolution(1440, 2560, Screen.fullScreen);
     }
@@ -213,7 +218,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if(saveData == null)
         {
-            saveData = new DataSaveClass(weapons, works, money, killCount, nowEnemyIndex, MainSceneManager.Instance.Player.ATK);
+            saveData = new DataSaveClass(weapons, works, money, killCount, nowEnemyIndex, MainSceneManager.Instance.Player.ATK, currentBossIndex);
         }
         else
         {
@@ -246,7 +251,7 @@ public class GameManager : MonoSingleton<GameManager>
         saveData = JsonUtility.FromJson<DataSaveClass>(jsonString);
 
         atk = 20;
-        saveData.loadData(out weapons, out works, out money, out killCount, out nowEnemyIndex, out atk);
+        saveData.loadData(out weapons, out works, out money, out killCount, out nowEnemyIndex, out atk, out currentBossIndex);
         MainSceneManager.Instance.Player.ATK = atk;
 
 #if UNITY_EDITOR

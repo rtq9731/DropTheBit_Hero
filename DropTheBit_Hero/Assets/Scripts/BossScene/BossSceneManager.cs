@@ -22,9 +22,13 @@ public class BossSceneManager : MonoBehaviour
     [SerializeField] Transform attackPool;
     [SerializeField] GameObject soundObj;
     [SerializeField] GameObject attackAnimObj;
+    [SerializeField] Transform playerAttackPos;
+    [SerializeField] Transform cameraPos;
+    [SerializeField] float cameraShakePower = 5f;
+    [SerializeField] float cameraShakeTime = 0.1f;
 
-    Queue<GameObject> attackSoundEffectPool;
-    Queue<GameObject> attackEffectPool;
+    Queue<GameObject> attackSoundEffectPool = new Queue<GameObject>();
+    Queue<GameObject> attackEffectPool = new Queue<GameObject>();
 
     [Header("전투 결과 관련")]
     [SerializeField] GameObject bgPanel;
@@ -37,6 +41,12 @@ public class BossSceneManager : MonoBehaviour
     private Vector2 playerStartPos = Vector2.zero;
     private Vector2 bossStratPos = Vector2.zero;
 
+    private Vector2 currentPlayerPos = Vector2.zero;
+    private Vector2 currentBossPos = Vector2.zero;
+
+    private Vector2 cameraStartPos = Vector2.zero;
+
+    float moveTime = 0f; // Cos && Sin의 값을 넣어주기 위한 변수
     float clickerTime = 30f;
 
     public int bossAttack1Hash = 0;
@@ -47,9 +57,8 @@ public class BossSceneManager : MonoBehaviour
     public int playerAttackHash = 0;
     public int playerHitHash = 0;
 
-    int attackEffectHash = 0;
-
     private bool isActiveCliker = false;
+    private bool isTime = false;
 
     private void Awake()
     {
@@ -59,7 +68,6 @@ public class BossSceneManager : MonoBehaviour
         bossDeadHash = Animator.StringToHash("Dead");
         playerAttackHash = Animator.StringToHash("Attack");
         playerHitHash = Animator.StringToHash("Hit");
-        attackEffectHash = Animator.StringToHash("DOEffect");
         //Debug.LogWarning(bossAnimator.GetCurrentAnimatorStateInfo(0).IsName("Boss_Idle")); -> 지금 상태 비교하는 연산
         Instance = this;
     }
@@ -88,7 +96,7 @@ public class BossSceneManager : MonoBehaviour
     void StartClicker()
     {
         clickerText.gameObject.SetActive(true);
-        clickerText.DOText($"빨리 클릭해 보스를 죽이세욧!\n남은시간: {Mathf.Round(clickerTime * 1000) * 0.001f}s", 1f).OnComplete(() => {
+        clickerText.DOText($"빨리 클릭해 보스를 죽이세욧!\n남은시간: {clickerTime.ToString("N3")}s", 1f).OnComplete(() => {
             isActiveCliker = true;
             bossHPBar.maxValue = progressBar.maxValue * 2;
             bossHPBar.value = bossHPBar.maxValue;
@@ -96,6 +104,7 @@ public class BossSceneManager : MonoBehaviour
             playerAnimator.transform.position = new Vector2(-4, -3);
             bossAnimator.transform.position = new Vector2(2, -4);
             playerStartPos = playerAnimator.gameObject.transform.position;
+            cameraStartPos = cameraPos.position;
             bossStratPos = bossAnimator.gameObject.transform.position;
             closeUpCam.SetActive(true);
         }); // Cliker ON!
@@ -105,7 +114,18 @@ public class BossSceneManager : MonoBehaviour
     {
         if (isActiveCliker)
         {
-            clickerText.text = $"빨리 클릭해 보스를 죽이세욧!\n남은시간: {Mathf.Round(clickerTime * 1000) * 0.001f}s";
+            if(isTime)
+            {
+                playerAnimator.transform.position = new Vector2(playerStartPos.x, playerStartPos.y + Mathf.Sin(moveTime * 10));
+                bossAnimator.transform.position = new Vector2(bossStratPos.x, bossStratPos.y + Mathf.Cos(moveTime * 10));
+
+                currentPlayerPos = playerAnimator.transform.position;
+                currentBossPos = bossAnimator.transform.position;
+
+                moveTime += Time.deltaTime;
+            }
+
+            clickerText.text = $"빨리 클릭해 보스를 죽이세욧!\n남은시간: {clickerTime.ToString("N3")}s";
 
             if (clickerTime <= 0)
                 FinishClicker(false);
@@ -127,7 +147,7 @@ public class BossSceneManager : MonoBehaviour
 
     void MakePlayerAttackEffect()
     {
-        GameObject current = null;
+        GameObject current;
         if(attackEffectPool.Count > 0)
         {
             if(attackEffectPool.Peek().activeSelf)
@@ -144,20 +164,67 @@ public class BossSceneManager : MonoBehaviour
             current = Instantiate(attackAnimObj, attackPool);
         }
 
-        current.SetActive(true);
-        current.GetComponent<Animator>().SetTrigger(attackEffectHash);
-        attackEffectPool.Enqueue(current);
+        if(current.GetComponent<PlayerAttackEffectObj>().weaponAttackPos == null)
+        {
+            current.GetComponent<PlayerAttackEffectObj>().weaponAttackPos = playerAttackPos;
+        }
 
+        current.SetActive(true);
+        current.transform.position = playerAttackPos.position;
+        attackEffectPool.Enqueue(current);
+    }
+
+    void MakePlayerSoundEffect()
+    {
+        GameObject current;
+        if (attackSoundEffectPool.Count > 0)
+        {
+            if (attackEffectPool.Peek().activeSelf)
+            {
+                current = Instantiate(soundObj, attackPool);
+            }
+            else
+            {
+                current = attackSoundEffectPool.Dequeue();
+            }
+        }
+        else
+        {
+            current = Instantiate(soundObj, attackPool);
+        }
+
+        current.SetActive(false);
+
+        current.GetComponent<AudioSource>().clip = audioClips[Random.Range(0, audioClips.Length)];
+        current.SetActive(true);
+        current.transform.position = playerAttackPos.position;
+        attackSoundEffectPool.Enqueue(current);
     }
 
     void FightSequnce()
     {
         playerAnimator.gameObject.transform.DOComplete();
         bossAnimator.gameObject.transform.DOComplete();
-        playerAnimator.gameObject.transform.DOMove(new Vector2(-1f, -3), 0.25f).OnComplete(() => playerAnimator.gameObject.transform.DOMove(playerStartPos, 0.25f));
-        bossAnimator.gameObject.transform.DOMove(new Vector2(0.2f, -4), 0.25f).OnComplete(() => bossAnimator.gameObject.transform.DOMove(bossStratPos, 0.25f));
-        audio.clip = audioClips[Random.Range(0, audioClips.Length)];
-        audio.Play();
+        Sequence seq = DOTween.Sequence();
+
+        seq.OnStart(() => isTime = false);
+
+        seq.Append(playerAnimator.gameObject.transform.DOMove(new Vector2(-1f, -3), 0.1f).OnComplete(() =>
+        {
+            playerAnimator.gameObject.transform.DOMove(currentPlayerPos, 0.5f);
+        }));
+
+        seq.Join(bossAnimator.gameObject.transform.DOMove(new Vector2(0.2f, -4), 0.1f).OnComplete(() =>
+        {
+            bossAnimator.SetTrigger(bossHitHash);
+            MakePlayerAttackEffect();
+            MakePlayerSoundEffect();
+            bossAnimator.gameObject.transform.DOMove(currentBossPos, 0.5f);
+        }));
+
+        seq.Join(cameraPos.DOShakePosition(cameraShakeTime, cameraShakePower)).OnComplete(() => cameraPos.position = cameraStartPos);
+
+        seq.OnComplete(() => isTime = true);
     }
 
 

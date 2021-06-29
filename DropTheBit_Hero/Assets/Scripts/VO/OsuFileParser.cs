@@ -109,8 +109,8 @@ public class OsuFileParser
 #if UNITY_EDITOR
         Debug.Log("osuBMParser: Finished beatmap parsing");
 #endif
-
         GameManager.Instance.isFinishParshing++;
+        Debug.Log(GameManager.Instance.isFinishParshing);
     }
 
     private OsuFileSection testNewSection(string data)

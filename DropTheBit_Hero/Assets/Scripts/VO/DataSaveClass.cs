@@ -16,9 +16,10 @@ public class DataSaveClass
     public int killCount;
     public int nowEnemyIndex;
     public float atk;
+    public ushort currentBossIndex;
 
     public DataSaveClass() { }
-    public DataSaveClass(Dictionary<string, WeaponData> weaponDictionary, Dictionary<string, WorkData> workDictionary, long money, int killCount, int nowEnemyIndex, float atk)
+    public DataSaveClass(Dictionary<string, WeaponData> weaponDictionary, Dictionary<string, WorkData> workDictionary, long money, int killCount, int nowEnemyIndex, float atk, ushort currentBossIndex)
     {
         for (int i = 0; i < weaponDictionary.Count; i++)
         {
@@ -36,6 +37,7 @@ public class DataSaveClass
         this.killCount = killCount;
         this.nowEnemyIndex = nowEnemyIndex;
         this.atk = atk;
+        this.currentBossIndex = currentBossIndex;
     }
 
     public void InitSaveClass(Dictionary<string, WeaponData> weaponDictionary, Dictionary<string, WorkData> workDictionary, long money, int killCount, int nowEnemyIndex, float atk)
@@ -57,7 +59,7 @@ public class DataSaveClass
 
     }
 
-    public void loadData(out Dictionary<string, WeaponData> weaponDictionary, out Dictionary<string, WorkData> workDictionary, out long money, out int killCount, out int nowEnemyIndex, out float atk)
+    public void loadData(out Dictionary<string, WeaponData> weaponDictionary, out Dictionary<string, WorkData> workDictionary, out long money, out int killCount, out int nowEnemyIndex, out float atk, out ushort currentBossIndex)
     {
         weaponDictionary = new Dictionary<string, WeaponData>();
         for (int i = 0; i < this.weaponNameList.Count; i++)
@@ -75,5 +77,6 @@ public class DataSaveClass
         killCount = this.killCount;
         nowEnemyIndex = this.nowEnemyIndex;
         atk = this.atk;
+        currentBossIndex = this.currentBossIndex;
     }
 }
