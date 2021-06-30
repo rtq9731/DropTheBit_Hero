@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 
-public class NoteHitEffect : MonoBehaviour
+public class ExitPanel : MonoBehaviour
 {
-    public Text text;
+    public Button btnExit;
+    public Button btnCancel;
 }

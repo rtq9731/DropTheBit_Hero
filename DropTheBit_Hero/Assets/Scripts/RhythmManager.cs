@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using DG.Tweening;
 
 public class RhythmManager : MonoBehaviour
@@ -12,6 +13,8 @@ public class RhythmManager : MonoBehaviour
         public Color goodColor = new Color(0.6792453f, 0.9150943f, 0.06030021f, 1);
         public Color missColor = new Color(0.6792453f, 0, 0.06030021f, 1);
     }
+
+    [SerializeField] Text debugText;
 
     [Header("오디오 관련")]
     [SerializeField] AudioSource audioSource;
@@ -25,9 +28,10 @@ public class RhythmManager : MonoBehaviour
     private Queue<GameObject> noteObjPool = new Queue<GameObject>();
     private Queue<NoteScript> noteCheckPool = new Queue<NoteScript>();
     private Queue<GameObject> hitEffectPool = new Queue<GameObject>();
-    private Queue<GameObject> textEffectPool = new Queue<GameObject>();
+    public Queue<GameObject> textEffectPool = new Queue<GameObject>();
 
     private int noteMakeIndex = 0;
+    private int hitCount = 0;
 
     private int currentTimingPointIndex = 0;
 
@@ -56,7 +60,7 @@ public class RhythmManager : MonoBehaviour
     }
 
     private void Update()
-    {
+    { 
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Delete))
             StartCoroutine(FinishRhythm());
@@ -87,6 +91,9 @@ public class RhythmManager : MonoBehaviour
 
         if (isPlayingNote)
         {
+
+            noteLineDistance = Vector2.Distance(noteMakeTr.position, noteLine.transform.position);
+
             noteTimer += Time.deltaTime * 1000;
 
             if(GameManager.Instance.GetVirtualBeatmaps().timings.Count <= noteMakeIndex)
@@ -133,7 +140,6 @@ public class RhythmManager : MonoBehaviour
 
         isPlayingNote = !isPlayingNote;
         isTimingPointPlay = !isTimingPointPlay;
-        noteLineDistance = Vector2.Distance(noteMakeTr.position, noteLine.transform.position);
 
         if (isPlayingNote)
         {
@@ -197,6 +203,11 @@ public class RhythmManager : MonoBehaviour
 
     }
 
+    public float GetRatePercent()
+    {
+        return (float)hitCount / (float)GameManager.Instance.GetVirtualBeatmaps().timings.Count * (float)100;
+    }
+
     //void CreateLongNote(HitSlider slider)
     //{
 
@@ -255,7 +266,7 @@ public class RhythmManager : MonoBehaviour
         }
 
         current.SetActive(true);
-        NoteHitEffect currentEffect = current.GetComponent<NoteHitEffect>();
+        TextEffect currentEffect = current.GetComponent<TextEffect>();
         switch (n)
         {
             case 1:
@@ -263,6 +274,7 @@ public class RhythmManager : MonoBehaviour
                     currentEffect.text.color = textEffectColors.perfectColor;
                     GameManager.Instance.Combo += 2;
                     currentEffect.text.text = $"PERFECT X {GameManager.Instance.Combo}";
+                    hitCount++;
 
                     BossSceneManager.Instance.progressBar.value += 2;
                     BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerAttackHash);
@@ -274,6 +286,7 @@ public class RhythmManager : MonoBehaviour
                     currentEffect.text.color = textEffectColors.goodColor;
                     ++GameManager.Instance.Combo;
                     currentEffect.text.text = $"GOOD X {GameManager.Instance.Combo}";
+                    hitCount++;
 
                     BossSceneManager.Instance.progressBar.value++;
                     BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerAttackHash);
@@ -331,7 +344,7 @@ public class RhythmManager : MonoBehaviour
         current.gameObject.SetActive(true);
         ParticleSystem currentParticle = current.GetComponent<ParticleSystem>();
         StartCoroutine(PlayHitEffect(currentParticle));
-
+        hitEffectPool.Enqueue(current.gameObject);
     }
 
     private IEnumerator PlayHitEffect(ParticleSystem particle)
@@ -341,7 +354,6 @@ public class RhythmManager : MonoBehaviour
         particle.Play();
         yield return new WaitForSeconds(particle.main.duration);
         particle.gameObject.SetActive(false);
-        hitEffectPool.Enqueue(particle.gameObject);
     }
 
 

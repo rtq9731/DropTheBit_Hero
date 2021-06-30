@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2546575337142812178}
   - component: {fileID: 2546575337142812180}
   - component: {fileID: 2546575337142812179}
-  - component: {fileID: 2546575337142812181}
+  - component: {fileID: -7787690461776973819}
   m_Layer: 5
   m_Name: TextEffect
   m_TagString: Untagged
@@ -80,7 +80,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: PERFECT
---- !u!114 &2546575337142812181
+--- !u!114 &-7787690461776973819
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

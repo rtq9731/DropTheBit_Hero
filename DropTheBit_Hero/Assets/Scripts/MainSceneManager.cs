@@ -62,7 +62,7 @@ public class MainSceneManager : MonoBehaviour
 
     private void Update()
     {
-        atkText.text = $"공격력\n{player.ATK}";
+        atkText.text = $"공격력 {player.ATK}";
 
 #if UNITY_EDITOR
 
@@ -82,11 +82,6 @@ public class MainSceneManager : MonoBehaviour
         }
 
 #endif
-
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-
-        }
 
         if (nowEnemy != null)
         {
@@ -120,6 +115,7 @@ public class MainSceneManager : MonoBehaviour
 
     public void CallNextEnemy()
     {
+        Debug.Log(GameManager.Instance.NowEnemyIndex);
         foreach (var item in enemyPool)
         {
             if(!item.activeSelf) // 만약 풀 안에 ActiveFalse된 오브젝트가 있다면.

@@ -10,11 +10,5 @@ public class PlayerAttackSoundEffect : MonoBehaviour
     {
         source = GetComponent<AudioSource>();
         source.Play();
-        GameManager.Instance.Invoke("ActFalse()", source.clip.length);
-    }
-
-    void ActFalse()
-    {
-        this.gameObject.SetActive(false);
     }
 }

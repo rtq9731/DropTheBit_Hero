@@ -4,12 +4,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class GameManager : MonoSingleton<GameManager>
 {
     [SerializeField] Monster enemySheet;
     [SerializeField] Weapon weaponSheet;
     [SerializeField] Work workSheet;
+    [SerializeField] GameObject exitPanelPrefab;
     [SerializeField] AudioClip[] songs;
 
     public BeatMapScriptableObj beatMap;
@@ -21,8 +23,11 @@ public class GameManager : MonoSingleton<GameManager>
     string filePath;
     private ushort currentBossIndex = 0;
 
+    private bool isStop = false;
+
     public OsuParser parsingManager = null;
     private RhythmManager rhythmManager;
+    ExitPanel exitPanel = null;
 
     private List<string> weaponNames = new List<string>();
     private List<string> workNames = new List<string>();
@@ -57,7 +62,8 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void UPBossCount()
     {
-        currentBossIndex++;
+        if(currentBossIndex + 1 < beatMap.beatmaps.Count)
+            currentBossIndex++;
     }
 
     public int KillCount
@@ -69,15 +75,14 @@ public class GameManager : MonoSingleton<GameManager>
             MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
             SaveData();
 
+            if( killCount - (nowEnemyIndex + 1) * 10 > 0 && nowEnemyIndex < enemySheet.dataArray.Length - 1)
+            {
+                nowEnemyIndex++;
+            }
+
             if ((currentBossIndex + 1) * 10 - killCount <= 0)
             {
                 MainSceneManager.Instance.CallBoss();
-            }
-
-            if (killCount - 10 * (currentBossIndex + 1) >= 0 && beatMap.beatmaps[currentBossIndex].isCleared)
-            {
-                if (beatMap.beatmaps[currentBossIndex].isCleared)
-                    currentBossIndex++;
             }
         }
     }
@@ -95,6 +100,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     void Start()
     {
+        Time.timeScale = 1;
         beatMap = Resources.Load("Notes/BeatMap_Data") as BeatMapScriptableObj;
         InputCommonEnemyData();
         InputWorkData();
@@ -104,9 +110,65 @@ public class GameManager : MonoSingleton<GameManager>
         MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
     }
 
+    private void Update()
+    {
+        if (isStop && Input.GetKeyDown(KeyCode.Escape))
+        {
+            Time.timeScale = 1;
+            exitPanel.gameObject.transform.DOScale(0, 0.2f).OnComplete(() =>
+            {
+                exitPanel.gameObject.SetActive(false);
+                isStop = false;
+            });
+        }
+
+        if (!isStop && Input.GetKeyDown(KeyCode.Escape))
+        {
+            isStop = true;
+            Debug.Log(isStop);
+
+            Time.timeScale = 0f;
+            if(FindObjectOfType<ExitPanel>() != null)
+            {
+                exitPanel = FindObjectOfType<ExitPanel>();
+            }
+            else
+            {
+                exitPanel = Instantiate(exitPanelPrefab, FindObjectOfType<Canvas>().transform).GetComponent<ExitPanel>();
+            }
+
+            exitPanel.gameObject.SetActive(true);
+            exitPanel.btnExit.onClick.AddListener(() => Application.Quit());
+            exitPanel.btnCancel.onClick.AddListener(() =>
+            {
+                Time.timeScale = 1;
+                exitPanel.gameObject.transform.DOScale(0, 0.2f).OnComplete(() =>
+                {
+                    exitPanel.gameObject.SetActive(false);
+                    isStop = false;
+                });
+            });
+
+            //if(Input.GetKeyDown(KeyCode.Escape))
+            //{
+            //    Time.timeScale = 1;
+            //    exitPanel.gameObject.transform.DOScale(0, 0.2f).OnComplete(() =>
+            //    {
+            //        exitPanel.gameObject.SetActive(false);
+            //        isStop = false;
+            //    });
+            //}
+        }
+    }
+
     #endregion
 
     #region 일반 메소드
+
+    public void PlusBossIndex()
+    {
+        currentBossIndex++;
+    }
 
     public WeaponData GetWeaponByIndex(int index)
     {
@@ -163,7 +225,7 @@ public class GameManager : MonoSingleton<GameManager>
         DG.Tweening.DOTween.Clear();
         Screen.orientation = ScreenOrientation.Landscape;
         Screen.orientation = ScreenOrientation.LandscapeLeft;
-        Screen.SetResolution(2560, 1440, Screen.fullScreen);
+        Screen.SetResolution(2560, 1440, false);
         SceneManager.LoadScene("BossScene");
         while (SceneManager.GetActiveScene().name != "BossScene")
         {
@@ -171,21 +233,25 @@ public class GameManager : MonoSingleton<GameManager>
         }
         Screen.orientation = ScreenOrientation.Landscape;
         Screen.orientation = ScreenOrientation.LandscapeLeft;
-        Screen.SetResolution(2560, 1440, Screen.fullScreen);
+        Screen.SetResolution(2560, 1440, false);
         yield return new WaitForSeconds(0.5f);
         DG.Tweening.DOTween.Clear();
     }
     private IEnumerator ChangeSceneToMain(bool isCleared)
     {
         DG.Tweening.DOTween.Clear();
+        Screen.orientation = ScreenOrientation.Portrait;
+        Screen.SetResolution(1440, 2560, false);
         SceneManager.LoadScene("MainScene");
         while (SceneManager.GetActiveScene().name != "MainScene")
         {
             yield return null;
         }
-        //bossSheet.dataArray[currentBossIndex].Iscleared = isCleared;
+
+        SaveData();
+
         Screen.orientation = ScreenOrientation.Portrait;
-        Screen.SetResolution(1440, 2560, Screen.fullScreen);
+        Screen.SetResolution(1440, 2560, false);
     }
     #endregion
 
@@ -234,7 +300,7 @@ public class GameManager : MonoSingleton<GameManager>
         }
         else
         {
-            saveData.InitSaveClass(weapons, works, money, killCount, nowEnemyIndex, MainSceneManager.Instance.Player.ATK);
+            saveData.InitSaveClass(weapons, works, money, killCount, nowEnemyIndex, MainSceneManager.Instance.Player.ATK, currentBossIndex);
         }
         string jsonString = JsonUtility.ToJson(saveData);
         FileStream fs = new FileStream(filePath, FileMode.Create);
