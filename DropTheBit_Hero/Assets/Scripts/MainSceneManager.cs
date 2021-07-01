@@ -60,6 +60,9 @@ public class MainSceneManager : MonoBehaviour
 
     private void Start()
     {
+        GameManager.Instance.LoadData();
+        topUI.UpdateCurrentCoin();
+        topUI.UpdateCurrentKillCount();
         FindObjectOfType<Image>().material.mainTextureOffset = new Vector2(0, 0);
         Invoke("CallNextEnemy", 0.01f);
         effectAnimator.speed = 0;
@@ -163,7 +166,6 @@ public class MainSceneManager : MonoBehaviour
 
     public void CallNextEnemy()
     {
-        Debug.Log(GameManager.Instance.NowEnemyIndex);
         foreach (var item in enemyPool)
         {
             if(!item.activeSelf) // 만약 풀 안에 ActiveFalse된 오브젝트가 있다면.

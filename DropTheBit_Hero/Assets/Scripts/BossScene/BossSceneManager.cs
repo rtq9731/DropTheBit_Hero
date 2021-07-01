@@ -296,11 +296,10 @@ public class BossSceneManager : MonoBehaviour
 
         if (isClear)
         {
-            GameManager.Instance.UPBossCount();
             seq.Append(
             texts[0].DOText($"보스 클리어에 성공했습니다!\n리듬게임 정확도 {rhythmManager.GetRatePercent().ToString("N3")} %", 3f).OnComplete(() =>
             {
-                if (rhythmManager.GetRatePercent() >= 100f)
+                if (rhythmManager.GetRatePercent() >= 99.99f)
                 {
                     texts[1].text = "P";
                 }
@@ -358,6 +357,7 @@ public class BossSceneManager : MonoBehaviour
                     texts[1].text = "F";
                 }
             }));
+            seq.Append(texts[2].DOText("", 0f)).OnComplete(() => btnChangeScene.onClick.AddListener(() => GameManager.Instance.ChangeSceneToMainScene(isClear)));
         }
 
 

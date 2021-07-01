@@ -65,6 +65,18 @@ public class RhythmManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Delete))
             StartCoroutine(FinishRhythm());
 #endif
+        if(Time.timeScale <= 0 && isPlayingNote && audioSource.isPlaying)
+        {
+            audioSource.Pause();
+            Debug.Log("음악 일시정지");
+        }
+
+        if (isPlayingNote && Time.timeScale > 0 && !audioSource.isPlaying)
+        {
+            audioSource.Play();
+            Debug.Log("음악 다시 재생");
+        }
+
 
         if(isTimingPointPlay)
         {
@@ -156,7 +168,10 @@ public class RhythmManager : MonoBehaviour
 
     private IEnumerator FinishRhythm()
     {
-        yield return new WaitForSeconds(2f); // 마지막 노트가 지나갈때까지 대기.
+#if UNITY_EDITOR
+        hitCount = GameManager.Instance.GetVirtualBeatmaps().timings.Count;
+#endif
+        yield return new WaitForSeconds(BossSceneManager.Instance.progressBar.value - noteTimer / 1000); // 노래 끝날때 까지 대기.
         StartStopSong();
         isPlayingNote = false;
         BossSceneManager.Instance.FinishFight();

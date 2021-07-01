@@ -50,8 +50,9 @@ public class RewardPanel : MonoBehaviour
         timeText.text = $"{time.ToString("N2")}시간 만의 방문이네요!";
         rewardText.text = $"여기, {stringReward} 의 보상이에요.\n열심히 일했습니닷!";
         btnOK.onClick.AddListener(() => panel.transform.DOScale(0, 0.2f).OnComplete(() => {
-            Destroy(gameObject);
+            GameManager.Instance.AddMoney(reward);
             GameManager.Instance.isOpenRewardTap = false;
+            Destroy(gameObject);
         }));
     }
 }

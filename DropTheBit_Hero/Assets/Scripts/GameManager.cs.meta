@@ -3,7 +3,16 @@ guid: 2adbf4ed1717f8149a22c769c6558d2e
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - enemySheet: {fileID: 11400000, guid: 4d2b0077f8393304f9f93e5ef5096086, type: 2}
+  - weaponSheet: {fileID: 11400000, guid: 89ac399def890c649b63fcf1e02f0f23, type: 2}
+  - workSheet: {fileID: 11400000, guid: 3e925474c95eb7149850862b5da5b697, type: 2}
+  - rewardPanelPrefab: {fileID: 3742042282201362949, guid: 33ef123e8f6f7704db34247f68798cc6,
+      type: 3}
+  - exitPanelPrefab: {fileID: 25758694633439017, guid: ce4e54d3751fad84d8d07d55832fa471,
+      type: 3}
+  - beatMap: {fileID: 11400000, guid: d8a206857fc253941a59e6d3b8215911, type: 2}
+  - parsingManager: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

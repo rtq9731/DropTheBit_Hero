@@ -11,9 +11,8 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] Monster enemySheet;
     [SerializeField] Weapon weaponSheet;
     [SerializeField] Work workSheet;
-    [SerializeField] RewardPanel rewardPanel;
+    [SerializeField] GameObject rewardPanelPrefab;
     [SerializeField] GameObject exitPanelPrefab;
-    [SerializeField] AudioClip[] songs;
 
     public BeatMapScriptableObj beatMap;
 
@@ -26,13 +25,15 @@ public class GameManager : MonoSingleton<GameManager>
 
     private bool isStop = false;
 
-    public OsuParser parsingManager = null;
+    private OsuParser parsingManager = null;
     private RhythmManager rhythmManager;
     private System.DateTime lastconnectTime;
     ExitPanel exitPanel = null;
 
     private List<string> weaponNames = new List<string>();
     private List<string> workNames = new List<string>();
+
+    List<AudioClip> songs = new List<AudioClip>();
 
     private long money = 0;
     private int killCount = 0;
@@ -68,11 +69,10 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void UPBossCount()
     {
-        atk += atk / 10; // 공격력 10% 증가
-        if (currentBossIndex + 1 < beatMap.beatmaps.Count)
-            currentBossIndex++;
+        Instance.atk += Instance.atk / 10; // 공격력 10% 증가
 
-        SaveData();
+        if (Instance.currentBossIndex + 1 < Instance.beatMap.beatmaps.Count)
+            Instance.PlusBossIndex();
     }
 
     public int KillCount
@@ -98,10 +98,16 @@ public class GameManager : MonoSingleton<GameManager>
     #endregion
 
     #region 유니티 메세지
-
     private void Awake()
     {
         filePath = Application.persistentDataPath + "/SaveData.txt";
+
+        songs.Add(Resources.Load("Sound_MP3/Nine Point Eight") as AudioClip);
+        songs.Add(Resources.Load("Sound_MP3/RTRT") as AudioClip);
+        songs.Add(Resources.Load("Sound_MP3/WorldExcuteMe") as AudioClip);
+
+        parsingManager = gameObject.AddComponent<OsuParser>();
+
 #if UNITY_EDITOR
         Debug.Log(filePath);
 #endif
@@ -114,9 +120,8 @@ public class GameManager : MonoSingleton<GameManager>
         InputCommonEnemyData();
         InputWorkData();
         InputWeponData();
-        LoadData();
-        MainSceneManager.Instance.topUI.UpdateCurrentCoin();
-        MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
+        //MainSceneManager.Instance.topUI.UpdateCurrentCoin();
+        //MainSceneManager.Instance.topUI.UpdateCurrentKillCount();
     }
 
     private void Update()
@@ -175,6 +180,9 @@ public class GameManager : MonoSingleton<GameManager>
 
     #region 일반 메소드
 
+    public void CallGameManager() // 의미 없음. DontDestroyOnLoad에 올리려고 참조.
+    { }
+
     public void PlusBossIndex()
     {
         currentBossIndex++;
@@ -223,7 +231,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void ParsingSongs()
     {
-        for (int i = 0; i < songs.Length; i++)
+        for (int i = 0; i < songs.Count; i++)
         {
             parsingManager.Parsing(songs[i].name);
         }
@@ -233,34 +241,38 @@ public class GameManager : MonoSingleton<GameManager>
     private IEnumerator ChangeSceneToBoss()
     {
         DOTween.Clear();
-        Screen.orientation = ScreenOrientation.Landscape;
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
-        Screen.SetResolution(2560, 1440, false);
         SceneManager.LoadScene("BossScene");
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+
         while (SceneManager.GetActiveScene().name != "BossScene")
         {
             yield return null;
         }
-        Screen.orientation = ScreenOrientation.Landscape;
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
+
         Screen.SetResolution(2560, 1440, false);
         yield return new WaitForSeconds(0.5f);
         DOTween.Clear();
     }
+
     private IEnumerator ChangeSceneToMain(bool isCleared)
     {
         DOTween.Clear();
-        Screen.orientation = ScreenOrientation.Portrait;
-        Screen.SetResolution(1440, 2560, false);
+
         SceneManager.LoadScene("MainScene");
+
+        Screen.orientation = ScreenOrientation.Portrait;
+
         while (SceneManager.GetActiveScene().name != "MainScene")
         {
             yield return null;
         }
+        if(isCleared)
+            UPBossCount();
+
+        MainSceneManager.Instance.Player.ATK = atk;
 
         SaveData();
 
-        Screen.orientation = ScreenOrientation.Portrait;
         Screen.SetResolution(1440, 2560, false);
     }
     #endregion
@@ -337,6 +349,8 @@ public class GameManager : MonoSingleton<GameManager>
 
         atk = 20;
         saveData.loadData(out weapons, out works, out money, out killCount, out nowEnemyIndex, out atk, out currentBossIndex, out lastconnectTime, out isFirstPlay);
+        
+        if(MainSceneManager.Instance != null)
         MainSceneManager.Instance.Player.ATK = atk;
 
         if(isFirst && !isFirstPlay)
@@ -344,6 +358,8 @@ public class GameManager : MonoSingleton<GameManager>
             isOpenRewardTap = true;
             isFirst = false;
             long rewardMoney = 0;
+            GameObject rewardPanelGameObj = Instantiate(rewardPanelPrefab, GameObject.Find("MainCanvas").transform);
+            RewardPanel rewardPanel = rewardPanelGameObj.GetComponent<RewardPanel>();
             rewardPanel.gameObject.SetActive(true);
 
             for (int i = 0; i < works.Count; i++)
