@@ -286,76 +286,83 @@ public class BossSceneManager : MonoBehaviour
         isActiveCliker = false;
         bgPanel.SetActive(true);
 
-        Text[] texts = new Text[3]; // 0번은 클리어 메세지 1번은 버튼에 붙은 텍스트 2번은 등급
+        Text[] texts = new Text[4]; // 0번은 클리어 메세지 1번은 등급 2번은 보상 텍스트 3번은 버튼에 붙은 텍스트
         for (int i = 0; i < 3; i++)
         {
             texts[i] = resultPanel.GetComponentsInChildren<Text>()[i];
         }
 
+        Sequence seq = DOTween.Sequence();
+
         if (isClear)
         {
             GameManager.Instance.UPBossCount();
-            texts[0].DOText ($"보스 클리어에 성공했습니다!\n리듬게임 정확도 {rhythmManager.GetRatePercent().ToString("N3")} %", 3f).OnComplete(() =>
+            seq.Append(
+            texts[0].DOText($"보스 클리어에 성공했습니다!\n리듬게임 정확도 {rhythmManager.GetRatePercent().ToString("N3")} %", 3f).OnComplete(() =>
             {
                 if (rhythmManager.GetRatePercent() >= 100f)
                 {
-                    texts[2].text = "P";
+                    texts[1].text = "P";
                 }
                 if (rhythmManager.GetRatePercent() > 95f)
                 {
-                    texts[2].text = "A +";
+                    texts[1].text = "A +";
                 }
                 else if (rhythmManager.GetRatePercent() > 90f)
                 {
-                    texts[2].text = "A";
+                    texts[1].text = "A";
                 }
                 else if (rhythmManager.GetRatePercent() > 80f)
                 {
-                    texts[2].text = "B";
+                    texts[1].text = "B";
                 }
                 else if (rhythmManager.GetRatePercent() > 70f)
                 {
-                    texts[2].text = "C";
+                    texts[1].text = "C";
                 }
                 else
                 {
-                    texts[2].text = "F";
+                    texts[1].text = "F";
                 }
-            });
+            }));
+
+            seq.Append(texts[2].DOText("보상 : 공격력 10% 증가", 0.3f)).OnComplete(() => btnChangeScene.onClick.AddListener(() => GameManager.Instance.ChangeSceneToMainScene(isClear)));
         }
         else
         {
+            seq.Append(
             texts[0].DOText($"보스 클리어에 실패했습니다..\n리듬게임 정확도 {rhythmManager.GetRatePercent().ToString("N3")} %", 3f).OnComplete(() =>
             {
                 if (rhythmManager.GetRatePercent() >= 100f)
                 {
-                    texts[2].text = "P";
+                    texts[1].text = "P";
                 }
                 if (rhythmManager.GetRatePercent() > 95f)
                 {
-                    texts[2].text = "A +";
+                    texts[1].text = "A +";
                 }
                 else if (rhythmManager.GetRatePercent() > 90f)
                 {
-                    texts[2].text = "A";
+                    texts[1].text = "A";
                 }
                 else if (rhythmManager.GetRatePercent() > 80f)
                 {
-                    texts[2].text = "B";
+                    texts[1].text = "B";
                 }
                 else if (rhythmManager.GetRatePercent() > 70f)
                 {
-                    texts[2].text = "C";
+                    texts[1].text = "C";
                 }
                 else
                 {
-                    texts[2].text = "F";
+                    texts[1].text = "F";
                 }
-            }); ;
+            }));
         }
+
+
 
         resultPanel.SetActive(true);
         clickerText.gameObject.SetActive(false);
-        btnChangeScene.onClick.AddListener(() => GameManager.Instance.ChangeSceneToMainScene(isClear));
     }
 }

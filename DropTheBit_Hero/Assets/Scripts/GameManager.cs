@@ -11,6 +11,7 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] Monster enemySheet;
     [SerializeField] Weapon weaponSheet;
     [SerializeField] Work workSheet;
+    [SerializeField] RewardPanel rewardPanel;
     [SerializeField] GameObject exitPanelPrefab;
     [SerializeField] AudioClip[] songs;
 
@@ -27,6 +28,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public OsuParser parsingManager = null;
     private RhythmManager rhythmManager;
+    private System.DateTime lastconnectTime;
     ExitPanel exitPanel = null;
 
     private List<string> weaponNames = new List<string>();
@@ -34,6 +36,10 @@ public class GameManager : MonoSingleton<GameManager>
 
     private long money = 0;
     private int killCount = 0;
+
+    private bool isFirst = true; // -> 여러번 씬 로딩이 안되었는가?
+    private bool isFirstPlay = true; // -> 뉴비인가?
+    public bool isOpenRewardTap = false; // 리워드 탭이 열려있을땐 esc메뉴가 불러와지면 안되니까
 
     private int combo = 0;
     int nowEnemyIndex = 0;
@@ -49,7 +55,7 @@ public class GameManager : MonoSingleton<GameManager>
     public int NowEnemyIndex { get { return nowEnemyIndex; } }
     public Dictionary<string, MonsterData> EnemyDatas { get { return enemyDatas; } }
     public List<string> EnemyNames { get { return enemyNames; } }
-    public float Atk { get { return atk; } }
+    public float Atk { get { return atk; } set { atk = value; } }
     public int Combo { get { return combo; } set { combo = value; } }
     public AudioClip GetMusic()
     {
@@ -62,8 +68,11 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void UPBossCount()
     {
-        if(currentBossIndex + 1 < beatMap.beatmaps.Count)
+        atk += atk / 10; // 공격력 10% 증가
+        if (currentBossIndex + 1 < beatMap.beatmaps.Count)
             currentBossIndex++;
+
+        SaveData();
     }
 
     public int KillCount
@@ -80,7 +89,7 @@ public class GameManager : MonoSingleton<GameManager>
                 nowEnemyIndex++;
             }
 
-            if ((currentBossIndex + 1) * 10 - killCount <= 0)
+            if ((currentBossIndex + 1) * 50 - killCount <= 0)
             {
                 MainSceneManager.Instance.CallBoss();
             }
@@ -122,7 +131,7 @@ public class GameManager : MonoSingleton<GameManager>
             });
         }
 
-        if (!isStop && Input.GetKeyDown(KeyCode.Escape))
+        if (!isStop && Input.GetKeyDown(KeyCode.Escape) && !isOpenRewardTap)
         {
             isStop = true;
             Debug.Log(isStop);
@@ -137,6 +146,7 @@ public class GameManager : MonoSingleton<GameManager>
                 exitPanel = Instantiate(exitPanelPrefab, FindObjectOfType<Canvas>().transform).GetComponent<ExitPanel>();
             }
 
+            exitPanel.gameObject.transform.localScale = Vector3.one;
             exitPanel.gameObject.SetActive(true);
             exitPanel.btnExit.onClick.AddListener(() => Application.Quit());
             exitPanel.btnCancel.onClick.AddListener(() =>
@@ -222,7 +232,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     private IEnumerator ChangeSceneToBoss()
     {
-        DG.Tweening.DOTween.Clear();
+        DOTween.Clear();
         Screen.orientation = ScreenOrientation.Landscape;
         Screen.orientation = ScreenOrientation.LandscapeLeft;
         Screen.SetResolution(2560, 1440, false);
@@ -235,11 +245,11 @@ public class GameManager : MonoSingleton<GameManager>
         Screen.orientation = ScreenOrientation.LandscapeLeft;
         Screen.SetResolution(2560, 1440, false);
         yield return new WaitForSeconds(0.5f);
-        DG.Tweening.DOTween.Clear();
+        DOTween.Clear();
     }
     private IEnumerator ChangeSceneToMain(bool isCleared)
     {
-        DG.Tweening.DOTween.Clear();
+        DOTween.Clear();
         Screen.orientation = ScreenOrientation.Portrait;
         Screen.SetResolution(1440, 2560, false);
         SceneManager.LoadScene("MainScene");
@@ -294,13 +304,14 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void SaveData()
     {
-        if(saveData == null)
+        isFirstPlay = false;
+        if (saveData == null)
         {
-            saveData = new DataSaveClass(weapons, works, money, killCount, nowEnemyIndex, MainSceneManager.Instance.Player.ATK, currentBossIndex);
+            saveData = new DataSaveClass(weapons, works, money, killCount, nowEnemyIndex, MainSceneManager.Instance.Player.ATK, currentBossIndex, System.DateTime.Now, isFirstPlay);
         }
         else
         {
-            saveData.InitSaveClass(weapons, works, money, killCount, nowEnemyIndex, MainSceneManager.Instance.Player.ATK, currentBossIndex);
+            saveData.InitSaveClass(weapons, works, money, killCount, nowEnemyIndex, MainSceneManager.Instance.Player.ATK, currentBossIndex, System.DateTime.Now, isFirstPlay);
         }
         string jsonString = JsonUtility.ToJson(saveData);
         FileStream fs = new FileStream(filePath, FileMode.Create);
@@ -325,8 +336,29 @@ public class GameManager : MonoSingleton<GameManager>
         saveData = JsonUtility.FromJson<DataSaveClass>(jsonString);
 
         atk = 20;
-        saveData.loadData(out weapons, out works, out money, out killCount, out nowEnemyIndex, out atk, out currentBossIndex);
+        saveData.loadData(out weapons, out works, out money, out killCount, out nowEnemyIndex, out atk, out currentBossIndex, out lastconnectTime, out isFirstPlay);
         MainSceneManager.Instance.Player.ATK = atk;
+
+        if(isFirst && !isFirstPlay)
+        {
+            isOpenRewardTap = true;
+            isFirst = false;
+            long rewardMoney = 0;
+            rewardPanel.gameObject.SetActive(true);
+
+            for (int i = 0; i < works.Count; i++)
+            {
+                WorkData current = works[workNames[i]];
+                if (current.Isunlocked == false)
+                    continue;
+
+
+                rewardMoney += (int)((System.DateTime.Now - lastconnectTime).TotalSeconds / current.Moneycool) * current.Yield;
+            }
+
+            rewardPanel.InitRewardPanel((System.DateTime.Now - lastconnectTime).TotalHours, rewardMoney);
+        }
+
     }
 
     #endregion

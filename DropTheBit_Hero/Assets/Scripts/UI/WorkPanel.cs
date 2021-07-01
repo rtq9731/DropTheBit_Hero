@@ -74,7 +74,7 @@ public class WorkPanel : MonoBehaviour
 
         GameManager.Instance.AddMoney(-Mathf.RoundToInt(GameManager.Instance.GetWorkDataByindex(index).Upgradecost + (0.3f * GameManager.Instance.GetWorkDataByindex(index).Upgradecount - 1)) + 1);
         ++GameManager.Instance.GetWorkDataByindex(index).Upgradecount;
-        GameManager.Instance.GetWorkDataByindex(index).Yield += long.Parse(Mathf.RoundToInt(GameManager.Instance.GetWorkDataByindex(index).Yield * 0.05f).ToString());
+        GameManager.Instance.GetWorkDataByindex(index).Yield += long.Parse(Mathf.RoundToInt(GameManager.Instance.GetWorkDataByindex(index).Yield * 0.01f).ToString());
         timer.UpdateData(GameManager.Instance.GetWorkDataByindex(index).Yield);
         upgradeBtn.onClick.RemoveAllListeners();
         Refresh();

@@ -17,9 +17,11 @@ public class DataSaveClass
     public int nowEnemyIndex;
     public float atk;
     public ushort currentBossIndex;
+    public string lastConnectTime;
+    public bool isFirstPlay;
 
     public DataSaveClass() { }
-    public DataSaveClass(Dictionary<string, WeaponData> weaponDictionary, Dictionary<string, WorkData> workDictionary, long money, int killCount, int nowEnemyIndex, float atk, ushort currentBossIndex)
+    public DataSaveClass(Dictionary<string, WeaponData> weaponDictionary, Dictionary<string, WorkData> workDictionary, long money, int killCount, int nowEnemyIndex, float atk, ushort currentBossIndex, System.DateTime lastConnectTime, bool isFirstPlay)
     {
         for (int i = 0; i < weaponDictionary.Count; i++)
         {
@@ -38,9 +40,11 @@ public class DataSaveClass
         this.nowEnemyIndex = nowEnemyIndex;
         this.atk = atk;
         this.currentBossIndex = currentBossIndex;
+        this.lastConnectTime = lastConnectTime.ToString();
+        this.isFirstPlay = isFirstPlay;
     }
 
-    public void InitSaveClass(Dictionary<string, WeaponData> weaponDictionary, Dictionary<string, WorkData> workDictionary, long money, int killCount, int nowEnemyIndex, float atk, ushort currentBossIndex)
+    public void InitSaveClass(Dictionary<string, WeaponData> weaponDictionary, Dictionary<string, WorkData> workDictionary, long money, int killCount, int nowEnemyIndex, float atk, ushort currentBossIndex, System.DateTime lastConnectTime, bool isFirstPlay)
     {
         for (int i = 0; i < weaponDictionary.Count; i++)
         {
@@ -57,10 +61,11 @@ public class DataSaveClass
         this.nowEnemyIndex = nowEnemyIndex;
         this.atk = atk;
         this.currentBossIndex = currentBossIndex;
-
+        this.lastConnectTime = lastConnectTime.ToString();
+        this.isFirstPlay = isFirstPlay;
     }
 
-    public void loadData(out Dictionary<string, WeaponData> weaponDictionary, out Dictionary<string, WorkData> workDictionary, out long money, out int killCount, out int nowEnemyIndex, out float atk, out ushort currentBossIndex)
+    public void loadData(out Dictionary<string, WeaponData> weaponDictionary, out Dictionary<string, WorkData> workDictionary, out long money, out int killCount, out int nowEnemyIndex, out float atk, out ushort currentBossIndex, out System.DateTime lastConnectTime, out bool isFirstPlay)
     {
         weaponDictionary = new Dictionary<string, WeaponData>();
         for (int i = 0; i < this.weaponNameList.Count; i++)
@@ -79,5 +84,7 @@ public class DataSaveClass
         nowEnemyIndex = this.nowEnemyIndex;
         atk = this.atk;
         currentBossIndex = this.currentBossIndex;
+        lastConnectTime = System.DateTime.Parse(this.lastConnectTime);
+        isFirstPlay = this.isFirstPlay;
     }
 }

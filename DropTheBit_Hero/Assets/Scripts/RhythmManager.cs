@@ -14,8 +14,6 @@ public class RhythmManager : MonoBehaviour
         public Color missColor = new Color(0.6792453f, 0, 0.06030021f, 1);
     }
 
-    [SerializeField] Text debugText;
-
     [Header("오디오 관련")]
     [SerializeField] AudioSource audioSource;
 
@@ -50,12 +48,14 @@ public class RhythmManager : MonoBehaviour
     [SerializeField] float cameraShakePower = 5f;
     [SerializeField] float cameraShakeTime = 0.1f;
 
+    private Vector2 cameraStartPos = Vector2.zero;
     private HitEffectColors textEffectColors = new HitEffectColors();
 
     private bool isPlayingNote = false;
 
     private void Start()
     {
+        cameraStartPos = Camera.main.transform.position;
         StartStopSong();
     }
 
@@ -102,7 +102,8 @@ public class RhythmManager : MonoBehaviour
                 return;
             }
 
-            BossSceneManager.Instance.progressBar.maxValue = GameManager.Instance.GetVirtualBeatmaps().timings.Count;
+            BossSceneManager.Instance.progressBar.maxValue = GameManager.Instance.GetMusic().length;
+
             float noteTiming = GameManager.Instance.GetVirtualBeatmaps().timings[noteMakeIndex];
             if (isPlayingNote && noteTimer >= noteTiming - 1000 - currentTimingPoint.MsPerBeat) // 노트 타격지점 까지 1초가 걸리도록 설계해놓음. 그래서 1초 + 오프셋 빼줄 것임.
             {
@@ -120,6 +121,8 @@ public class RhythmManager : MonoBehaviour
                     CrateNote();
                 //}
             }
+
+            BossSceneManager.Instance.progressBar.value += Time.deltaTime;
 
         }
 
@@ -276,7 +279,6 @@ public class RhythmManager : MonoBehaviour
                     currentEffect.text.text = $"PERFECT X {GameManager.Instance.Combo}";
                     hitCount++;
 
-                    BossSceneManager.Instance.progressBar.value += 2;
                     BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerAttackHash);
 
                     break;
@@ -288,7 +290,6 @@ public class RhythmManager : MonoBehaviour
                     currentEffect.text.text = $"GOOD X {GameManager.Instance.Combo}";
                     hitCount++;
 
-                    BossSceneManager.Instance.progressBar.value++;
                     BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerAttackHash);
 
                     break;
@@ -299,7 +300,6 @@ public class RhythmManager : MonoBehaviour
                     GameManager.Instance.Combo = 0;
                     currentEffect.text.text = "MISS";
                     
-                    BossSceneManager.Instance.progressBar.value--;
                     BossSceneManager.Instance.playerAnimator.SetTrigger(BossSceneManager.Instance.playerHitHash);
                     
 
@@ -373,7 +373,10 @@ public class RhythmManager : MonoBehaviour
         NoteScript currentNote = noteCheckPool.Peek();
         if (currentNote.isHit(noteLine.transform.position) % 4 > 0)
         {
-            cameraPos.DOShakePosition(cameraShakeTime, cameraShakePower);
+            cameraPos.DOComplete();
+            Sequence seq = DOTween.Sequence();
+            seq.Append(cameraPos.DOJump(new Vector2(0, cameraStartPos.y), cameraShakePower / 2f, 1, cameraShakeTime / 2f));
+            seq.Append(cameraPos.DOJump(new Vector2(0, cameraStartPos.y), -cameraShakePower / 2f, 1, cameraShakeTime / 2f));
             CrateEffect(currentNote.isHit(noteLine.transform.position) % 4);
             DeleteNote(noteCheckPool.Dequeue());
         }

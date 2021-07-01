@@ -25,6 +25,7 @@ public class MainSceneManager : MonoBehaviour
     [SerializeField] GameObject enemyNameTextPanel;
     [SerializeField] Animator effectAnimator;
     [SerializeField] Slider enemyHpSlider;
+    [SerializeField] GameObject weaponImagePrefabs;
 
     [Header("배경")]
     [SerializeField] BackGroundMove backGround;
@@ -35,6 +36,7 @@ public class MainSceneManager : MonoBehaviour
     [Header("풀링용")]
     [SerializeField] Transform enemyPoolTr;
     [SerializeField] Transform moneyEffectPoolTr;
+    [SerializeField] Transform weponEffectPoolTr;
 
     [Header("여타 참조용 Public 변수들")]
     [SerializeField] public TopUI topUI;
@@ -45,11 +47,14 @@ public class MainSceneManager : MonoBehaviour
     [SerializeField] public LeftUI leftUI;
     [SerializeField] Player player;
 
+    public int currentWeaponIndex;
+
     Enemy nowEnemy;
     Text enemyNameText;
 
     public List<GameObject> enemyPool = new List<GameObject>();
     public Queue<GameObject> moneyEffectPool = new Queue<GameObject>();
+    private Queue<GameObject> weaponEffectPool = new Queue<GameObject>();
 
     public Player Player { get { return player; } set { player = value; } }
 
@@ -99,9 +104,52 @@ public class MainSceneManager : MonoBehaviour
 
     public void PlayAttackEffect()
     {
+        PlayAttackImageEffect();
+
         effectAnimator.speed = 1;
         effectAnimator.SetTrigger($"SlashEffect");
     }
+
+    public void PlayAttackImageEffect()
+    {
+
+        GameObject current;
+        if(weaponEffectPool.Count > 0)
+        {
+            if(weaponEffectPool.Peek().activeSelf)
+            {
+                MakeWaeponEffect(out current);
+            }
+            else
+            {
+                current = weaponEffectPool.Dequeue();
+            }
+        }
+        else
+        {
+            MakeWaeponEffect(out current);
+        }
+
+        SpriteRenderer sr = current.GetComponent<SpriteRenderer>();
+        sr.sprite = Resources.Load<Sprite>(GameManager.Instance.GetWeaponByIndex(currentWeaponIndex).Image_Path);
+        sr.gameObject.transform.position = new Vector2(nowEnemy.transform.position.x, nowEnemy.transform.position.y + 1f);
+
+        current.SetActive(true);
+
+        Sequence seq = DOTween.Sequence();
+
+        seq.Append(sr.DOFade(1, 0.1f));
+        seq.Append(sr.DOFade(1, 0.8f)); // 타이머용
+        seq.Append(sr.DOFade(0, 0.1f)).OnComplete(() => current.SetActive(false));
+
+        weaponEffectPool.Enqueue(current);
+    }
+
+    public void MakeWaeponEffect(out GameObject current)
+    {
+        current = Instantiate(weaponImagePrefabs, weponEffectPoolTr);
+    }
+
 
     public void StopAttackEffect()
     {

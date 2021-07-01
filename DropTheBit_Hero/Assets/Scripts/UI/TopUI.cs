@@ -13,23 +13,23 @@ public class TopUI : MonoBehaviour
         GameManager.Instance.SaveData();
         if (GameManager.Instance.GetMoney().ToString().Length >= 13) // 1000000000000의자리 = 1T으로 표시
         {
-            coinText.text = $"현재 돈 : {System.Math.Round(GameManager.Instance.GetMoney() / 1000000000000, 2)} m";
+            coinText.text = $"현재 돈 : {(GameManager.Instance.GetMoney() / 1000000000000).ToString("N2")} m";
         }
         if (GameManager.Instance.GetMoney().ToString().Length >= 10) // 1000000000의자리 = 1B으로 표시
         {
-            coinText.text = $"현재 돈 : {System.Math.Round(GameManager.Instance.GetMoney() / 1000000000, 2)} m";
+            coinText.text = $"현재 돈 : {(GameManager.Instance.GetMoney() / 1000000000).ToString("N2")} m";
         }
         else if (GameManager.Instance.GetMoney().ToString().Length >= 7) // 1000000의자리 = 1m으로 표시
         {
-            coinText.text = $"현재 돈 : {System.Math.Round(GameManager.Instance.GetMoney() / 1000000, 2)} m";
+            coinText.text = $"현재 돈 : {(GameManager.Instance.GetMoney() / 1000000).ToString("N2")} m";
         }
         else if (GameManager.Instance.GetMoney().ToString().Length >= 4) // 1000의자리 = 1k으로 표시
         {
-            coinText.text = $"현재 돈 : {System.Math.Round(GameManager.Instance.GetMoney() / 1000, 2)} k";
+            coinText.text = $"현재 돈 : {(GameManager.Instance.GetMoney() / 1000).ToString("N2")} k";
         }
         else
         {
-            coinText.text = $"현재 돈 : {System.Math.Round(GameManager.Instance.GetMoney(), 2)}";
+            coinText.text = $"현재 돈 : {(GameManager.Instance.GetMoney()).ToString("N2")}";
         }
     }
 

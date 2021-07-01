@@ -26,6 +26,9 @@ public class UpgradePanel : MonoBehaviour
     /// </summary>
     public void Refresh(bool isUnlocked) // 원본함수
     {
+        if(isUnlocked) 
+        MainSceneManager.Instance.currentWeaponIndex = index; // 언락되었다면 무기번호에 자신의 번호를 넣어줌 -> 가장 높은 무기가 가장 마지막에 호출
+
         lockPanel.SetActive(!isUnlocked); // isUnlocked와 반대로 움직여야함.
 
         GameManager.Instance.GetWeaponByIndex(index).Isunlocked = isUnlocked;
@@ -36,7 +39,7 @@ public class UpgradePanel : MonoBehaviour
             upgradeBtn.GetComponentInChildren<Text>().text = "MAX!"; // 최대로 업그레이드 됐다면 다음으로 넘김
             this.upgradeCostText.text = $"업그레이드 비용 : 최대";
             this.currentUpgradeText.text = "현재 업그레이드 단계 : 최대"; // 최대로 업그레이드 됨으로 표시
-            MainSceneManager.Instance.upgradeUI.GetUpgradePanelByIndex(GameManager.Instance.GetWeaponByIndex(index).Index).Refresh(true);
+            MainSceneManager.Instance.upgradeUI.GetUpgradePanelByIndex(GameManager.Instance.GetWeaponByIndex(index).Index).Refresh(true); // 데이터상의 Index는 1부터 시작함
         }
         else
         {
