@@ -168,9 +168,9 @@ public class RhythmManager : MonoBehaviour
 
     private IEnumerator FinishRhythm()
     {
-#if UNITY_EDITOR
-        hitCount = GameManager.Instance.GetVirtualBeatmaps().timings.Count;
-#endif
+//#if UNITY_EDITOR
+//        hitCount = GameManager.Instance.GetVirtualBeatmaps().timings.Count;
+//#endif
         yield return new WaitForSeconds(BossSceneManager.Instance.progressBar.value - noteTimer / 1000); // 노래 끝날때 까지 대기.
         StartStopSong();
         isPlayingNote = false;
