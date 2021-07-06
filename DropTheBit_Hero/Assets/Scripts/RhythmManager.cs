@@ -53,7 +53,7 @@ public class RhythmManager : MonoBehaviour
 
     private bool isPlayingNote = false;
 
-    private void Start()
+    private void OnEnable()
     {
         cameraStartPos = Camera.main.transform.position;
         StartStopSong();
